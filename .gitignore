@@ -1,6 +1,4 @@
 node_modules
-client/dist/tickets
-client/dist/team-space
 .vscode
 .env
 package-lock.json
