@@ -12,6 +12,7 @@
     "bulma": "^0.7.4",
     "font-awesome": "^4.7.0",
     "vue": "^2.6.6",
+    "vue-cli-plugin-resolve-alias": "^0.1.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
@@ -42,7 +43,15 @@
         "error",
         160
       ],
-      "linebreak-style": 0
+      "linebreak-style": 0,
+      "indent": [
+        "error",
+        4
+      ],
+      "comma-dangle": [
+        "error",
+        "only-multiline"
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"
