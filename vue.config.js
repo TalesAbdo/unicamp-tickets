@@ -12,7 +12,9 @@ module.exports = {
             alias: {
             // just like a normal resolve in Webpack
                 src: path.resolve(__dirname, './src'),
-                components: path.resolve(__dirname, './src/components')
+                css: path.resolve(__dirname, './src/css'),
+                sharedComponents: path.resolve(__dirname, './src/sharedComponents'),
+                viewComponents: path.resolve(__dirname, './src/viewComponents'),
             }
         }
     }
