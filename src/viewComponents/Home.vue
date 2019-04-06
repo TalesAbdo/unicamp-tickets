@@ -1,18 +1,35 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+   <div>
+   <Navbar />
+   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from 'src/sharedComponents/HelloWorld.vue';
+import Navbar from 'shared/Navbar.vue';
 
 export default {
-    name: 'home',
+    name: 'login',
     components: {
-        HelloWorld,
+        Navbar
     },
+    data() {
+        return {
+            showModal: false
+        };
+    },
+    methods: {
+        modalControl() {
+            this.showModal = true;
+        },
+        hide() {
+            this.showModal = false;
+        },
+    }
 };
 </script>
+
+
+<style lang="scss">
+@import '~src/css/main.scss';
+
+</style>

@@ -10,12 +10,12 @@ module.exports = {
     pluginOptions: {
         'resolve-alias': {
             alias: {
-            // just like a normal resolve in Webpack
                 src: path.resolve(__dirname, './src'),
                 css: path.resolve(__dirname, './src/css'),
-                sharedComponents: path.resolve(__dirname, './src/sharedComponents'),
-                viewComponents: path.resolve(__dirname, './src/viewComponents'),
+                modal: path.resolve(__dirname, './src/modalComponents'),
+                shared: path.resolve(__dirname, './src/sharedComponents'),
+                view: path.resolve(__dirname, './src/viewComponents'),
             }
         }
-    }
+    },
 };

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-      ssss
     <router-view/>
   </div>
 </template>
@@ -9,11 +8,8 @@
 @import 'src/css/main.scss';
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: $black;
-  background-color: $black;
+  min-height: 100%;
 }
 </style>

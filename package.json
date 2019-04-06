@@ -53,6 +53,9 @@
       "comma-dangle": [
         "error",
         "only-multiline"
+      ],
+      "import/no-unresolved": [
+          "off"
       ]
     },
     "parserOptions": {
