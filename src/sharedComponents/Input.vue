@@ -33,20 +33,26 @@ export default {
         display: block;
         color: $black;
         cursor: default;
+        user-select: none;
     }
 
     .input-text {
-        padding: 9px 7px 4px;
+        padding: 5px 7px 4px;
         display: block;
         border: none;
         width: 100%;
         color: $black;
         font-style: italic;
         background-color: transparent;
-        font-size: 0.75rem;
+        font-size: 0.95rem;
 
         &:hover {
             cursor: text;
+        }
+
+        &:focus {
+            outline-offset: 0px !important;
+            outline: none !important;
         }
     }
 

@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <nav v-if="true" class="navbar is-primary" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <span class="navbar-item">
                 <img src="@/assets/Logo.svg" width="20" height="28">
@@ -19,16 +19,16 @@
                         <figure class="image is-32x32">
                             <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
                         </figure>
-                        Tales
+                        UserFirstName
                     </a>
 
                     <div class="navbar-dropdown is-right has-text-right">
                         <span class="navbar-item is-flex">
                             <span class="has-text-weight-bold">
-                                Tales Abdo dos Santos
+                                UserName
                             </span>
                             <span class="is-italic">
-                                talesabdo@hotmail.com
+                                UserEmail
                             </span>
                         </span>
 

@@ -14,23 +14,27 @@
                 <img class="image" src="@/assets/Logo.svg">
             </div>
 
-            <button class="button is-black is-normal">{{buttonText}}</button>
+
+            <PersonInformation firstLine="Oie meu nome" secondLine="Oie meu email" imageSrc="https://bulma.io/images/placeholders/128x128.png"/>
+
+            <button class="button is-black is-normal">sss</button>
         </form>
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
 </template>
 
 <script>
+
 import Input from 'shared/Input.vue';
+import PersonInformation from 'shared/PersonInformation.vue';
 
 export default {
     name: 'userControl',
     components: {
-        Input
+        Input, PersonInformation
     },
     props: {
-        show: { type: Boolean, default: false },
-        buttonText: { type: String, required: true, default: '' },
+        show: { type: Boolean, default: false }
     },
     data() {
         return {

@@ -1,8 +1,12 @@
+import moment from 'moment';
 import Vue from 'vue';
+import Icon from 'vue-awesome/icons';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import './css/main.scss';
+
+moment.locale('pt-BR');
+Vue.component('icon', Icon);
 
 Vue.config.productionTip = false;
 
