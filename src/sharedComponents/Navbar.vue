@@ -13,22 +13,38 @@
         </div>
 
         <div id="navbarBasicExample" class="navbar-menu">
+
+            <div class="navbar-start">
+                <a :class="verifyRoute('Tickets')" class="navbar-item">
+                    Tickets
+                </a>
+                <a :class="verifyRoute('Services')" class="navbar-item">
+                    Serviços
+                </a>
+                <a :class="verifyRoute('Members')" class="navbar-item">
+                    Membros
+                </a>
+                <a :class="verifyRoute('Metrics')" class="navbar-item">
+                    Métricas
+                </a>
+            </div>
+
             <div class="navbar-end">
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link is-arrowless">
-                        <figure class="image is-32x32">
-                            <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+                        <figure class="image">
+                            <img class="is-rounded" src="https://pm1.narvii.com/6883/bc1d3a9b73c656fe7773392421f2205d90e8eb09r1-198-255v2_128.jpg">
                         </figure>
-                        UserFirstName
+                        {{firstName}}
                     </a>
 
                     <div class="navbar-dropdown is-right has-text-right">
                         <span class="navbar-item is-flex">
                             <span class="has-text-weight-bold">
-                                UserName
+                                {{user.name}}
                             </span>
                             <span class="is-italic">
-                                UserEmail
+                                {{user.email}}
                             </span>
                         </span>
 
@@ -56,6 +72,27 @@
 <script>
 export default {
     name: 'navbar',
+    data() {
+        return {
+            user: {
+                name: 'Tales Abdo dos Santos',
+                email: 'talesabdo@dac.177305.br'
+            }
+        };
+    },
+    computed: {
+        firstName() {
+            return this.user.name.split(' ')[0];
+        }
+    },
+    methods: {
+        verifyRoute(routeName) {
+            if (routeName === this.$route.name) {
+                return 'is-actual-page';
+            }
+            return '';
+        }
+    }
 };
 </script>
 
@@ -64,13 +101,33 @@ export default {
 
 .navbar {
     box-shadow: 5px 0 20px $dark-gray;
+    margin-bottom: 1.5rem;
+
+    .navbar-start {
+        .navbar-item {
+            font-weight: 700;
+            border-bottom: 3px solid transparent;
+            transition: .3s;
+
+            &.is-actual-page {
+                border-bottom: 3px solid $white;
+                transition: .3s;
+            }
+        }
+    }
 
     .image {
         margin-right: 0.35rem;
+        width: 32px;
+    }
+
+    .navbar-link {
+        padding-right: 2rem;
     }
 
     .navbar-dropdown {
         padding-bottom: 0;
+
         .is-flex {
             flex-direction: column;
             padding-top: 0rem !important;

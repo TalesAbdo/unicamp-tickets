@@ -1,12 +1,12 @@
 <template>
-    <div :class="{'is-active': show}" class="modal">
+    <div :class="{'is-active': show}" class="modal new-ticket">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <Title titleValue="Novo Ticket" class="header-text"/>
             <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto"/>
             <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" />
 
-            <Product class = "margin-rem"/>
+            <Service class = "margin-rem"/>
 
             <div class="severity-container">
                 <span class="has-text-weight-bold">Severidade</span>
@@ -40,12 +40,12 @@ import Title from 'shared/Title.vue';
 import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
 import FileButton from 'shared/FileButton.vue';
-import Product from './Product.vue';
+import Service from './ServiceDropdown.vue';
 
 export default {
     name: 'newTicket',
     components: {
-        Title, Input, Textarea, FileButton, Product
+        Title, Input, Textarea, FileButton, Service
     },
     props: {
         show: { type: Boolean, default: false },
@@ -69,8 +69,8 @@ export default {
 <style lang="scss" scoped>
 @import '~src/css/main.scss';
 
-.modal{
-    .modal-background{
+.modal.new-ticket {
+    .modal-background {
         background-color: rgba(76, 76, 76, 0.5);
     }
 

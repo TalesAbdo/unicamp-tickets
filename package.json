@@ -44,7 +44,7 @@
     "rules": {
       "max-len": [
         "error",
-        160
+        200
       ],
       "linebreak-style": 0,
       "indent": [

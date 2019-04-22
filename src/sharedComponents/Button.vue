@@ -29,7 +29,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-evenly !important;
-    height: 42px !important;
 
     .is-size-5 {
         line-height: 19px;

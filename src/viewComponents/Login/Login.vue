@@ -18,7 +18,7 @@
 
 <script>
 import Input from 'shared/Input.vue';
-import UserControl from 'modal/UserControl.vue';
+import UserControl from 'modal/UserControl/UserControl.vue';
 
 export default {
     name: 'login',

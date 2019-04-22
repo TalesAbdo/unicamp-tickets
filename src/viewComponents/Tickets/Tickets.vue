@@ -1,34 +1,39 @@
 <template>
-    <div class="home-container">
+    <div class="tickets-container">
         <div class="left-container">
-            <Button icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')" />
+            <div class="ticket-counter">
+                <span class="is-italic is-size-5">Controle</span>
+                <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{ticketsSituation.open}}</span>
+                <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{ticketsSituation.inProgress}}</span>
+                <span><i class="fas fa-check-circle"/><b>Resolvidos:</b> {{ticketsSituation.closed}}</span>
+                <span><i class="fas fa-anchor"/><b>Em espera:</b> {{ticketsSituation.onHold}}</span>
+                <span><i class="fas fa-ban"/><b>Fechados:</b> {{ticketsSituation.closed}}</span>
+            </div>
+
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
+
         <div class="right-container">
             <OrdenationTitle class="right-header" :orderBy="orderBy" :isUp="isUp" @onItemClick="changeOrder"/>
             <TicketCard v-for="(item) in tickets" :key="item" :ticket="ticket" @modalControl="modalControl"/>
         </div>
-        <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/>
-        <TicketDetails :show="showTicketDetails" @hide="modalControl('ticketDetails')" />
+        <TicketDetails :show="showTicketDetails" @hide="modalControl" />
     </div>
 </template>
 
 <script>
-import NewTicket from 'modal/NewTicket/NewTicket.vue';
 import TicketDetails from 'modal/TicketDetails/TicketDetails.vue';
-import Button from 'shared/Button.vue';
 import TicketCard from './components/TicketCard.vue';
 import OrdenationTitle from './components/OrdenationTitle.vue';
 import TicketFilters from './components/Filter/TicketFilters.vue';
 
 export default {
-    name: 'home',
+    name: 'tickets',
     components: {
-        NewTicket, TicketDetails, TicketCard, OrdenationTitle, Button, TicketFilters
+        TicketDetails, TicketCard, OrdenationTitle, TicketFilters
     },
     data() {
         return {
-            showNewTicket: false,
             showTicketDetails: false,
             orderBy: 'creationDate',
             isUp: false,
@@ -43,7 +48,14 @@ export default {
                 assignedPhoto: 'https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg'
             },
             tickets: [1, 2, 3, 4, 5, 6, 7],
-            filters: []
+            filters: [],
+            ticketsSituation: {
+                open: 4,
+                inProgress: 6,
+                resolved: 20,
+                onHold: 3,
+                closed: 207
+            }
         };
     },
     created() {
@@ -92,12 +104,8 @@ export default {
         }
     },
     methods: {
-        modalControl(modal) {
-            if (modal === 'newTicket') {
-                this.showNewTicket = !this.showNewTicket;
-            } else {
-                this.showTicketDetails = !this.showTicketDetails;
-            }
+        modalControl() {
+            this.showTicketDetails = !this.showTicketDetails;
         },
         changeOrder(element) {
             this.orderBy = element;
@@ -114,19 +122,35 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.home-container {
+.tickets-container {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 
     .left-container {
-        width: 13%;
+        width: 15%;
         margin-right: 2.5rem;
         display: flex;
         flex-direction: column;
         align-self: flex-start;
-        margin-top: .4rem;
+        margin-top: .5rem;
+
+        .ticket-counter {
+            display: flex;
+            flex-direction: column;
+            background-color: $white;
+            border-left: 3px solid $primary;
+            padding-left: .25rem;
+
+            span {
+                margin-bottom: .35rem;
+
+                b {
+                    margin-left: .35rem;
+                }
+            }
+        }
     }
 
     .right-container {

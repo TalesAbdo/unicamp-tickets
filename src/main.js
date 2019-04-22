@@ -6,7 +6,7 @@ import router from './router';
 import store from './store';
 
 moment.locale('pt-BR');
-Vue.component('icon', Icon);
+Vue.component('icon', Icon); //eslint-disable-line
 
 Vue.config.productionTip = false;
 

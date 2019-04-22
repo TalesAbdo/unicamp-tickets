@@ -1,6 +1,6 @@
 <template>
-<div class="product-container">
-    <span class="dropdown-title">Produto</span>
+<div class="service-dropdown-container">
+    <span class="dropdown-title">Serviço</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
@@ -48,7 +48,7 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.product-container {
+.service-dropdown-container {
     align-self: flex-start;
     display: flex;
     align-items: center;

@@ -1,11 +1,11 @@
 <template>
    <div class="person-information">
-        <figure class="image is-64x64">
+        <figure class="image is-48x48">
             <img class="is-rounded" :src="imageSrc">
         </figure>
         <div class="text-info">
-            <span class="first-line has-text-weight-bold">{{firstLine}}</span>
-            <span class="second-line">{{secondLine}}</span>
+            <span class="text has-text-weight-bold">{{firstLine}}</span>
+            <span class="text is-italic">{{secondLine}}</span>
         </div>
    </div>
 </template>
@@ -33,7 +33,7 @@ export default {
     display: flex;
 
     .image {
-        margin-right: 0.75rem;
+        margin-right: 0.2rem;
     }
 
     .text-info {
@@ -41,7 +41,8 @@ export default {
         flex-direction: column;
         justify-content: center;
 
-        .first-line {
+        .text {
+            font-size: .9rem;
 
         }
     }

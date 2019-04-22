@@ -17,8 +17,8 @@ export default {
 @import '~src/css/main.scss';
 
 .ticket-number {
-    margin-left: .5rem;
     max-width: 90px !important;
+    max-height: 37px !important;
     padding: 0.3rem !important;
     display: flex;
     justify-content: center;

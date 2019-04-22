@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'is-active': show}" class="modal">
+    <div :class="{'is-active': show}" class="modal user-control">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <h1 class="header-text">Insira suas informações para criar sua conta!</h1>
@@ -48,7 +48,7 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.modal{
+.modal.user-control{
     .modal-background{
         background-color: rgba(76, 76, 76, 0.5);
     }
