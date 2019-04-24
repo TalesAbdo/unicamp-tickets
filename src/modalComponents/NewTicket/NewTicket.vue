@@ -8,7 +8,7 @@
 
             <Service class = "margin-rem"/>
 
-            <div class="severity-container">
+            <div class="severity-buttons-container">
                 <span class="has-text-weight-bold">Severidade</span>
                 <div class="buttons has-addons">
                     <span :class="{'is-success is-selected': activeSevButton === 0}" class="button" @click="severityControl(0)">Baixa</span>
@@ -40,7 +40,7 @@ import Title from 'shared/Title.vue';
 import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
 import FileButton from 'shared/FileButton.vue';
-import Service from './ServiceDropdown.vue';
+import Service from './components/ServiceDropdown.vue';
 
 export default {
     name: 'newTicket',
@@ -93,14 +93,14 @@ export default {
             margin-bottom: 1.25rem;
         }
 
-        .severity-container {
+        .severity-buttons-container {
             display: flex;
             align-items: center;
             justify-content: center;
             align-self: flex-start;
             margin-bottom: 1.75rem;
 
-            span {
+            .has-text-weight-bold {
                 margin-top: .4rem;
                 margin-right: .5rem;
                 user-select: none;

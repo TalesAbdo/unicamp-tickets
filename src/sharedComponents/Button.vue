@@ -22,7 +22,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '~src/css/main.scss';
 
 .button {
@@ -32,6 +32,10 @@ export default {
 
     .is-size-5 {
         line-height: 19px;
+    }
+
+    .is-size-6 {
+        margin-left: .5rem;
     }
 }
 </style>

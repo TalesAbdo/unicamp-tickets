@@ -37,11 +37,8 @@ export default {
             modalInformation: { titleText: '', buttonText: '' }
         };
     },
-    created() {
-    },
     methods: {
         modalControl(type) {
-            console.log('here3');
             if (type === 'newService') {
                 this.modalInformation = { titleText: 'Novo Serviço', buttonText: 'Criar Serviço' };
             } else {

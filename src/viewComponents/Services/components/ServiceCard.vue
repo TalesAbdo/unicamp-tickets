@@ -24,7 +24,6 @@ export default {
     },
     methods: {
         onClick() {
-            console.log('here');
             this.$emit('modalControl', 'editService');
         },
     }

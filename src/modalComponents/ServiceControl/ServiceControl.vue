@@ -20,7 +20,7 @@ import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
 
 export default {
-    name: 'newTicket',
+    name: 'serviceControl',
     components: {
         Title, Input, Textarea
     },

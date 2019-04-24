@@ -1,5 +1,5 @@
 <template>
-<div class="service-dropdown-container">
+<div class="service-dropdown">
     <span class="dropdown-title">Serviço</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
@@ -48,7 +48,7 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.service-dropdown-container {
+.service-dropdown {
     align-self: flex-start;
     display: flex;
     align-items: center;
