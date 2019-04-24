@@ -38,6 +38,14 @@
             </div>
 
             <div class="options-second-line">
+                <div class="calendar-container">
+                    <span class="has-text-weight-bold">Data inicial</span>
+                    <input class="date" type="date">
+                </div>
+                <div class="calendar-container">
+                    <span class="has-text-weight-bold">Data final</span>
+                    <input class="date" type="date">
+                </div>
                 <Button icon="fa-file-excel" value="Gerar relatório"/>
             </div>
         </div>
@@ -131,6 +139,37 @@ export default {
             display: flex;
             justify-content: space-evenly;
             align-items: flex-end;
+
+            .calendar-container {
+                display: flex;
+                flex-direction: column;
+
+                .date {
+                    height: 37.5px;
+                    border: 1px solid $primary;
+                    border-radius: 4px;
+                    padding: .5rem;
+                    margin-top: .3rem;
+                }
+                ::-webkit-calendar-picker-indicator {
+                    background-image: url(http://icons.iconarchive.com/icons/dakirby309/simply-styled/256/Calendar-icon.png);
+                    background-position:center;
+                    background-size:20px 20px;
+                    background-repeat:no-repeat;
+                    color:rgba(204,204,204,0);
+                }
+                ::-webkit-inner-spin-button {
+                    display:none;
+                }
+                ::-webkit-calendar-picker-indicator { background-color:white}
+                    input[type=date]{
+                    font-size: 18px;
+                    }
+                ::-webkit-datetime-edit-text { color:$dark-gray; }
+                ::-webkit-datetime-edit-month-field { color:$dark-gray; }
+                ::-webkit-datetime-edit-day-field { color:$dark-gray; }
+                ::-webkit-datetime-edit-year-field { color:$dark-gray; }
+            }
         }
     }
 }
