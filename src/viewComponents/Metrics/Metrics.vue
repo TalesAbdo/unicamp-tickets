@@ -3,7 +3,8 @@
         <div class="common-container graph-container">
             <Title class="report-title" titleValue="Análises gráficas"/>
             <span class="report-subtitle is-italic">Preencha os filtros para gerar o gráfico correspondente à pesquisa</span>
-            <div class="options-first-line">
+            <canvas id="report-chart" width="400" height="180"></canvas>
+            <div class="graph-first-line options-first-line">
                 <div class="choose-container">
                     <span class="has-text-weight-bold">Analisar</span>
                     <div class="buttons has-addons">
@@ -53,6 +54,7 @@
 </template>
 
 <script>
+import Chart from 'chart.js';
 import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
 import Service from './components/ServiceDropdown.vue';
@@ -68,6 +70,40 @@ export default {
             activeAnalysisButton: 0,
             activeSevButton: 0
         };
+    },
+    mounted() {
+        const ctx = document.getElementById('report-chart').getContext('2d');
+        const myChart = new Chart(ctx, { // eslint-disable-line
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [
+                    {
+                        label: 'Mátricula',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Instalação',
+                        data: [2, 10, 10, 20, 5, 8],
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: 'rgba(100, 110, 132, 1)',
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
     },
     methods: {
         analysisControl(value) {
@@ -96,17 +132,18 @@ export default {
         width: 100%;
         display: flex;
         flex-direction: column;
-
-        &.graph-container {
-            margin-bottom: 1.5rem;
-        }
+        margin-bottom: 3rem;
 
         .report-title {
             margin-bottom: 0;
         }
 
         .report-subtitle {
-            margin-bottom: 1.5rem !important;
+            margin-bottom: 1rem !important;
+        }
+
+        .graph-first-line {
+            margin-top: 1rem;
         }
 
         .options-first-line {

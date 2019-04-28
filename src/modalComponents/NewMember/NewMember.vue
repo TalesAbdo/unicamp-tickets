@@ -79,7 +79,7 @@ export default {
             setTimeout(() => { this.activeSearch = false; }, 150);
         },
         onItemClick(element) {
-            console.log(element);
+            console.log(element); //eslint-disable-line
         },
     }
 };
