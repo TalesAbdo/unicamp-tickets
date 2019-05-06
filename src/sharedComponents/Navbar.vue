@@ -15,16 +15,16 @@
         <div id="navbarBasicExample" class="navbar-menu">
 
             <div class="navbar-start">
-                <a :class="verifyRoute('Tickets')" class="navbar-item">
+                <a :class="verifyRoute('Tickets')" class="navbar-item" href="/#/tickets">
                     Tickets
                 </a>
-                <a :class="verifyRoute('Services')" class="navbar-item">
+                <a :class="verifyRoute('Services')" class="navbar-item" href="/#/services">
                     Serviços
                 </a>
-                <a :class="verifyRoute('Members')" class="navbar-item">
+                <a :class="verifyRoute('Members')" class="navbar-item" href="/#/members">
                     Membros
                 </a>
-                <a :class="verifyRoute('Metrics')" class="navbar-item">
+                <a :class="verifyRoute('Metrics')" class="navbar-item" href="/#/metrics">
                     Métricas
                 </a>
             </div>

@@ -69,10 +69,10 @@ export default {
             border: 1px solid $primary;
 
             &:focus {
-            box-shadow: 0 0 0px !important;
-            outline-offset: 0px !important;
-            outline: none !important;
-        }
+                box-shadow: 0 0 0px !important;
+                outline-offset: 0px !important;
+                outline: none !important;
+            }
         }
     }
 }
