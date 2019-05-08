@@ -1,7 +1,9 @@
 const path = require('path');
+const configureServer = require('./server/server.js');
 
 module.exports = {
     devServer: {
+        before: configureServer,
         overlay: {
             warnings: false,
             errors: false,
