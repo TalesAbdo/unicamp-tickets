@@ -30,4 +30,7 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 
+db["User"].hasMany(db["SupportUser"], { foreignKey: 'id'});
+db["SupportUser"].belongsTo(db["User"], {foreignKey: 'id'});
+
 module.exports = db;
