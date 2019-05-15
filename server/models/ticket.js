@@ -1,20 +1,21 @@
 module.exports = function (sequelize, DataTypes) {
     const Ticket = sequelize.define('Ticket', {
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
-        },
-        password: {
+        title: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        image: DataTypes.BLOB
+        severityId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        statusId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        description: {
+            type: DataTypes.MEDIUMTEXT,
+            allowNull: false
+        },
     });
 
     return Ticket;
