@@ -1,9 +1,27 @@
 module.exports = function (app, db) {
 
-    //Achar um ticket em especfico
-    //Fazer com filtragem. Um com todos os tickets e outro com tickets por id de usuário
-    app.get('/api/tickets/all', (req, res) => {
-        db.Ticket.findAll({}).then((result) => {
+    app.get('/api/ticket/byuser', (req, res) => {
+        db.Ticket.findAll({
+            where: {
+                userId: req.body.userId,   
+                createdAt: {
+                    [Op.between]: [req.body.initialDate, req.body.finalDate],  
+                },
+                severityId: req.body.severityIdList,
+                statusId: req.body.statusIdList,
+                serviceId: req.body.serviceIdList
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
+    app.get('/api/ticket/:id', (req, res) => {
+        db.Ticket.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((result) => {
             res.json(result);
         });
     });
@@ -21,9 +39,9 @@ module.exports = function (app, db) {
             res.json(result);
         });
     });
-    app.put('/api/ticket/update/assigned/:id', (req, res) => {
+    app.put('/api/ticket/update/assigned/:ticketid/:assignedid', (req, res) => {
         db.Ticket.update({
-            assignedId: req.body.assignedId
+            assignedId: req.params.assignedId
         }, {
             where: {
                 id: req.params.id
@@ -33,9 +51,9 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/owner/:id', (req, res) => {
+    app.put('/api/ticket/update/owner/:ticketid/:ownerid', (req, res) => {
         db.Ticket.update({
-            ownerId: req.body.ownerId
+            ownerId: req.params.ownerId
         }, {
             where: {
                 id: req.params.id
@@ -45,9 +63,9 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/service/:id', (req, res) => {
+    app.put('/api/ticket/update/service/:ticketid/:serviceid', (req, res) => {
         db.Ticket.update({
-            serviceId: req.body.serviceId
+            serviceId: req.params.serviceId
         }, {
             where: {
                 id: req.params.id
@@ -57,9 +75,9 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/severity/:id', (req, res) => {
+    app.put('/api/ticket/update/severity/:ticketid/:serviceid', (req, res) => {
         db.Ticket.update({
-            severityId: req.body.severityId
+            severityId: req.params.severityId
         }, {
             where: {
                 id: req.params.id
@@ -97,6 +115,16 @@ module.exports = function (app, db) {
         });
     });
 
+    app.get('/api/service/:id', (req, res) => {
+        db.Service.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
     app.post('/api/service/new', (req, res) => {
         db.Service.create({
             name: req.body.name,
@@ -129,9 +157,15 @@ module.exports = function (app, db) {
         });
     });
 
-    // Pesquisa por nome e email
-    app.get('/api/user/all', (req, res) => {
-        db.User.findAll({}).then((result) => {
+    app.get('/api/user/bynameandemail', (req, res) => {
+        db.User.findAll({
+            where: {
+                [Op.or]: [
+                    { name: { [Op.like]: `%${req.body.name}` } },
+                    { email: { [Op.like]: `%${req.body.email}` } }
+                  ]
+            }
+        }).then((result) => {
             res.json(result);
         });
     });
@@ -187,7 +221,7 @@ module.exports = function (app, db) {
         });
     });
 
-    // Insert an admin
+    // Update admin status
     app.put('/api/usersupport/update/:id', (req, res) => {
         db.UserSupport.update({
             isAdmin: req.body.isAdmin
@@ -210,9 +244,12 @@ module.exports = function (app, db) {
         });
     });
 
-    // Find comments by ticket id
-    app.get('/api/comment/all', (req, res) => {
-        db.Item.findAll({}).then((result) => {
+    app.get('/api/comment/all/:ticketid', (req, res) => {
+        db.Item.findAll({
+            where: {
+                ticketId: req.params.ticketid
+            }
+        }).then((result) => {
             res.json(result);
         });
     });
@@ -227,18 +264,6 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/comment/update/:id', (req, res) => {
-        db.Item.update({
-            name: req.body.name
-        }, {
-            where: {
-                id: req.params.id
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
     app.delete('/api/comment/delete/:id', (req, res) => {
         db.Item.destroy({
             where: {
@@ -248,9 +273,8 @@ module.exports = function (app, db) {
             res.json(result);
         });
     });
-
     
-    app.get('/api/attachment/all', (req, res) => {
+    app.get('/api/attachment/:ticketid', (req, res) => {
         db.Item.findAll({}).then((result) => {
             res.json(result);
         });
@@ -261,18 +285,6 @@ module.exports = function (app, db) {
             name: req.body.name,
             category: req.body.category,
             price: req.body.price
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    app.put('/api/attachment/update/:id', (req, res) => {
-        db.Item.update({
-            name: req.body.name
-        }, {
-            where: {
-                id: req.params.id
-            }
         }).then((result) => {
             res.json(result);
         });

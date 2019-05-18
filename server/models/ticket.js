@@ -16,7 +16,12 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.MEDIUMTEXT,
             allowNull: false
         },
-    });
+    },
+    {
+        sequelize,
+        modelName: 'ticket'
+    }
+    );
 
     return Ticket;
 };
