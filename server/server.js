@@ -1,25 +1,24 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const db = require('./models');
-const apiRoutes = require('./app/routes/apiRoutes.js');
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var db = require('./models');
+var apiRoutes = require('./app/routes/apiRoutes.js');
 
-const app2 = express();
-
-const PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
-app2.use(bodyParser.json());
-app2.use(bodyParser.urlencoded({ extended: true }));
-app2.use(bodyParser.text());
-app2.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 // Static directory
-app2.use(express.static('public'));
+app.use(express.static('public'));
 
-apiRoutes(app2, db);
+apiRoutes(app, db);
 
-db.sequelize.sync().then(() => {
-    app2.listen(PORT, () => {
+db.sequelize.sync().then(function () {
+    app.listen(PORT, function () {
         console.log(`Listening on PORT ${PORT}`);
     });
 });

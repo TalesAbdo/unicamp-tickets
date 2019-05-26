@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     const Ticket = sequelize.define('Ticket', {
         title: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(100),
             allowNull: false
         },
         severityId: {
@@ -13,15 +13,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         description: {
-            type: DataTypes.MEDIUMTEXT,
+            type: DataTypes.STRING(3000),
             allowNull: false
         },
     },
-    {
-        sequelize,
-        modelName: 'ticket'
-    }
-    );
+    { freezeTableName: true, tableName: 'ticket' });
 
     return Ticket;
 };

@@ -4,7 +4,8 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BLOB,
             allowNull: false
         },
-    });
+    },
+    { freezeTableName: true, tableName: 'attachment', timestamps: false });
 
     return Attachment;
 };
