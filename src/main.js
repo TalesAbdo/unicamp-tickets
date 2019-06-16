@@ -5,6 +5,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+
 moment.locale('pt-BR');
 Vue.component('icon', Icon); //eslint-disable-line
 

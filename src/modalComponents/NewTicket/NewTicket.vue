@@ -3,10 +3,10 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <Title titleValue="Novo Ticket" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" />
+            <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto" @typed="titleTyped" v-model="ticket.title"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" v-model="ticket.description"/>
 
-            <Service class = "margin-rem"/>
+            <Service class = "margin-rem" v-model="ticket.serviceId"/>
 
             <div class="severity-buttons-container">
                 <span class="has-text-weight-bold">Severidade</span>
@@ -28,7 +28,7 @@
                         <span><i class="fas fa-trash" /> Arquivo1.ssv</span>
                     </div>
                 </div>
-                <button type="button" class="button is-black is-normal">Abrir Ticket</button>
+                <button type="button" class="button is-black is-normal" @click="createTicket">Abrir Ticket</button>
             </div>
         </form>
         <button class="modal-close is-large" aria-label="close"></button>
@@ -42,6 +42,8 @@ import Textarea from 'shared/Textarea.vue';
 import FileButton from 'shared/FileButton.vue';
 import Service from './components/ServiceDropdown.vue';
 
+const axios = require('axios');
+
 export default {
     name: 'newTicket',
     components: {
@@ -52,7 +54,13 @@ export default {
     },
     data() {
         return {
-            activeSevButton: null
+            activeSevButton: null,
+            ticket: {
+                title: null,
+                description: null,
+                serviceId: null,
+                severityId: null,
+            }
         };
     },
     methods: {
@@ -62,6 +70,22 @@ export default {
         hide() {
             this.$emit('hide');
         },
+        createTicket() {
+            console.log('here');
+            console.log(this.ticket);
+            axios.post('api/ticket/new',
+                {
+                    assignedId: null,
+                    ownerId: 1,
+                    serviceId: this.ticket.serviceId,
+                    title: this.ticket.title,
+                    description: this.ticket.description,
+                    severityId: this.ticket.severityId,
+                    statusId: 3,
+                }).then((response) => {
+                console.log(response);
+            });
+        }
     }
 };
 </script>

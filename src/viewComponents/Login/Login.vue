@@ -20,6 +20,8 @@
 import Input from 'shared/Input.vue';
 import UserControl from 'modal/UserControl/UserControl.vue';
 
+const axios = require('axios');
+
 export default {
     name: 'login',
     components: {
@@ -29,6 +31,12 @@ export default {
         return {
             showUserControl: false
         };
+    },
+    mounted() {
+        console.log('entered');
+        axios.get('api/service/all').then((response) => {
+            console.log(response);
+        });
     },
     methods: {
         modalControl() {

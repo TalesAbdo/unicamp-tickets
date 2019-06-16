@@ -3,9 +3,11 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <Title :titleValue="modalInformation.titleText" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" />
+            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="(name) => {service.name = name}"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" v-model="service.description"  @input="(description) => {service.description = description}"/>
             <div class="footer-buttons">
+
+        {{service}}sss
                 <button type="button" class="button is-black">{{modalInformation.buttonText}}</button>
                 <button type="button" class="button is-danger is-inverted">Remover Serviço</button>
             </div>
@@ -26,11 +28,14 @@ export default {
     },
     props: {
         show: { type: Boolean, default: false },
-        modalInformation: { type: Object, required: false }
-
+        modalInformation: { type: Object, required: false },
     },
     data() {
         return {
+            service: {
+                name: null,
+                description: null,
+            }
         };
     },
     methods: {

@@ -1,7 +1,7 @@
 <template>
     <div class="input-container">
         <span class="input-title">{{inputTitle}}</span>
-        <input class="input-text" type="text" :placeHolder="placeHolder" autocomplete="off" />
+        <input class="input-text" type="text" :placeHolder="placeHolder" autocomplete="off" v-model="typedValue" />
         <div class="line"/>
     </div>
 </template>
@@ -10,12 +10,16 @@
 export default {
     name: 'inputText',
     props: {
-        inputTitle: { type: String, required: true, default: '' },
-        inputPlaceHolder: { type: String, required: true, default: '' },
+        inputTitle: { type: String, required: true },
+        inputPlaceHolder: { type: String, required: true },
     },
     computed: {
         placeHolder() {
             return `Digite aqui ${this.inputPlaceHolder}`;
+        },
+        typedValue: {
+            get() { return this.prop; },
+            set(typedValue) { this.$emit('input', typedValue); },
         },
     },
 };

@@ -1,6 +1,14 @@
 const path = require('path');
 
 module.exports = {
+    devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://localhost:3001',
+                secure: false
+            }
+        }
+    },
     pluginOptions: {
         'resolve-alias': {
             alias: {
