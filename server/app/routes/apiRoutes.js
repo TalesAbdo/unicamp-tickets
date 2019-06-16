@@ -34,7 +34,7 @@ module.exports = function (app, db) {
             title: req.body.title,
             description: req.body.description,
             severityId: req.body.severityId,
-            statusId: req.body.statusId,
+            statusId: 1, // All tickets start open
         }).then((result) => {
             res.json(result);
         });

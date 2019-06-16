@@ -1,7 +1,7 @@
 <template>
     <div class="textarea-container">
         <span class="textarea-title">{{textareaTitle}}</span>
-        <textarea class="textarea" :placeholder="placeHolder"></textarea>
+        <textarea class="textarea" :placeholder="placeHolder" v-model="typedValue"/>
     </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
     computed: {
         placeHolder() {
             return `Digite aqui ${this.textareaPlaceHolder}`;
+        },
+        typedValue: {
+            get() { return this.prop; },
+            set(typedValue) { this.$emit('input', typedValue); },
         },
     },
 };

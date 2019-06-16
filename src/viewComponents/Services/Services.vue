@@ -9,7 +9,7 @@
 
              <ServiceCard v-for="item in services" :key="item.name" :service="item" @modalControl="modalControl"/>
         </div>
-        <ServiceControl :show="showServiceControl" @hide="modalControl" :modalInformation="modalInformation"/>
+        <ServiceControl :show="showServiceControl" @hide="modalControl" :isCreate="isCreate"/>
     </div>
 </template>
 
@@ -34,15 +34,15 @@ export default {
                 { name: 'Pedidos de itens', description: 'Itens relacionados aos laboratórios' },
                 { name: 'Máquinas', description: 'Pedidos de máquinas novas' }
             ],
-            modalInformation: { titleText: '', buttonText: '' }
+            isCreate: false
         };
     },
     methods: {
         modalControl(type) {
             if (type === 'newService') {
-                this.modalInformation = { titleText: 'Novo Serviço', buttonText: 'Criar Serviço' };
+                this.isCreate = true;
             } else {
-                this.modalInformation = { titleText: 'Editar Serviço', buttonText: 'Confirmar Alterações' };
+                this.isCreate = false;
             }
             this.showServiceControl = !this.showServiceControl;
         },

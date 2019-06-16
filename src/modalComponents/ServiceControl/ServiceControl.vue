@@ -2,17 +2,15 @@
     <div :class="{'is-active': show}" class="modal service-control">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
-            <Title :titleValue="modalInformation.titleText" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="(name) => {service.name = name}"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" v-model="service.description"  @input="(description) => {service.description = description}"/>
+            <Title :titleValue="titleText" class="header-text"/>
+            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription"/>
             <div class="footer-buttons">
-
-        {{service}}sss
-                <button type="button" class="button is-black">{{modalInformation.buttonText}}</button>
-                <button type="button" class="button is-danger is-inverted">Remover Serviço</button>
+                <button type="button" class="button is-black" @click="createUpdateService">{{buttonText}}</button>
+                <button v-if="!isCreate" type="button" class="button is-danger is-inverted">Remover Serviço</button>
             </div>
         </form>
-        <button class="modal-close is-large" aria-label="close"></button>
+        <button class="modal-close is-large" aria-label="close"/>
     </div>
 </template>
 
@@ -28,7 +26,21 @@ export default {
     },
     props: {
         show: { type: Boolean, default: false },
-        modalInformation: { type: Object, required: false },
+        isCreate: { type: Boolean, required: true },
+    },
+    computed: {
+        titleText() {
+            if (this.isCreate) {
+                return 'Novo Serviço';
+            }
+            return 'Editar Serviço';
+        },
+        buttonText() {
+            if (this.isCreate) {
+                return 'Criar Serviço';
+            }
+            return 'Confirmar Alterações';
+        },
     },
     data() {
         return {
@@ -42,6 +54,21 @@ export default {
         hide() {
             this.$emit('hide');
         },
+        setName(value) {
+            this.service.name = value;
+        },
+        setDescription(value) {
+            this.service.description = value;
+        },
+        createUpdateService() {
+            console.log('hersse');
+            this.$notify({
+                group: 'foo',
+                title: 'Important message',
+                text: 'Hello user! This is a notification!',
+                type: 'warn'
+            });
+        }
     }
 };
 </script>
