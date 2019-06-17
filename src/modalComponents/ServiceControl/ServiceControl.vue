@@ -3,11 +3,11 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <Title :titleValue="titleText" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription"/>
+            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="oldService.name"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="oldService.description"/>
             <div class="footer-buttons">
                 <button type="button" class="button is-black" @click="createUpdateService">{{buttonText}}</button>
-                <button v-if="!isCreate" type="button" class="button is-danger is-inverted">Remover Serviço</button>
+                <button v-if="oldService.id" type="button" class="button is-danger is-inverted"  @click="deleteService">Remover Serviço</button>
             </div>
         </form>
         <button class="modal-close is-large" aria-label="close"/>
@@ -19,6 +19,8 @@ import Title from 'shared/Title.vue';
 import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
 
+const axios = require('axios');
+
 export default {
     name: 'serviceControl',
     components: {
@@ -26,20 +28,20 @@ export default {
     },
     props: {
         show: { type: Boolean, default: false },
-        isCreate: { type: Boolean, required: true },
+        oldService: { type: Object, required: true },
     },
     computed: {
         titleText() {
-            if (this.isCreate) {
-                return 'Novo Serviço';
+            if (this.oldService.name) {
+                return 'Editar Serviço';
             }
-            return 'Editar Serviço';
+            return 'Novo Serviço';
         },
         buttonText() {
-            if (this.isCreate) {
-                return 'Criar Serviço';
+            if (this.oldService.name) {
+                return 'Confirmar Alterações';
             }
-            return 'Confirmar Alterações';
+            return 'Criar Serviço';
         },
     },
     data() {
@@ -49,6 +51,11 @@ export default {
                 description: null,
             }
         };
+    },
+    watch: {
+        oldService() {
+            this.service = this.oldService;
+        },
     },
     methods: {
         hide() {
@@ -61,13 +68,53 @@ export default {
             this.service.description = value;
         },
         createUpdateService() {
-            console.log('hersse');
-            this.$notify({
-                group: 'foo',
-                title: 'Important message',
-                text: 'Hello user! This is a notification!',
-                type: 'warn'
-            });
+            if (this.service.name && this.service.description) {
+                const params = {
+                    name: this.service.name,
+                    description: this.service.description
+                };
+                if (this.oldService.id) {
+                    axios.put(`api/service/update/${this.oldService.id}`, params)
+                        .then(() => {
+                            this.$notify({
+                                group: 'foo',
+                                title: 'Sucesso!',
+                                text: 'Serviço atualizado com êxito.',
+                                type: 'success'
+                            });
+                        });
+                } else {
+                    axios.post('api/service/new', params)
+                        .then(() => {
+                            this.$notify({
+                                group: 'foo',
+                                title: 'Sucesso!',
+                                text: 'Serviço criado com êxito.',
+                                type: 'success'
+                            });
+                        });
+                }
+                this.hide();
+            } else {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Atenção!',
+                    text: 'Preencha todas as informações necessárias.',
+                    type: 'danger'
+                });
+            }
+        },
+        deleteService() {
+            axios.delete(`api/service/delete/${this.oldService.id}`)
+                .then(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Sucesso!',
+                        text: 'Serviço deletado com êxito.',
+                        type: 'success'
+                    });
+                    this.hide();
+                });
         }
     }
 };

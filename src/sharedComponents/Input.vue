@@ -12,14 +12,15 @@ export default {
     props: {
         inputTitle: { type: String, required: true },
         inputPlaceHolder: { type: String, required: true },
+        preValue: { type: String, required: false, default: '' }
     },
     computed: {
         placeHolder() {
             return `Digite aqui ${this.inputPlaceHolder}`;
         },
         typedValue: {
-            get() { return this.prop; },
-            set(typedValue) { this.$emit('input', typedValue); },
+            get() { return this.preValue; },
+            set(typedValue) { this.$emit('input', typedValue); }
         },
     },
 };

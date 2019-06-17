@@ -1,15 +1,14 @@
 <template>
     <div class="services-container">
         <div class="left-container">
-            <Button icon="fa-box" value="Novo serviço" @click="modalControl('newService')" />
+            <Button icon="fa-box" value="Novo serviço" @click="modalControl('newService')"/>
         </div>
 
         <div class="right-container">
              <Title titleValue="Serviços"/>
-
-             <ServiceCard v-for="item in services" :key="item.name" :service="item" @modalControl="modalControl"/>
+             <ServiceCard v-for="(item, index) in services" :key="index" :service="item" @modalControl="modalControl"/>
         </div>
-        <ServiceControl :show="showServiceControl" @hide="modalControl" :isCreate="isCreate"/>
+        <ServiceControl :show="showServiceControl" @hide="modalControl('close')" :oldService="oldService"/>
     </div>
 </template>
 
@@ -19,6 +18,8 @@ import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
 import ServiceCard from './components/ServiceCard.vue';
 
+const axios = require('axios');
+
 export default {
     name: 'service',
     components: {
@@ -27,24 +28,44 @@ export default {
     data() {
         return {
             showServiceControl: false,
-            services: [
-                { name: 'Matrícula', description: 'Pedidos de matrícula no semestre' },
-                { name: 'Alteração de Matrícula', description: 'Pedidos de alteração de matrícula no semestre' },
-                { name: 'Instalação', description: 'Instalação de máquinas e periféricos' },
-                { name: 'Pedidos de itens', description: 'Itens relacionados aos laboratórios' },
-                { name: 'Máquinas', description: 'Pedidos de máquinas novas' }
-            ],
-            isCreate: false
+            services: [],
+            oldService: {
+                id: null,
+                name: '',
+                description: ''
+            }
         };
     },
+    mounted() {
+        this.getServiceList();
+    },
     methods: {
-        modalControl(type) {
-            if (type === 'newService') {
-                this.isCreate = true;
+        getServiceList() {
+            axios.get('api/service/all')
+                .then((response) => {
+                    this.services = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter a lista de serviços.',
+                        type: 'Danger'
+                    });
+                });
+        },
+        modalControl(value) {
+            if (value === 'newService' || value === 'close') {
+                this.oldService = {
+                    id: null,
+                    name: '',
+                    description: ''
+                };
             } else {
-                this.isCreate = false;
+                this.oldService = value;
             }
             this.showServiceControl = !this.showServiceControl;
+            this.getServiceList();
         },
     }
 };

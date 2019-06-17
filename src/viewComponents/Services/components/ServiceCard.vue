@@ -18,13 +18,9 @@ export default {
     props: {
         service: { type: Object, required: true }
     },
-    data() {
-        return {
-        };
-    },
     methods: {
         onClick() {
-            this.$emit('modalControl', 'editService');
+            this.$emit('modalControl', this.service);
         },
     }
 };

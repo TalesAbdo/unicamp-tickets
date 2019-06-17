@@ -2,7 +2,7 @@
     <div id="app">
         <Navbar />
         <router-view/>
-        <notifications group="foo" position="top center"/>
+        <notifications group="foo" position="top center" :max=3 class="vue-notifications"/> <!-- fkf -->
     </div>
 </template>
 
@@ -23,5 +23,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100%;
+
+  .vue-notifications {
+    margin-top:.5rem;
+  }
 }
 </style>

@@ -11,14 +11,15 @@ export default {
     props: {
         textareaTitle: { type: String, required: true },
         textareaPlaceHolder: { type: String, required: true },
+        preValue: { type: String, required: false, default: '' }
     },
     computed: {
         placeHolder() {
             return `Digite aqui ${this.textareaPlaceHolder}`;
         },
         typedValue: {
-            get() { return this.prop; },
-            set(typedValue) { this.$emit('input', typedValue); },
+            get() { return this.preValue; },
+            set(typedValue) { this.$emit('input', typedValue); }
         },
     },
 };
