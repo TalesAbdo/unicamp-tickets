@@ -49,6 +49,24 @@ export default {
             service: {
                 name: null,
                 description: null,
+            },
+            successMessage: {
+                group: 'foo',
+                title: 'Sucesso!',
+                text: 'Operação realizada com êxito.',
+                type: 'success'
+            },
+            errorMessage: {
+                group: 'foo',
+                title: 'Atenção!',
+                text: 'Operação não realizada, contate o adminstrador da aplicação.',
+                type: 'danger'
+            },
+            attentionMessage: {
+                group: 'foo',
+                title: 'Atenção!',
+                text: 'Preencha todas as informações necessárias.',
+                type: 'danger'
             }
         };
     },
@@ -68,53 +86,42 @@ export default {
             this.service.description = value;
         },
         createUpdateService() {
-            if (this.service.name && this.service.description) {
-                const params = {
-                    name: this.service.name,
-                    description: this.service.description
-                };
-                if (this.oldService.id) {
-                    axios.put(`api/service/update/${this.oldService.id}`, params)
-                        .then(() => {
-                            this.$notify({
-                                group: 'foo',
-                                title: 'Sucesso!',
-                                text: 'Serviço atualizado com êxito.',
-                                type: 'success'
+            try {
+                if (this.service.name && this.service.description) {
+                    const params = {
+                        name: this.service.name,
+                        description: this.service.description
+                    };
+                    if (this.oldService.id) {
+                        axios.put(`api/service/update/${this.oldService.id}`, params)
+                            .then(() => {
+                                this.$notify(this.successMessage);
                             });
-                        });
+                    } else {
+                        axios.post('api/service/new', params)
+                            .then(() => {
+                                this.$notify(this.successMessage);
+                            });
+                    }
+                    this.hide();
                 } else {
-                    axios.post('api/service/new', params)
-                        .then(() => {
-                            this.$notify({
-                                group: 'foo',
-                                title: 'Sucesso!',
-                                text: 'Serviço criado com êxito.',
-                                type: 'success'
-                            });
-                        });
+                    this.$notify(this.attentionMessage);
                 }
-                this.hide();
-            } else {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Atenção!',
-                    text: 'Preencha todas as informações necessárias.',
-                    type: 'danger'
-                });
+            } catch (error) {
+                this.$notify(this.errorMessage);
+                console.log(error);
             }
         },
         deleteService() {
-            axios.delete(`api/service/delete/${this.oldService.id}`)
-                .then(() => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Sucesso!',
-                        text: 'Serviço deletado com êxito.',
-                        type: 'success'
+            try {
+                axios.delete(`api/service/delete/${this.oldService.id}`)
+                    .then(() => {
+                        this.$notify(this.successMessage);
+                        this.hide();
                     });
-                    this.hide();
-                });
+            } catch (error) {
+                this.$notify(this.errorMessage);
+            }
         }
     }
 };
