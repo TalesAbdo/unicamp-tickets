@@ -8,18 +8,23 @@
                 <div class="choose-container">
                     <span class="has-text-weight-bold">Analisar</span>
                     <div class="buttons has-addons">
-                        <span :class="{'is-primary is-selected': activeAnalysisButton === 1}" class="button" @click="analysisControl(1)">Tickets por mês</span>
-                        <span :class="{'is-primary is-selected': activeAnalysisButton === 2}" class="button" @click="analysisControl(2)">Tempo de fechamento</span>
+                        <span :class="{'is-primary is-selected': periodData.type === 'countTicket'}" class="button" @click="setType('countTicket')">Tickets por mês</span>
+                        <span :class="{'is-primary is-selected': periodData.type === 'avgTime'}" class="button" @click="setType('avgTime')">Tempo de fechamento</span>
                     </div>
                 </div>
-                <Service/>
+                <Service @click="setService" />
+                    <Year @click="setYear" />
             </div>
 
             <div class="options-second-line">
-                <Month title="Mês final"/>
-                <Month title="Mês final"/>
-                <Button icon="fa-image" value="Salvar imagem" />
+                    <Month title="Mês Inicial"  @click="setinitialMonth" />
+                    <Month title="Mês Final"  @click="setFinalMonth" />
+
+                <Button icon="fa-chart-bar" value="Gerar gráfico" @click="getChartData"/>
+                <Button icon="fa-image" value="Salvar imagem" @click="createImage"/>
             </div>
+            {{periodData}}
+
         </div>
 
         <div class="common-container">
@@ -58,60 +63,121 @@ import Chart from 'chart.js';
 import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
 import Service from './components/ServiceDropdown.vue';
+import Year from './components/YearDropdown.vue';
 import Month from './components/MonthDropdown.vue';
+
+const axios = require('axios');
 
 export default {
     name: 'metrics',
     components: {
-        Button, Title, Service, Month
+        Button, Title, Service, Year, Month
     },
     data() {
         return {
-            activeAnalysisButton: 0,
-            activeSevButton: 0
+            activeSevButton: 0,
+            labels: [],
+            chartData: [],
+            periodData: {
+                type: null,
+                service: null,
+                year: null,
+                initialMonth: null,
+                finalMonth: null
+            }
         };
     },
     mounted() {
-        const ctx = document.getElementById('report-chart').getContext('2d');
-        const myChart = new Chart(ctx, { // eslint-disable-line
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [
-                    {
-                        label: 'Mátricula',
-                        data: [12, 19, 3, 5, 2, 3],
-                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Instalação',
-                        data: [2, 10, 10, 20, 5, 8],
-                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                        borderColor: 'rgba(100, 110, 132, 1)',
-                        borderWidth: 1
-                    },
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
+        this.createChart();
     },
     methods: {
-        analysisControl(value) {
-            this.activeAnalysisButton = value;
-        },
         severityControl(value) {
             this.activeSevButton = value;
         },
+        createChart() {
+            const ctx = document.getElementById('report-chart').getContext('2d');
+            const myChart = new Chart(ctx, { // eslint-disable-line
+                type: 'line',
+                data: {
+                    labels: this.labels,
+                    datasets: [
+                        {
+                            data: this.chartData,
+                            label: this.periodData.year ? this.periodData.year : 'Select a period',
+                            backgroundColor: 'rgba(255, 255, 255, 0)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                }
+            });
+        },
+        setType(value) {
+            this.periodData.type = value;
+        },
+        setService(value) {
+            this.periodData.service = value;
+        },
+        setYear(value) {
+            this.periodData.year = value;
+        },
+        setinitialMonth(value) {
+            this.periodData.initialMonth = value;
+        },
+        setFinalMonth(value) {
+            this.periodData.finalMonth = value;
+        },
+        getChartData() {
+            try {
+                if (this.periodData.type && this.periodData.year && this.periodData.initialMonth && this.periodData.finalMonth) {
+                    if (this.periodData.type === 'countTicket') {
+                        axios.post('api/ticket/byamount', this.periodData)
+                            .then((response) => {
+                                console.log(response);
+                                response.data.forEach((item) => {
+                                    console.log(item.MONTH);
+                                    this.labels.push(toString(item.MONTH));
+                                    this.chartData.push(item.COUNT);
+                                });
+                            });
+                    } else {
+                        axios.post('api/ticket/byclosingtime')
+                            .then((response) => {
+                                console.log(response);
+                            });
+                    }
+
+                    this.createChart();
+                } else {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Atenção!',
+                        text: 'Preencha todas as informações para gerar o relatório.',
+                        type: 'warn'
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Algo deu errado enquanto o gráfico era gerado, contate o adminstrador.',
+                    type: 'danger'
+                });
+            }
+        },
+        createImage() {
+
+        }
     }
 };
 </script>

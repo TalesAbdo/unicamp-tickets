@@ -1,19 +1,19 @@
 <template>
-<div class="month-dropdown-metrics">
-    <span class="dropdown-title">{{title}}</span>
+<div class="year-dropdown-metrics">
+    <span class="dropdown-title">Ano</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
             <span>{{placeholder}}</span>
             <span class="icon is-small">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                <i class="fas fa-angle-down" aria-hidden="true"/>
             </span>
             </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a v-for="month in months" :key="month.id" class="dropdown-item" @click="onClick(month)">
-                {{month.name}}
+            <a v-for="year in years" :key="year.YEAR" class="dropdown-item"  @click="onClick(year.YEAR)">
+                {{year.YEAR}}
             </a>
             </div>
         </div>
@@ -22,44 +22,31 @@
 </template>
 
 <script>
+
+const axios = require('axios');
+
 export default {
-    name: 'monthDropdown',
-    props: {
-        title: { type: String, required: true }
-    },
-    computed: {
-        typedValue: {
-            get() { return this.preValue; },
-            set(typedValue) { this.$emit('input', typedValue); }
-        },
-    },
+    name: 'yearDropdown',
     data() {
         return {
             active: false,
-            placeholder: 'Selecione um mês',
-            months: [
-                { id: 1, name: 'Janeiro' },
-                { id: 2, name: 'Fevereiro' },
-                { id: 3, name: 'Março' },
-                { id: 4, name: 'Abril' },
-                { id: 5, name: 'Maio' },
-                { id: 6, name: 'Junho' },
-                { id: 7, name: 'Julho' },
-                { id: 8, name: 'Agosto' },
-                { id: 9, name: 'Setembro' },
-                { id: 10, name: 'Outubro' },
-                { id: 11, name: 'Novembro' },
-                { id: 12, name: 'Dezembro' }
-            ]
+            placeholder: 'Selecione um ano',
+            years: []
         };
+    },
+    mounted() {
+        axios.get('api/ticket/year/')
+            .then((response) => {
+                this.years = response.data;
+            });
     },
     methods: {
         controlDropdown() {
             this.active = !this.active;
         },
-        onClick(month) {
-            this.placeholder = month.name;
-            this.$emit('click', month.id);
+        onClick(year) {
+            this.placeholder = year;
+            this.$emit('click', year);
             this.controlDropdown();
         }
     }
@@ -69,7 +56,7 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.month-dropdown-metrics {
+.year-dropdown-metrics {
     align-self: flex-start;
     display: flex;
     flex-direction: column;
@@ -87,7 +74,7 @@ export default {
 
     .dropdown {
         .button {
-            width: 11rem;
+            min-width: 6rem;
             margin-top: 0;
             border: 1px solid $primary;
             display: flex;
@@ -105,7 +92,7 @@ export default {
         }
 
         .dropdown-menu {
-            max-width: 11rem;
+            min-width: 6rem;
 
             .dropdown-content {
                 max-height: 15rem;

@@ -71,8 +71,6 @@ export default {
             this.$emit('hide');
         },
         createTicket() {
-            console.log('here');
-            console.log(this.ticket);
             axios.post('api/ticket/new',
                 {
                     assignedId: null,
@@ -83,7 +81,6 @@ export default {
                     severityId: this.ticket.severityId,
                     statusId: 3,
                 }).then((response) => {
-                console.log(response);
             });
         }
     }

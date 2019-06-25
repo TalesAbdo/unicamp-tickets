@@ -4,7 +4,7 @@
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
-            <span>Selecione um produto</span>
+            <span>{{placeholder}}</span>
             <span class="icon is-small">
                 <i class="fas fa-angle-down" aria-hidden="true"></i>
             </span>
@@ -12,11 +12,8 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a href="#" class="dropdown-item">
-                Dropdown item
-            </a>
-            <a class="dropdown-item">
-                Other dropdown item
+            <a v-for="service in services" :key="service.id" class="dropdown-item"  @click="onClick(service)">
+                {{service.name}}
             </a>
             </div>
         </div>
@@ -25,6 +22,9 @@
 </template>
 
 <script>
+
+const axios = require('axios');
+
 export default {
     name: 'serviceDropdown',
     props: {
@@ -32,14 +32,25 @@ export default {
     data() {
         return {
             active: false,
+            services: [],
+            placeholder: 'Todos',
         };
     },
+    mounted() {
+        axios.get('api/service/all')
+            .then((response) => {
+                this.services = response.data;
+                this.services.unshift({ name: 'Todos', id: null, description: '' });
+            });
+    },
     methods: {
-        onClick() {
-            this.$emit('click');
-        },
         controlDropdown() {
             this.active = !this.active;
+        },
+        onClick(service) {
+            this.placeholder = service.name;
+            this.$emit('click', service.id);
+            this.controlDropdown();
         }
     }
 };

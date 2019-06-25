@@ -1,31 +1,78 @@
+
 module.exports = function (app, db) {
 
-    app.get('/api/ticket/byuser', (req, res) => {
-        db.Ticket.findAll({
-            where: {
-                userId: req.body.userId,   
-                createdAt: {
-                    [Op.between]: [req.body.initialDate, req.body.finalDate],  
-                },
-                severityId: req.body.severityIdList,
-                statusId: req.body.statusIdList,
-                serviceId: req.body.serviceIdList
-            }
-        }).then((result) => {
+    // app.get('/api/ticket/byuser', (req, res) => {
+    //     db.Ticket.findAll({
+    //         where: {
+    //             userId: req.body.userId,   
+    //             createdAt: {
+    //                 [Op.between]: [req.body.initialDate, req.body.finalDate],  
+    //             },
+    //             severityId: req.body.severityIdList,
+    //             statusId: req.body.statusIdList,
+    //             serviceId: req.body.serviceIdList
+    //         }
+    //     }).then((result) => {
+    //         res.json(result);
+    //     });
+    // });
+
+    // app.get('/api/ticket/:id', (req, res) => {
+    //     db.Ticket.findOne({
+    //         where: {
+    //             id: req.params.id
+    //         }
+    //     }).then((result) => {
+    //         res.json(result);
+    //     });
+    // });
+
+    app.get('/api/ticket/year', (req, res) => {
+        db.sequelize.query(
+            'SELECT YEAR(createdAt) YEAR FROM TICKET GROUP BY YEAR(createdAt);',
+            {type: db.sequelize.QueryTypes.SELECT}
+          ).then((result) => {
             res.json(result);
         });
     });
 
-    app.get('/api/ticket/:id', (req, res) => {
-        db.Ticket.findOne({
-            where: {
-                id: req.params.id
-            }
-        }).then((result) => {
+    // This way was easier and more applicable. Also, it's a post so a body can be passed
+    app.post('/api/ticket/byamount', (req, res) => {
+        console.log(req.body);
+        let serviceQuery = ''
+        if(req.body.serviceId) {
+            serviceQuery = `AND serviceId = '${req.body.serviceId}`
+        }
+        db.sequelize.query(
+            `SELECT MONTHNAME(createdAt) MONTH, COUNT(*) COUNT FROM TICKET
+            WHERE (MONTH(createdAt) >= '${req.body.initialMonth}' AND MONTH(createdAt) <= '${req.body.finalMonth}')
+            AND YEAR(createdAt) = '${req.body.year}'
+            ${serviceQuery}
+            GROUP BY MONTH(createdAt);`,
+            {type: db.sequelize.QueryTypes.SELECT}
+            ).then((result) => {
             res.json(result);
         });
     });
 
+    // This way was easier and more applicable. Also, it's a post so a body can be passed
+    app.post('/api/ticket/byclosingtime', (req, res) => {
+        let serviceQuery = ''
+        if(req.body.serviceId) {
+            serviceQuery = `AND serviceId = '${req.body.serviceId}`
+        }
+        db.sequelize.query(
+            `SELECT MONTHNAME(createdAt), AVG(DATEDIFF(updatedAt, createdAt)) as avgDays
+            WHERE (MONTH(createdAt) >= '${req.body.initialMonth}' AND MONTH(createdAt) <= '${req.body.finalMonth}')
+            AND YEAR(createdAt) = '${req.body.year}'
+            ${serviceQuery}
+            GROUP BY MONTH(createdAt);`,
+            {type: db.sequelize.QueryTypes.SELECT}
+            ).then((result) => {
+            res.json(result);
+        });
+    });
+    
     app.post('/api/ticket/new', (req, res) => {
         db.Ticket.create({
             assignedId: req.body.assignedId,
@@ -39,6 +86,7 @@ module.exports = function (app, db) {
             res.json(result);
         });
     });
+
     app.put('/api/ticket/update/assigned/:ticketid/:assignedid', (req, res) => {
         db.Ticket.update({
             assignedId: req.params.assignedId

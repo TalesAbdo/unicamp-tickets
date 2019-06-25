@@ -109,7 +109,7 @@ export default {
                 }
             } catch (error) {
                 this.$notify(this.errorMessage);
-                console.log(error);
+                console.log(error); // eslint-disable-line
             }
         },
         deleteService() {
