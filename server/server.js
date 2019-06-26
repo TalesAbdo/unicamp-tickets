@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var db = require('./models');
 var apiRoutes = require('./app/routes/apiRoutes.js');
 
-var PORT = process.env.PORT || 3001;
+var PORT = process.env.PORT || 3002;
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.json());

@@ -44,14 +44,14 @@ module.exports = function (app, db) {
             serviceQuery = `AND serviceId = '${req.body.serviceId}`
         }
         db.sequelize.query(
-            `SELECT MONTHNAME(createdAt) MONTH, COUNT(*) COUNT FROM TICKET
+            `SELECT MONTHNAME(createdAt) MONTH, COUNT(*) VALUE FROM TICKET
             WHERE (MONTH(createdAt) >= '${req.body.initialMonth}' AND MONTH(createdAt) <= '${req.body.finalMonth}')
             AND YEAR(createdAt) = '${req.body.year}'
             ${serviceQuery}
             GROUP BY MONTH(createdAt);`,
             {type: db.sequelize.QueryTypes.SELECT}
             ).then((result) => {
-            res.json(result);
+            res.json([{MONTH: '1uuuu', VALUE: 23}, {MONTH: '1uuuu', VALUE: 70}, {MONTH: '1uuuu', VALUE: 56} ]);
         });
     });
 
@@ -62,7 +62,7 @@ module.exports = function (app, db) {
             serviceQuery = `AND serviceId = '${req.body.serviceId}`
         }
         db.sequelize.query(
-            `SELECT MONTHNAME(createdAt), AVG(DATEDIFF(updatedAt, createdAt)) as avgDays
+            `SELECT MONTHNAME(createdAt) MONTH, AVG(DATEDIFF(updatedAt, createdAt)) VALUE FROM TICKET
             WHERE (MONTH(createdAt) >= '${req.body.initialMonth}' AND MONTH(createdAt) <= '${req.body.finalMonth}')
             AND YEAR(createdAt) = '${req.body.year}'
             ${serviceQuery}

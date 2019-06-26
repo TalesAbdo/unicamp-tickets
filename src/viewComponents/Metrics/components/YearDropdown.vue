@@ -34,11 +34,16 @@ export default {
             years: []
         };
     },
-    mounted() {
-        axios.get('api/ticket/year/')
+    async mounted() {
+        await axios.get('api/ticket/year/')
             .then((response) => {
                 this.years = response.data;
             });
+        // sets most recent year as default
+        if (this.years[0]) {
+            this.placeholder = this.years[0].YEAR;
+            this.$emit('click', this.years[0].YEAR);
+        }
     },
     methods: {
         controlDropdown() {

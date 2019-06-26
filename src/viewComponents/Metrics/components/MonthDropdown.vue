@@ -36,7 +36,7 @@ export default {
     data() {
         return {
             active: false,
-            placeholder: 'Selecione um mês',
+            placeholder: 'Janeiro',
             months: [
                 { id: 1, name: 'Janeiro' },
                 { id: 2, name: 'Fevereiro' },

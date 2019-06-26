@@ -24,6 +24,8 @@
                 <Button icon="fa-image" value="Salvar imagem" @click="createImage"/>
             </div>
             {{periodData}}
+            {{chartData}}
+            {{labels}}
 
         </div>
 
@@ -59,6 +61,7 @@
 </template>
 
 <script>
+import { saveAs } from 'file-saver';
 import Chart from 'chart.js';
 import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
@@ -79,11 +82,11 @@ export default {
             labels: [],
             chartData: [],
             periodData: {
-                type: null,
+                type: 'countTicket',
                 service: null,
                 year: null,
-                initialMonth: null,
-                finalMonth: null
+                initialMonth: 1,
+                finalMonth: 1
             }
         };
     },
@@ -99,12 +102,13 @@ export default {
             const myChart = new Chart(ctx, { // eslint-disable-line
                 type: 'line',
                 data: {
+                    backgroundColor: '#000000',
                     labels: this.labels,
                     datasets: [
                         {
                             data: this.chartData,
                             label: this.periodData.year ? this.periodData.year : 'Select a period',
-                            backgroundColor: 'rgba(255, 255, 255, 0)',
+                            backgroundColor: 'rgba(0, 0, 0, 0)',
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1
                         },
@@ -114,11 +118,20 @@ export default {
                     scales: {
                         yAxes: [{
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                precision: 0
                             }
                         }]
                     },
-                }
+                },
+                // For image export
+                plugins: [{
+                    beforeDraw(c) {
+                        const { ctx } = c.chart;
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, c.chart.width, c.chart.height);
+                    }
+                }]
             });
         },
         setType(value) {
@@ -136,32 +149,23 @@ export default {
         setFinalMonth(value) {
             this.periodData.finalMonth = value;
         },
-        getChartData() {
+        async getChartData() {
             try {
-                if (this.periodData.type && this.periodData.year && this.periodData.initialMonth && this.periodData.finalMonth) {
+                if (this.periodData.finalMonth >= this.periodData.initialMonth) {
+                    let apiPath;
                     if (this.periodData.type === 'countTicket') {
-                        axios.post('api/ticket/byamount', this.periodData)
-                            .then((response) => {
-                                console.log(response);
-                                response.data.forEach((item) => {
-                                    console.log(item.MONTH);
-                                    this.labels.push(toString(item.MONTH));
-                                    this.chartData.push(item.COUNT);
-                                });
-                            });
+                        apiPath = 'api/ticket/byamount';
                     } else {
-                        axios.post('api/ticket/byclosingtime')
-                            .then((response) => {
-                                console.log(response);
-                            });
+                        apiPath = 'api/ticket/byclosingtime';
                     }
 
+                    await axios.post(apiPath, this.periodData).then((response) => { this.fillChartData(response.data); });
                     this.createChart();
                 } else {
                     this.$notify({
                         group: 'foo',
                         title: 'Atenção!',
-                        text: 'Preencha todas as informações para gerar o relatório.',
+                        text: 'Selecione o mês final maior que o inicial.',
                         type: 'warn'
                     });
                 }
@@ -175,8 +179,19 @@ export default {
                 });
             }
         },
+        fillChartData(data) {
+            this.labels = [];
+            this.chartData = [];
+            data.forEach((item) => {
+                this.labels.push(item.MONTH);
+                this.chartData.push(item.VALUE);
+            });
+        },
         createImage() {
-
+            const canvas = document.getElementById('report-chart');
+            canvas.toBlob((blob) => {
+                saveAs(blob, 'pretty image.jpg');
+            }, 'image/jpeg', 1);
         }
     }
 };
