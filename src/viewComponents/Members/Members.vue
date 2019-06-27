@@ -7,9 +7,9 @@
         <div class="right-container">
              <Title titleValue="Membros"/>
 
-             <MemberCard v-for="item in members" :key="item.name" :member="item"/>
+             <MemberCard v-for="member in members" :key="member.id" :member="member" @onUpdate="getMemberList"/>
         </div>
-        <NewMember :show="showNewMember" @hide="modalControl"/>
+        <NewMember :show="showNewMember" @hide="modalControl"  @onUpdate="getMemberList"/>
     </div>
 </template>
 
@@ -19,6 +19,8 @@ import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
 import MemberCard from './components/MemberCard.vue';
 
+const axios = require('axios');
+
 export default {
     name: 'members',
     components: {
@@ -27,18 +29,30 @@ export default {
     data() {
         return {
             showNewMember: false,
-            members: [
-                { name: 'Tales de Mileto dos Santos Prado', email: 'tales@ft.unicamp.br', isAdmin: true },
-                { name: 'Ana Carolina de Souza', email: 'ana@ft.unicamp.br' },
-                { name: 'José Pedro Martins', email: 'jose@ft.unicamp.br' },
-                { name: 'Maria dos Santos', email: 'maria@ft.unicamp.br' },
-                { name: 'Ricardo José Pinheiros', email: 'ricardo@ft.unicamp.br' }
-            ],
+            members: [],
         };
     },
+    mounted() {
+        this.getMemberList();
+    },
     methods: {
+        getMemberList() {
+            axios.get('/api/usersupport/all')
+            .then((response) => {
+                this.members = response.data;
+            })
+            .catch(() => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível obter a lista de membros.',
+                    type: 'Danger'
+                });
+            });
+        },
         modalControl() {
             this.showNewMember = !this.showNewMember;
+            this.getMemberList();
         },
     }
 };

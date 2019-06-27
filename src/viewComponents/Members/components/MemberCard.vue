@@ -14,18 +14,41 @@
                 <span class="is-size-5 has-text-weight-bold">{{member.name}}</span>
                 <span class="service-description">{{member.email}}</span>
             </div>
-            <button type="button" class="button is-danger is-inverted">Remover Membro</button>
+            <button type="button" class="button is-danger is-inverted" @click="removeMember">Remover Membro</button>
         </div>
     </div>
 </template>
 
 <script>
+const axios = require('axios');
 
 export default {
     name: 'memberCard',
     props: {
         member: { type: Object, required: true }
     },
+    methods: {
+        removeMember() {
+            axios.delete(`/api/usersupport/delete/${this.member.id}`)
+            .then(() => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Sucesso!',
+                    text: 'Usuário deletado com êxito.',
+                    type: 'success'
+                });
+                this.$emit('onUpdate');
+            })
+            .catch(() => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível deletar o membro, contate o administrador.',
+                    type: 'Danger'
+                });
+            });
+        }
+    }
 };
 </script>
 
@@ -76,6 +99,10 @@ export default {
             .email-description {
                 color: $dark-gray;
             }
+        }
+        
+        .button:hover {
+            border: 1px solid $primary !important;
         }
     }
 }

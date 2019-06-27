@@ -1,5 +1,7 @@
 
 module.exports = function (app, db) {
+    const Sequelize = require('sequelize');
+    const Op = Sequelize.Op;
 
     app.get('/api/ticket/byuser', (req, res) => {
         db.Ticket.findAll({
@@ -36,9 +38,8 @@ module.exports = function (app, db) {
         });
     });
 
-    // This way was easier and more applicable. Also, it's a post so a body can be passed
+    // Queries with join are made with raw query because are simpler to understand and modify
     app.post('/api/ticket/byamount', (req, res) => {
-        console.log(req.body);
         let serviceQuery = ''
         if(req.body.serviceId) {
             serviceQuery = `AND serviceId = ${req.body.serviceId}`
@@ -55,7 +56,6 @@ module.exports = function (app, db) {
         });
     });
 
-    // This way was easier and more applicable. Also, it's a post so a body can be passed
     app.post('/api/ticket/byclosingtime', (req, res) => {
         let serviceQuery = ''
         if(req.body.serviceId) {
@@ -230,14 +230,15 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/user/bynameandemail', (req, res) => {
+    app.post('/api/user/bynameandemail', (req, res) => {
         db.User.findAll({
             where: {
                 [Op.or]: [
-                    { name: { [Op.like]: `%${req.body.name}` } },
-                    { email: { [Op.like]: `%${req.body.email}` } }
-                  ]
-            }
+                    { name: { [Op.substring]: req.body.typedText } },
+                    { email: { [Op.substring]: req.body.typedText } }
+                ]
+            },
+            attributes: ['id', 'name', 'email']
         }).then((result) => {
             res.json(result);
         });
@@ -280,23 +281,32 @@ module.exports = function (app, db) {
     });
 
     app.get('/api/usersupport/all', (req, res) => {
-        db.UserSupport.findAll({}).then((result) => {
+        db.sequelize.query(
+            `select u.name, u.email, u.id, su.isAdmin
+            from user u
+            inner join supportUser su on u.id = su.userid`,
+            {type: db.sequelize.QueryTypes.SELECT}
+            ).then((result) => {
             res.json(result);
         });
     });
 
     app.post('/api/usersupport/new', (req, res) => {
-        db.UserSupport.create({
-            userId: req.body.userId,
-            isAdmin: 'n'
-        }).then((result) => {
+        db.SupportUser.findOrCreate({
+            where: {
+                userId: req.body.userId
+            },
+            defaults: {
+                isAdmin: 0
+            }
+        }).then(([result, created]) => {
             res.json(result);
         });
     });
 
     // Update admin status
     app.put('/api/usersupport/update/:id', (req, res) => {
-        db.UserSupport.update({
+        db.SupportUser.update({
             isAdmin: req.body.isAdmin
         }, {
             where: {
@@ -308,9 +318,9 @@ module.exports = function (app, db) {
     });
 
     app.delete('/api/usersupport/delete/:id', (req, res) => {
-        db.UserSupport.destroy({
+        db.SupportUser.destroy({
             where: {
-                id: req.params.id
+                userId: req.params.id
             }
         }).then((result) => {
             res.json(result);

@@ -28,7 +28,7 @@
 
         <!-- User search results -->
         <div v-show="result.length && !isSearching && typedText" class="results">
-            <a v-for="(item, index) in result" :key="index" class="result-item" @click="teste(item)">
+            <a v-for="(item, index) in result" :key="index" class="result-item" @click="userSelected(item)">
                 <PersonInformation :firstLine="item.name" :secondLine="item.email" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
             </a>
         </div>
@@ -48,12 +48,8 @@ export default {
         isSearching: { type: Boolean, required: true, default: false },
         result: { type: Array, required: true, default: () => {} }
     },
-    data() {
-        return {
-        };
-    },
     methods: {
-        teste(item) {
+        userSelected(item) {
             this.$emit('onclick', item);
         },
     }
@@ -93,11 +89,11 @@ export default {
     }
 
     .result-item {
-        padding: .825rem 0;
+        padding: .825rem 2rem;
         border-bottom: 1px solid $light-gray;
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-start;
         color: $dark-gray;
 
         &:hover {

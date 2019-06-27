@@ -7,23 +7,24 @@
                 <span class="has-text-weight-bold">Procurar usuários</span>
                 <label :class="{ isActive:activeSearch }" class="search-bar" for="inputnav">
                     <i class="fas fa-search"/>
-                    <input placeholder="Digite aqui o nome ou email" class="search-input" type="text"
+                    <input placeholder="Digite aqui o nome ou email" class="search-input" type="text" v-model="typedText"
                             @input="search" @focus="activateSearch" @focusout="desactivateSearch">
                 </label>
-                <UserSearchDropdown :typedText="typedText" :active="activeSearch" :isSearching="isSearching" :result="result" @onclick="onItemClick"/>
+                <UserSearchDropdown :typedText="typedText" :active="activeSearch" :isSearching="isSearching" :result="searchResult" @onclick="onUserClick"/>
             </div>
             <div class="chosen-users-container">
                 <span class="has-text-weight-bold">Usuários escolhidos</span>
                 <div class="chosen-users">
-                    <div v-for="user in chosenUsers" :key="user.id" class="user">
+                    <div v-for="user in chosenUsers" :key="user.id" class="user" @click="removeUser(user.id)">
                         <figure class="image is-32x32">
                             <img class="is-rounded" src="https://pm1.narvii.com/6626/77bcaf576f221820644c375a2720f21470fba161_128.jpg">
                         </figure>
-                            <span class="text has-text-weight-bold">{{firstName(user.name)}}</span>
+                            <span class="name text has-text-weight-bold">{{firstName(user.name)}}</span>
+                            <span class="remove text has-text-weight-bold has-text-primary">Remove</span>
                     </div>
                 </div>
             </div>
-            <button type="button" class="button is-black">Adicionar usuários como membros</button>
+            <button type="button" class="button is-black" @click="addMembers">Adicionar usuários como membros</button>
         </div>
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
@@ -32,6 +33,8 @@
 <script>
 import Title from 'shared/Title.vue';
 import UserSearchDropdown from './components/UserSearchDropdown.vue';
+
+const axios = require('axios');
 
 export default {
     name: 'newMember',
@@ -43,18 +46,11 @@ export default {
     },
     data() {
         return {
-            chosenUsers: [
-                { id: 1, name: 'Tales de Mileto dos Santos Prado', isAdmin: true },
-                { id: 2, name: 'Ana Carolina de Souza' },
-                { id: 3, name: 'José Pedro Martins' },
-                { id: 4, name: 'Maria dos Santos' },
-                { id: 5, name: 'Ricardo José Pinheiros' }
-            ],
+
             activeSearch: false,
             isSearching: false,
-            result: [{ id: 1, name: 'Tales de Mileto dos Santos Prado', email: 'talesabdo@outlook.com' },
-                { id: 1, name: 'Tales de Mileto dos Santos Prado', email: 'talesabdo@outlook.com' },
-                { id: 1, name: 'Tales de Mileto dos Santos Prado', email: 'talesabdo@outlook.com' }],
+            chosenUsers: [],
+            searchResult: [],
             typedText: '',
             focusOut: true
         };
@@ -69,17 +65,76 @@ export default {
         async search(event) {
             this.typedText = (event.target.value.toLowerCase());
             this.isSearching = true;
-            // this.chosenUsers.push(event);
+            await this.getUserList();
             this.isSearching = false;
+            
         },
         activateSearch() {
             this.activeSearch = true;
         },
         desactivateSearch() {
-            setTimeout(() => { this.activeSearch = false; }, 150);
+            setTimeout(() => { this.activeSearch = false; }, 250);
         },
-        onItemClick(element) {
-            console.log(element); //eslint-disable-line
+        onUserClick(element) {
+            this.typedText = '';
+            let alreadyInList = false;
+            this.chosenUsers.map((item) => {
+                if(item.id === element.id) {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Cuidado!',
+                        text: 'Este usuário já está na lista.',
+                        type: 'warn'
+                    });
+                    alreadyInList = true;
+                }
+            });
+            if (!alreadyInList) {
+                this.chosenUsers.push(element);
+            }
+        },
+        getUserList() {
+            axios.post('/api/user/bynameandemail', { typedText: this.typedText })
+            .then((response) => { this.searchResult = response.data; })
+            .catch(() => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível obter a lista de membros.',
+                    type: 'Danger'
+                });
+            });
+        },
+        removeUser(id) {
+            const index = this.chosenUsers.findIndex((item) => {
+                return item.id === id;
+            })
+            if (index !== -1) {
+                this.chosenUsers.splice(index, 1);
+            }
+        },
+        addMembers() {
+            try {
+                this.chosenUsers.forEach(user => {
+                    axios.post('/api/usersupport/new', { userId: user.id })
+                });
+                this.$notify({
+                    group: 'foo',
+                    title: 'Sucesso!',
+                    text: 'Usuário(s) adicionado(s) com êxito.',
+                    type: 'success'
+                });
+                this.chosenUsers = [];
+                this.hide();
+            } catch (e) {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível adicionar o(s) membro(s).',
+                    type: 'Danger'
+                });
+                console.log(e);
+            };
         },
     }
 };
@@ -144,11 +199,40 @@ export default {
                 width: 100%;
                 display: flex;
                 flex-wrap: wrap;
+                margin-top: .5rem;
 
                 .user {
                     display: flex;
                     align-items: center;
-                    margin: .5rem .5rem 0 0;
+                    margin-right: .8rem;
+                    transition: .2s ease-in;
+
+                    &:hover {
+                        transform: scale(1.025);
+                        transition: .2s ease-out;
+                        cursor: pointer;
+
+                        > .name, .image {
+                            opacity: .3;
+                            transition: .2 ease-out;
+                        }
+                        > .remove {
+                            opacity: 1 !important;
+                            transition: .2 ease-out;
+                        }
+                    }
+
+                    .text {
+                        margin-left: .25rem;
+                        line-height: 10px;
+                    }
+
+                    .remove {
+                        position: absolute;
+                        opacity: 0;
+                        transition: .2 ease-in;
+
+                    }
                 }
             }
         }
