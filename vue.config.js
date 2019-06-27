@@ -21,11 +21,3 @@ module.exports = {
         }
     },
 };
-// proxy configuration on vue cli 3
-// devServer.proxy
-
-// prod app.js
-// servir backend
-// front-end static
-
-// colocar os arquivos no servidor e entao utilizar PM2

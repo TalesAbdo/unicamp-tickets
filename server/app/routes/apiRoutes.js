@@ -1,31 +1,31 @@
 
 module.exports = function (app, db) {
 
-    // app.get('/api/ticket/byuser', (req, res) => {
-    //     db.Ticket.findAll({
-    //         where: {
-    //             userId: req.body.userId,   
-    //             createdAt: {
-    //                 [Op.between]: [req.body.initialDate, req.body.finalDate],  
-    //             },
-    //             severityId: req.body.severityIdList,
-    //             statusId: req.body.statusIdList,
-    //             serviceId: req.body.serviceIdList
-    //         }
-    //     }).then((result) => {
-    //         res.json(result);
-    //     });
-    // });
+    app.get('/api/ticket/byuser', (req, res) => {
+        db.Ticket.findAll({
+            where: {
+                userId: req.body.userId,   
+                createdAt: {
+                    [Op.between]: [req.body.initialDate, req.body.finalDate],  
+                },
+                severityId: req.body.severityIdList,
+                statusId: req.body.statusIdList,
+                serviceId: req.body.serviceIdList
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
 
-    // app.get('/api/ticket/:id', (req, res) => {
-    //     db.Ticket.findOne({
-    //         where: {
-    //             id: req.params.id
-    //         }
-    //     }).then((result) => {
-    //         res.json(result);
-    //     });
-    // });
+    app.get('/api/ticket/search/:id', (req, res) => {
+        db.Ticket.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
 
     app.get('/api/ticket/year', (req, res) => {
         db.sequelize.query(
@@ -41,7 +41,7 @@ module.exports = function (app, db) {
         console.log(req.body);
         let serviceQuery = ''
         if(req.body.serviceId) {
-            serviceQuery = `AND serviceId = '${req.body.serviceId}`
+            serviceQuery = `AND serviceId = ${req.body.serviceId}`
         }
         db.sequelize.query(
             `SELECT MONTHNAME(createdAt) MONTH, COUNT(*) VALUE FROM TICKET
@@ -59,7 +59,7 @@ module.exports = function (app, db) {
     app.post('/api/ticket/byclosingtime', (req, res) => {
         let serviceQuery = ''
         if(req.body.serviceId) {
-            serviceQuery = `AND serviceId = '${req.body.serviceId}`
+            serviceQuery = `AND serviceId = ${req.body.serviceId}`
         }
         db.sequelize.query(
             `SELECT MONTHNAME(createdAt) MONTH, AVG(DATEDIFF(updatedAt, createdAt)) VALUE FROM TICKET
@@ -67,6 +67,31 @@ module.exports = function (app, db) {
             AND YEAR(createdAt) = '${req.body.year}'
             ${serviceQuery}
             GROUP BY MONTH(createdAt);`,
+            {type: db.sequelize.QueryTypes.SELECT}
+            ).then((result) => {
+            res.json(result);
+        });
+    });
+
+    // This way was easier and more applicable. Also, it's a post so a body can be passed
+    app.post('/api/ticket/byfilter', (req, res) => {
+        let serviceQuery = '';
+        let severityQuery = '';
+        if (req.body.serviceId) {
+            serviceQuery = `AND t.serviceId = ${req.body.serviceId}`
+        }
+        if (req.body.severityId) {
+            severityQuery = `AND t.severityId = ${req.body.severityId}`
+        }
+        db.sequelize.query(
+            `select t.id, t.severityId severityId, t.STATUSID statusId, t.title, t.description,
+            t.createdAt as created, t.updatedAt updated, s.name as serviceName, ou.name ownerName, su.name assignedName FROM TICKET t
+            left join SERVICE s on t.serviceId = s.id
+            left join USER ou on t.ownerId = ou.id
+            left join USER su on t.assignedId = su.id
+            WHERE ((t.createdAt) >= '${req.body.initialDate}' AND (t.createdAt) <= '${req.body.finalDate}')
+            ${serviceQuery}
+            ${serviceQuery}`,
             {type: db.sequelize.QueryTypes.SELECT}
             ).then((result) => {
             res.json(result);

@@ -12,7 +12,7 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a v-for="year in years" :key="year.YEAR" class="dropdown-item"  @click="onClick(year.YEAR)">
+            <a v-for="year in years" :key="year.YEAR" class="dropdown-item" @click="onClick(year.YEAR)">
                 {{year.YEAR}}
             </a>
             </div>

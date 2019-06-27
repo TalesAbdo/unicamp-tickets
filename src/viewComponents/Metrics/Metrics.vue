@@ -12,49 +12,44 @@
                         <span :class="{'is-primary is-selected': periodData.type === 'avgTime'}" class="button" @click="setType('avgTime')">Tempo de fechamento</span>
                     </div>
                 </div>
-                <Service @click="setService" />
-                    <Year @click="setYear" />
+                <Service @click="setGraphService" />
+                <Year @click="setYear" />
             </div>
 
             <div class="options-second-line">
-                    <Month title="Mês Inicial"  @click="setinitialMonth" />
-                    <Month title="Mês Final"  @click="setFinalMonth" />
-
+                <Month title="Mês Inicial"  @click="setinitialMonth" />
+                <Month title="Mês Final"  @click="setFinalMonth" />
                 <Button icon="fa-chart-bar" value="Gerar gráfico" @click="getChartData"/>
                 <Button icon="fa-image" value="Salvar imagem" @click="createImage"/>
             </div>
-            {{periodData}}
-            {{chartData}}
-            {{labels}}
-
         </div>
 
         <div class="common-container">
             <Title class="report-title" titleValue="Relatórios"/>
-            <span class="report-subtitle is-italic">Preencha os filtros para criar o relatório .xls com informações dos tickets da pesquisa</span>
+            <span class="report-subtitle is-italic">Preencha os filtros para criar o relatório .xlsx com informações dos tickets da pesquisa</span>
             <div class="options-first-line">
                  <div class="choose-container">
                     <span class="has-text-weight-bold">Severidade</span>
                     <div class="buttons has-addons">
-                        <span :class="{'is-success is-selected': activeSevButton === 1}" class="button" @click="severityControl(1)">Baixa</span>
-                        <span :class="{'is-warning is-selected': activeSevButton === 2}" class="button" @click="severityControl(2)">Média</span>
-                        <span :class="{'is-danger is-selected': activeSevButton === 3}" class="button" @click="severityControl(3)">Alta</span>
-                        <span :class="{'is-info is-selected': activeSevButton === 4}" class="button" @click="severityControl(4)">Todas</span>
+                        <span :class="{'is-success is-selected': reportData.severityId === 1}" class="button" @click="reportData.severityId=1">Baixa</span>
+                        <span :class="{'is-warning is-selected': reportData.severityId === 2}" class="button" @click="reportData.severityId=2">Média</span>
+                        <span :class="{'is-danger is-selected': reportData.severityId === 3}" class="button" @click="reportData.severityId=3">Alta</span>
+                        <span :class="{'is-info is-selected': reportData.severityId === null}" class="button" @click="reportData.severityId=null">Todas</span>
                     </div>
                 </div>
-                <Service/>
+                <Service @click="setReportService" />
             </div>
 
             <div class="options-second-line">
                 <div class="calendar-container">
                     <span class="has-text-weight-bold">Data inicial</span>
-                    <input class="date" type="date">
+                    <input class="date" type="date" v-model="reportData.initialDate">
                 </div>
                 <div class="calendar-container">
                     <span class="has-text-weight-bold">Data final</span>
-                    <input class="date" type="date">
+                    <input class="date" type="date" v-model="reportData.finalDate">
                 </div>
-                <Button icon="fa-file-excel" value="Gerar relatório"/>
+                <Button icon="fa-file-excel" value="Gerar relatório" @click="createReport"/>
             </div>
         </div>
     </div>
@@ -68,6 +63,7 @@ import Title from 'shared/Title.vue';
 import Service from './components/ServiceDropdown.vue';
 import Year from './components/YearDropdown.vue';
 import Month from './components/MonthDropdown.vue';
+import XLSX from 'xlsx';
 
 const axios = require('axios');
 
@@ -83,10 +79,16 @@ export default {
             chartData: [],
             periodData: {
                 type: 'countTicket',
-                service: null,
+                serviceId: null,
                 year: null,
                 initialMonth: 1,
                 finalMonth: 1
+            },
+            reportData: {
+                severityId: null,
+                serviceId: null,
+                initialDate: null,
+                finalDate: null
             }
         };
     },
@@ -137,8 +139,8 @@ export default {
         setType(value) {
             this.periodData.type = value;
         },
-        setService(value) {
-            this.periodData.service = value;
+        setGraphService(value) {
+            this.periodData.serviceId = value;
         },
         setYear(value) {
             this.periodData.year = value;
@@ -148,6 +150,27 @@ export default {
         },
         setFinalMonth(value) {
             this.periodData.finalMonth = value;
+        },
+        setReportService(value) {
+            this.reportData.serviceId = value;
+        },
+        severityName(id) {
+            switch(id) {
+                case 1: return 'Baixa';
+                case 2: return 'Média';
+                case 3: return 'Alta';
+                default: return null;
+            }
+        },
+        statusName(id) {
+            switch(id) {
+                case 1: return 'Aberto';
+                case 2: return 'Em progresso';
+                case 3: return 'Resolvido';
+                case 4: return 'Em espera';
+                case 5: return 'Fechado';
+                default: return null;
+            }
         },
         async getChartData() {
             try {
@@ -174,7 +197,7 @@ export default {
                 this.$notify({
                     group: 'foo',
                     title: 'Erro!',
-                    text: 'Algo deu errado enquanto o gráfico era gerado, contate o adminstrador.',
+                    text: 'Algo deu errado na geração do gráfico, contate o adminstrador.',
                     type: 'danger'
                 });
             }
@@ -189,9 +212,72 @@ export default {
         },
         createImage() {
             const canvas = document.getElementById('report-chart');
+            const today = new Date(); 
+            console.log(today);
             canvas.toBlob((blob) => {
-                saveAs(blob, 'pretty image.jpg');
+                saveAs(blob, `Analise-grafica-${today.getDate()}-${today.getMonth() + 1 < 10 ? '0'.concat(today.getMonth()+1) : today.getMonth()+1}-${today.getFullYear()}.jpg`);
             }, 'image/jpeg', 1);
+        },
+        async generateDataForReport() {
+            try {
+                if ((this.reportData.initialDate) && (this.reportData.finalDate) && this.reportData.initialDate <= this.reportData.finalDate) {
+                    const fieldNames = ['ID', 'SEVERIDADE', 'STATUS', 'TÍTULO', 'CRIADO EM', 'ÚLTIMA ATUALIZAÇÃO', 'SERVIÇO',
+                    'DONO', 'RESPONSÁVEL', 'DESCRIÇÃO'];
+                    const data = [fieldNames];
+                    let result = await axios.post('/api/ticket/byfilter', this.reportData).then((response) => { 
+                        console.log(response);
+                        response.data.forEach((item) => {
+                            let line = [item.id, this.severityName(item.severityId), this.statusName(item.statusId), item.title,
+                            item.created, item.updated, item.serviceName, item.ownerName, item.assignedName, item.description];
+                            data.push(line);
+                        });
+                    });
+                    return data;
+                } else {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Atenção!',
+                        text: 'Selecione uma data final maior que a inicial.',
+                        type: 'warn'
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        async createReport() {
+            try {
+                const data = await this.generateDataForReport();
+                if (!data) {
+                    return;
+                }
+
+                const wb = XLSX.utils.book_new();
+                wb.SheetNames.push('Pesquisa por tickets');
+
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                wb.Sheets['Pesquisa por tickets'] = ws;
+
+                let wscolumns = [{ wch: 8 }, { wch: 11 }, { wch: 12 }, { wch: 20 }, { wch: 23 }, { wch: 23 }, { wch: 25 }, { wch: 25 }, { wch: 25 }, { wch: 40 }];
+
+
+                ws['!cols'] = wscolumns;
+
+                const wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
+
+                const buf = new ArrayBuffer(wbout.length);
+                const view = new Uint8Array(buf);
+                for (let i = 0; i < wbout.length; i += 1) {
+                    view[i] = wbout.charCodeAt(i) & 0xFF; // eslint-disable-line
+                }
+
+                const today = new Date();
+                saveAs(new Blob([buf], { type: 'application/octet-stream' }),
+                    `Relatorio-${today.getDate()}-${today.getMonth() + 1 < 10 ? '0'.concat(today.getMonth()) : today.getMonth()}-${today.getFullYear()}.xlsx`);
+
+            } catch (error) {
+                console.log('Could not generate report', error); // eslint-disable-line
+            }
         }
     }
 };
@@ -269,20 +355,29 @@ export default {
                     padding: .5rem;
                     margin-top: .3rem;
                 }
+
                 ::-webkit-calendar-picker-indicator {
-                    background-image: url(http://icons.iconarchive.com/icons/dakirby309/simply-styled/256/Calendar-icon.png);
-                    background-position:center;
-                    background-size:20px 20px;
-                    background-repeat:no-repeat;
-                    color:rgba(204,204,204,0);
+                    background-image: url(../../assets/calendar-regular.svg);
+                    background-position: center;
+                    background-size: 15px 15px;
+                    background-repeat: no-repeat;
+                    color: rgba(255, 255, 255, 0);
+                    display: block;
                 }
+
                 ::-webkit-inner-spin-button {
                     display:none;
                 }
-                ::-webkit-calendar-picker-indicator { background-color:white}
-                    input[type=date]{
+
+                ::-webkit-calendar-picker-indicator {
+                    background-color:white
+                }
+                
+                 input[type=date] {
                     font-size: 18px;
+                                        display: block;
                     }
+
                 ::-webkit-datetime-edit-text { color:$dark-gray; }
                 ::-webkit-datetime-edit-month-field { color:$dark-gray; }
                 ::-webkit-datetime-edit-day-field { color:$dark-gray; }
