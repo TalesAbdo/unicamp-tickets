@@ -38,17 +38,17 @@ export default {
     methods: {
         getMemberList() {
             axios.get('/api/usersupport/all')
-            .then((response) => {
-                this.members = response.data;
-            })
-            .catch(() => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível obter a lista de membros.',
-                    type: 'Danger'
+                .then((response) => {
+                    this.members = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter a lista de membros.',
+                        type: 'Danger'
+                    });
                 });
-            });
         },
         modalControl() {
             this.showNewMember = !this.showNewMember;

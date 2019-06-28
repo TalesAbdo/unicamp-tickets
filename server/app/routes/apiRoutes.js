@@ -38,6 +38,15 @@ module.exports = function (app, db) {
         });
     });
 
+    app.get('/api/ticket/bystatus', (req, res) => {
+        db.sequelize.query(
+            'select statusId, count(*) as quantity from ticket group by statusId',
+            {type: db.sequelize.QueryTypes.SELECT}
+          ).then((result) => {
+            res.json(result);
+        });
+    });
+
     // Queries with join are made with raw query because are simpler to understand and modify
     app.post('/api/ticket/byamount', (req, res) => {
         let serviceQuery = ''

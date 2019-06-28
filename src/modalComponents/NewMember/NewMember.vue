@@ -67,7 +67,6 @@ export default {
             this.isSearching = true;
             await this.getUserList();
             this.isSearching = false;
-            
         },
         activateSearch() {
             this.activeSearch = true;
@@ -79,7 +78,7 @@ export default {
             this.typedText = '';
             let alreadyInList = false;
             this.chosenUsers.map((item) => {
-                if(item.id === element.id) {
+                if (item.id === element.id) {
                     this.$notify({
                         group: 'foo',
                         title: 'Cuidado!',
@@ -95,28 +94,26 @@ export default {
         },
         getUserList() {
             axios.post('/api/user/bynameandemail', { typedText: this.typedText })
-            .then((response) => { this.searchResult = response.data; })
-            .catch(() => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível obter a lista de membros.',
-                    type: 'Danger'
+                .then((response) => { this.searchResult = response.data; })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter a lista de membros.',
+                        type: 'Danger'
+                    });
                 });
-            });
         },
         removeUser(id) {
-            const index = this.chosenUsers.findIndex((item) => {
-                return item.id === id;
-            })
+            const index = this.chosenUsers.findIndex(item => item.id === id);
             if (index !== -1) {
                 this.chosenUsers.splice(index, 1);
             }
         },
         addMembers() {
             try {
-                this.chosenUsers.forEach(user => {
-                    axios.post('/api/usersupport/new', { userId: user.id })
+                this.chosenUsers.forEach((user) => {
+                    axios.post('/api/usersupport/new', { userId: user.id });
                 });
                 this.$notify({
                     group: 'foo',
@@ -134,7 +131,7 @@ export default {
                     type: 'Danger'
                 });
                 console.log(e);
-            };
+            }
         },
     }
 };

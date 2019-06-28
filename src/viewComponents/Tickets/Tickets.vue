@@ -3,13 +3,12 @@
         <div class="left-container">
             <div class="ticket-counter">
                 <span class="is-italic is-size-5">Controle</span>
-                <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{ticketsSituation.open}}</span>
-                <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{ticketsSituation.inProgress}}</span>
-                <span><i class="fas fa-check-circle"/><b>Resolvidos:</b> {{ticketsSituation.closed}}</span>
-                <span><i class="fas fa-anchor"/><b>Em espera:</b> {{ticketsSituation.onHold}}</span>
-                <span><i class="fas fa-ban"/><b>Fechados:</b> {{ticketsSituation.closed}}</span>
+                <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{getTicketsByStatusQuantity(1)}}</span>
+                <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{getTicketsByStatusQuantity(2)}}</span>
+                <span><i class="fas fa-check-circle"/><b>Resolvidos:</b> {{getTicketsByStatusQuantity(3)}}</span>
+                <span><i class="fas fa-anchor"/><b>Em espera:</b> {{getTicketsByStatusQuantity(4)}}</span>
+                <span><i class="fas fa-ban"/><b>Fechados:</b> {{getTicketsByStatusQuantity(5)}}</span>
             </div>
-
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
 
@@ -26,6 +25,8 @@ import TicketDetails from 'modal/TicketDetails/TicketDetails.vue';
 import TicketCard from './components/TicketCard.vue';
 import OrdenationTitle from './components/OrdenationTitle.vue';
 import TicketFilters from './components/Filter/TicketFilters.vue';
+
+const axios = require('axios');
 
 export default {
     name: 'tickets',
@@ -49,13 +50,7 @@ export default {
             },
             tickets: [1, 2, 3, 4, 5, 6, 7],
             filters: [],
-            ticketsSituation: {
-                open: 4,
-                inProgress: 6,
-                resolved: 20,
-                onHold: 3,
-                closed: 207
-            }
+            ticketsByStatus: [{},{},{},{},{}]
         };
     },
     created() {
@@ -63,8 +58,23 @@ export default {
         if (filtersPreference) {
             this.filters = JSON.parse(filtersPreference);
         } else {
-            this.filters = [
-                {
+            this.filters = this.getBaseFilters();
+        }
+        this.getTicketsByStatus();
+    },
+    methods: {
+        modalControl() {
+            this.showTicketDetails = !this.showTicketDetails;
+        },
+        changeOrder(element) {
+            this.orderBy = element;
+            this.isUp = !this.isUp;
+        },
+        filtersUpdate(event) {
+            localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
+        },
+        getBaseFilters() {
+                 return [{
                     name: 'Status',
                     query: 'status',
                     options: [
@@ -101,19 +111,29 @@ export default {
                     multiple: false
                 }
             ];
+        },
+        getTicketsByStatus() {
+            axios.get('/api/ticket/bystatus')
+                .then((response) => {
+                    this.ticketsByStatus = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Erro ao obter a listagem de tickts por status',
+                        type: 'Danger'
+                    });
+                });
+        },
+        getTicketsByStatusQuantity(id) {
+            const index = this.ticketsByStatus.findIndex(item => item.statusId === id);
+            if(index > -1) {
+                return this.ticketsByStatus[index].quantity;
+            } else {
+                return 0;
+            }
         }
-    },
-    methods: {
-        modalControl() {
-            this.showTicketDetails = !this.showTicketDetails;
-        },
-        changeOrder(element) {
-            this.orderBy = element;
-            this.isUp = !this.isUp;
-        },
-        filtersUpdate(event) {
-            localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
-        },
     }
 };
 </script>

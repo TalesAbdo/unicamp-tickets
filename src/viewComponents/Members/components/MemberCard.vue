@@ -30,23 +30,23 @@ export default {
     methods: {
         removeMember() {
             axios.delete(`/api/usersupport/delete/${this.member.id}`)
-            .then(() => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Sucesso!',
-                    text: 'Usuário deletado com êxito.',
-                    type: 'success'
+                .then(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Sucesso!',
+                        text: 'Usuário deletado com êxito.',
+                        type: 'success'
+                    });
+                    this.$emit('onUpdate');
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível deletar o membro, contate o administrador.',
+                        type: 'Danger'
+                    });
                 });
-                this.$emit('onUpdate');
-            })
-            .catch(() => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível deletar o membro, contate o administrador.',
-                    type: 'Danger'
-                });
-            });
         }
     }
 };
@@ -100,7 +100,7 @@ export default {
                 color: $dark-gray;
             }
         }
-        
+
         .button:hover {
             border: 1px solid $primary !important;
         }
