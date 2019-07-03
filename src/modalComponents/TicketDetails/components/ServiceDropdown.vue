@@ -1,6 +1,6 @@
 <template>
 <div class="service-dropdown-container">
-    <span class="dropdown-title">{{title}}</span>
+    <span class="dropdown-title">Serviço</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
@@ -9,8 +9,8 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a  v-for="(item) in itens" :key="item.id" class="dropdown-item is-flex">
-                {{item.value}}
+            <a  v-for="(service) in services" :key="service.id" class="dropdown-item is-flex" @click="serviceClicked(service.id)">
+                {{service.name}}
             </a>
             </div>
         </div>
@@ -22,10 +22,8 @@
 export default {
     name: 'inputText',
     props: {
-        title: { type: String, required: true },
-        itens: { type: Array, required: true },
-        triggerValue: { type: String, required: false, default: '' },
-        dropdownType: { type: String, required: false, default: '' }
+        services: { type: Array, required: true },
+        triggerValue: { type: String, required: false, default: '' }
     },
     data() {
         return {
@@ -33,8 +31,9 @@ export default {
         };
     },
     methods: {
-        onClick() {
-            this.$emit('click');
+        serviceClicked(serviceId) {
+            this.$emit('click', serviceId);
+            this.controlDropdown();
         },
         controlDropdown() {
             this.active = !this.active;

@@ -3,28 +3,34 @@ module.exports = function (app, db) {
     const Sequelize = require('sequelize');
     const Op = Sequelize.Op;
 
-    app.get('/api/ticket/byuser', (req, res) => {
-        db.Ticket.findAll({
-            where: {
-                userId: req.body.userId,   
-                createdAt: {
-                    [Op.between]: [req.body.initialDate, req.body.finalDate],  
-                },
-                severityId: req.body.severityIdList,
-                statusId: req.body.statusIdList,
-                serviceId: req.body.serviceIdList
-            }
-        }).then((result) => {
+    app.post('/api/ticket/byuser', (req, res) => {
+        let ownerQuery = '';
+        if (req.body.ownerId) {
+            ownerQuery = `and ownerId = ${req.body.ownerId}`;
+        }
+        db.sequelize.query(
+            `select t.id, t.title, t.severityId, t.statusId, t.createdAt, au.name as assignedName from ticket t
+            inner join user au on au.id = t.assignedId
+            where statusId in (${req.body.statusList.join(',')})
+            and severityId in (${req.body.severityList.join(',')})
+            ${req.body.dateQuery}
+            ${ownerQuery}`,
+            {type: db.sequelize.QueryTypes.SELECT}
+          ).then((result) => {
             res.json(result);
         });
     });
 
-    app.get('/api/ticket/search/:id', (req, res) => {
-        db.Ticket.findOne({
-            where: {
-                id: req.params.id
-            }
-        }).then((result) => {
+
+    app.get('/api/ticket/byid/:id', (req, res) => {
+        db.sequelize.query(
+            `select t.*, au.name as assignedName, ou.name as ownerName, ou.email as ownerEmail, s.name as serviceName from ticket t
+            inner join user au on au.id = t.assignedId
+            inner join user ou on ou.id = t.ownerId
+            inner join service s on s.id = t.serviceId
+            and t.id = ${req.params.id}`,
+            {type: db.sequelize.QueryTypes.SELECT}
+          ).then((result) => {
             res.json(result);
         });
     });
@@ -121,18 +127,20 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/assigned/:ticketid/:assignedid', (req, res) => {
+    app.put('/api/ticket/update/assigned/:ticketid', (req, res) => {
+        console.log('bateu', req.body, req.params);
         db.Ticket.update({
-            assignedId: req.params.assignedId
+            assignedId: req.body.assignedId
         }, {
             where: {
-                id: req.params.id
+                id: req.params.ticketid
             }
         }).then((result) => {
             res.json(result);
         });
     });
 
+    //APAGAR
     app.put('/api/ticket/update/owner/:ticketid/:ownerid', (req, res) => {
         db.Ticket.update({
             ownerId: req.params.ownerId
@@ -145,36 +153,36 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/service/:ticketid/:serviceid', (req, res) => {
+    app.put('/api/ticket/update/service/:ticketid', (req, res) => {
         db.Ticket.update({
-            serviceId: req.params.serviceId
+            serviceId: req.body.serviceId
         }, {
             where: {
-                id: req.params.id
+                id: req.params.ticketid
             }
         }).then((result) => {
             res.json(result);
         });
     });
 
-    app.put('/api/ticket/update/severity/:ticketid/:serviceid', (req, res) => {
+    app.put('/api/ticket/update/severity/:ticketid', (req, res) => {
         db.Ticket.update({
-            severityId: req.params.severityId
+            severityId: req.body.severityId
         }, {
             where: {
-                id: req.params.id
+                id: req.params.ticketid
             }
         }).then((result) => {
             res.json(result);
         });
     });
 
-    app.put('/api/ticket/update/status/:id', (req, res) => {
+    app.put('/api/ticket/update/status/:ticketid', (req, res) => {
         db.Ticket.update({
             statusId: req.body.statusId
         }, {
             where: {
-                id: req.params.id
+                id: req.params.ticketid
             }
         }).then((result) => {
             res.json(result);

@@ -1,18 +1,18 @@
 <template>
 <div class="product-container">
-    <span class="dropdown-title">{{title}}</span>
+    <span class="dropdown-title">Severidade</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
-                <i :class="icon(triggerValue)" class="fas fa-exclamation-triangle"/>
+                <icon :class="icon(triggerValue)" name="exclamation-triangle"/>
                 <span>{{name(triggerValue)}}</span>
             </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a  v-for="(item) in itens" :key="item.id" class="dropdown-item is-flex">
-                <i :class="icon(item.id)" class="fas fa-exclamation-triangle"/>
-                <span>{{name(item.id)}}</span>
+            <a  v-for="(severity) in severities" :key="severity.id" class="dropdown-item is-flex" @click="severityClicked(severity.id)">
+                 <icon :class="icon(severity.id)" name="exclamation-triangle"/>
+                <span>{{name(severity.id)}}</span>
             </a>
             </div>
         </div>
@@ -21,13 +21,16 @@
 </template>
 
 <script>
+import Icon from 'vue-awesome/components/Icon.vue';
+
 export default {
     name: 'statusDropdown',
+    components: {
+        Icon
+    },
     props: {
-        title: { type: String, required: true },
-        itens: { type: Array, required: true },
-        triggerValue: { type: Number, required: true },
-        dropdownType: { type: String, required: false, default: '' }
+        severities: { type: Array, required: true },
+        triggerValue: { type: Number, required: true }
     },
     data() {
         return {
@@ -51,8 +54,9 @@ export default {
             default: return null;
             }
         },
-        onClick() {
-            this.$emit('click');
+        severityClicked(severityId) {
+            this.$emit('click', severityId);
+            this.controlDropdown();
         },
         controlDropdown() {
             this.active = !this.active;

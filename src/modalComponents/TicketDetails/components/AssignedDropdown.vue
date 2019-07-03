@@ -1,6 +1,6 @@
 <template>
 <div class="assigned-dropdown-container">
-    <span class="dropdown-title">{{title}}</span>
+    <span class="dropdown-title">Responsável</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
@@ -12,11 +12,11 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a  v-for="(item) in itens" :key="item.id" class="dropdown-item is-flex">
+            <a  v-for="(member) in members" :key="member.id" class="dropdown-item is-flex" @click="memberClicked(member.id)">
                 <figure class="image is-24x24">
-                    <img class="is-rounded" :src="item.imageSource">
+                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
                 </figure>
-                {{item.value}}
+                {{member.name}}
             </a>
             </div>
         </div>
@@ -28,10 +28,8 @@
 export default {
     name: 'assignedDropdown',
     props: {
-        title: { type: String, required: true },
-        itens: { type: Array, required: true },
-        triggerValue: { type: String, required: false, default: '' },
-        dropdownType: { type: String, required: false, default: '' }
+        members: { type: Array, required: true },
+        triggerValue: { type: String, required: false, default: '' }
     },
     data() {
         return {
@@ -39,8 +37,9 @@ export default {
         };
     },
     methods: {
-        onClick() {
-            this.$emit('click');
+        memberClicked(assignedId) {
+            this.$emit('click', assignedId);
+            this.controlDropdown();
         },
         controlDropdown() {
             this.active = !this.active;

@@ -5,17 +5,19 @@
             <div class="header">
                 <span class="has-text-weight-bold is-size-5">{{ticket.title}}</span>
                 <div class="sub-header">
-                    <TicketNumber class="ticket-number" :id="19438"/>
-                    <PersonInformation firstLine="Tales Abdo" secondLine="talesabdo@outlook.com" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
+                    <TicketNumber class="ticket-number" :id="ticket.id"/>
+                    <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
                 </div>
             </div>
-
+{{ticket}}
+{{services}}
+{{members}}
             <div class="ticket-content">
                 <div class="left-content">
-                    <ServiceDropdown title="Serviço" triggerValue="Matrícula" :itens="itens"/>
-                    <StatusDropdown title="Status" :triggerValue="1" :itens="itens"/>
-                    <SeverityDropdown title="Severidade" :triggerValue="2" :itens="itens"/>
-                    <AssignedDropdown title="Responsável" triggerValue="Tales" :itens="itensAssigned" dropdownType="assigned"/>
+                    <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" @click="updateServiceId"/>
+                    <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" @click="updateStatusId"/>
+                    <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" @click="updateSeverityId"/>
+                    <AssignedDropdown :triggerValue="ticket.assignedName" :members="members" @click="updateAssignedId"/>
                     <AttachmentList />
                 </div>
                 <div class="line"/>
@@ -50,33 +52,154 @@ import SeverityDropdown from './components/SeverityDropdown.vue';
 import AssignedDropdown from './components/AssignedDropdown.vue';
 import AttachmentList from './components/AttachmentList.vue';
 
+const axios = require('axios');
+
 export default {
     name: 'ticketDetails',
     components: {
         TicketNumber, PersonInformation, Textarea, History, ServiceDropdown, StatusDropdown, SeverityDropdown, AssignedDropdown, AttachmentList
     },
     props: {
-        show: { type: Boolean, default: false }
+        show: { type: Boolean, default: false },
+        ticketId: { type: Number, default: null }
     },
     data() {
         return {
             ticket: {
-                title: 'Problema nos computadores do laboratório 3',
-                description: 'Quisque lobortis eu augue et elementum. Maecenas vel ex venenatis, tempor mi at, cursus purus. Donec nec erat quam. Aliquam sodales nisl nulla, quis porta arcu mattis ut. Donec eget leo pharetra, rutrum sapien in, congue massa. Suspendisse potenti. Suspendisse venenatis semper felis non malesuada. Etiam iaculis, neque sed faucibus gravida, diam lacus viverra neque, id bibendum nisi enim et turpis.' //eslint-disable-line
+                id: 0,
+                ownerName: '',
+                ownerEmail: '',
+                title: '',
+                description: '',
+                serviceName: 'Escolha um serviço',
+                assignedName: 'Escolha um responsável',
+                statusId: 0,
+                severityId: 0
             },
-            itens: [{ id: 1, value: 'ítem1' }, { id: 2, value: 'ítem2' }, { id: 3, value: 'ítem3' }],
-            itensAssigned: [
-                { id: 1, value: 'Tales de Mileto', imageSource: 'https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg' },
-                {
-                    id: 2,
-                    value: '9s',
-                    imageSource: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLNrCG5UnTcct9-mlr2I-H5p2acL1qwhBuPApVCA7LL2_Evdp2gQ'
-                },
-                { id: 3, value: 'Lorde', imageSource: 'https://pbs.twimg.com/profile_images/418421020727324672/HuJpLShB.jpeg' }
-            ]
+            services: [],
+            members: [],
+            statuses: [{ id: 1, value: 'Aberto' }, { id: 2, value: 'Em progresso' }, { id: 3, value: 'Resolvido' }, { id: 4, value: 'Em espera' }],
+            severities: [{ id: 1, value: 'Baixa' }, { id: 2, value: 'Média' }, { id: 3, value: 'Alta' }]
         };
     },
+    watch: {
+        ticketId() {
+            this.updateAll();
+        },
+    },
+    mounted() {
+        this.updateAll();
+    },
     methods: {
+        updateAll() {
+            this.getTicket();
+            this.getServices();
+            this.getMembers();
+        },
+        getTicket() {
+            if (this.ticketId) {
+                axios.get(`/api/ticket/byid/${this.ticketId}`)
+                    .then((response) => {
+                        this.ticket = response.data[0];
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível obter informações do ticket.',
+                            type: 'Error'
+                        });
+                    });
+            }
+        },
+        getServices() {
+            if (this.ticketId) {
+                axios.get('/api/service/all')
+                    .then((response) => {
+                        this.services = response.data;
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível obter a listagem de serviços.',
+                            type: 'Error'
+                        });
+                    });
+            }
+        },
+        getMembers() {
+            if (this.ticketId) {
+                axios.get('/api/usersupport/all')
+                    .then((response) => {
+                        this.members = response.data;
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível obter a listagem de membros.',
+                            type: 'Error'
+                        });
+                    });
+            }
+        },
+        updateServiceId(serviceId) {
+            axios.put(`/api/ticket/update/service/${this.ticketId}`, { serviceId: serviceId })
+            .then((response) => {
+                this.getTicket();
+            })
+            .catch(() => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível alterar o serviço.',
+                    type: 'Error'
+                });
+            });
+        },
+        updateAssignedId(assignedId) {
+            axios.put(`/api/ticket/update/assigned/${this.ticketId}`, { assignedId: assignedId })
+            .then((response) => {
+                this.getTicket();
+            })
+            .catch((e) => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível alterar o responsável.',
+                    type: 'Error'
+                });
+            });
+        },
+        updateStatusId(statusId) {
+            axios.put(`/api/ticket/update/status/${this.ticketId}`, { statusId: statusId })
+            .then((response) => {
+                this.getTicket();
+            })
+            .catch((e) => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível alterar o status.',
+                    type: 'Error'
+                });
+            });
+        },
+        updateSeverityId(severityId) {
+            axios.put(`/api/ticket/update/severity/${this.ticketId}`, { severityId: severityId })
+            .then((response) => {
+                this.getTicket();
+            })
+            .catch((e) => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi possível alterar a severidade.',
+                    type: 'Error'
+                });
+            });
+        },
         hide() {
             this.$emit('hide');
         },

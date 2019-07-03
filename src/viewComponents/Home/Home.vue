@@ -1,15 +1,15 @@
 <template>
     <div class="home-container">
         <div class="left-container">
-            <Button icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')" />
+            <!-- <Button icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')" /> -->
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
         <div class="right-container">
             <OrdenationTitle class="right-header" :orderBy="orderBy" :isUp="isUp" @onItemClick="changeOrder"/>
-            <TicketCard v-for="(item) in tickets" :key="item" :ticket="ticket" @modalControl="modalControl"/>
+            <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" @modalControl="modalControl" @onClick="setTicketDetailId"/>
         </div>
-        <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/>
-        <TicketDetails :show="showTicketDetails" @hide="modalControl('ticketDetails')" />
+        <!-- <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/> -->
+        <TicketDetails :show="showTicketDetails" @hide="modalControl('ticketDetails')" :ticketId="ticketDetailId"/>
     </div>
 </template>
 
@@ -20,6 +20,8 @@ import Button from 'shared/Button.vue';
 import TicketCard from './components/TicketCard.vue';
 import OrdenationTitle from './components/OrdenationTitle.vue';
 import TicketFilters from './components/Filter/TicketFilters.vue';
+
+const axios = require('axios');
 
 export default {
     name: 'home',
@@ -32,17 +34,8 @@ export default {
             showTicketDetails: false,
             orderBy: 'creationDate',
             isUp: false,
-            ticket: {
-                id: 1203,
-                title: 'hey',
-                status: 1,
-                severity: 3,
-                assignedId: 'Tales',
-                creationDate: '01-01-2000',
-                hasAttachment: false,
-                assignedPhoto: 'https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg'
-            },
-            tickets: [1, 2, 3, 4, 5, 6, 7],
+            tickets: [],
+            ticketDetailId: null,
             filters: []
         };
     },
@@ -51,7 +44,69 @@ export default {
         if (filtersPreference) {
             this.filters = JSON.parse(filtersPreference);
         } else {
-            this.filters = [
+            this.filters = this.baseFilters();
+        }
+
+        this.getTicketList();
+    },
+    methods: {
+        getTicketList() {
+            let dateQuery = '';
+
+            let sevenDate = new Date();
+            sevenDate.setDate(sevenDate.getDate() - 7);
+            sevenDate = sevenDate.toJSON().slice(0,19).replace('T', ' ');
+
+            let thirtyDate = new Date();
+            thirtyDate.setDate(thirtyDate.getDate() - 30);
+            thirtyDate = thirtyDate.toJSON().slice(0,19).replace('T', ' ');
+
+            if (this.filters[2].selected[0] === 1) {
+                dateQuery = `and t.createdAt > '${sevenDate}'`;
+            } else if (this.filters[2].selected[0] === 2) {
+                dateQuery = `and t.createdAt between '${sevenDate}' and '${thirtyDate}'`;
+            } else if (this.filters[2].selected[0] === 3) {
+                dateQuery = `and t.createdAt < '${thirtyDate}'`;
+            }
+
+            axios.post('/api/ticket/byuser',
+                {
+                    ownerId: null,
+                    statusList: this.filters[0].selected,
+                    severityList: this.filters[1].selected,
+                    dateQuery })
+                .then((response) => {
+                    this.tickets = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter a lista de tickets.',
+                        type: 'Danger'
+                    });
+                });
+        },
+        modalControl(modal) {
+            if (modal === 'newTicket') {
+                this.showNewTicket = !this.showNewTicket;
+            } else {
+                this.showTicketDetails = !this.showTicketDetails;
+            }
+        },
+        changeOrder(element) {
+            this.orderBy = element;
+            this.isUp = !this.isUp;
+        },
+        setTicketDetailId(id) {
+            this.ticketDetailId = id;
+        },
+        async filtersUpdate(event) {
+            await localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
+            this.getTicketList();
+        },
+        baseFilters() {
+            return [
                 {
                     name: 'Status',
                     query: 'status',
@@ -90,22 +145,6 @@ export default {
                 }
             ];
         }
-    },
-    methods: {
-        modalControl(modal) {
-            if (modal === 'newTicket') {
-                this.showNewTicket = !this.showNewTicket;
-            } else {
-                this.showTicketDetails = !this.showTicketDetails;
-            }
-        },
-        changeOrder(element) {
-            this.orderBy = element;
-            this.isUp = !this.isUp;
-        },
-        filtersUpdate(event) {
-            localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
-        },
     }
 };
 </script>
@@ -131,6 +170,7 @@ export default {
 
     .right-container {
         width: 50%;
+        align-self: flex-start;
 
         .right-header {
             margin-bottom: 1.5rem;

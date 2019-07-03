@@ -50,7 +50,7 @@ export default {
             },
             tickets: [1, 2, 3, 4, 5, 6, 7],
             filters: [],
-            ticketsByStatus: [{},{},{},{},{}]
+            ticketsByStatus: [{}, {}, {}, {}, {}]
         };
     },
     created() {
@@ -74,42 +74,42 @@ export default {
             localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
         },
         getBaseFilters() {
-                 return [{
-                    name: 'Status',
-                    query: 'status',
-                    options: [
-                        { value: 0, label: 'Aberto' },
-                        { value: 1, label: 'Em progresso' },
-                        { value: 2, label: 'Resolvido' },
-                        { value: 3, label: 'Em espera' },
-                        { value: 4, label: 'Fechado' },
-                    ],
-                    selected: [0, 1, 3],
-                    multiple: true
-                },
-                {
-                    name: 'Prioridade',
-                    query: 'priority',
-                    options: [
-                        { value: 0, label: 'Baixa' },
-                        { value: 1, label: 'Média' },
-                        { value: 2, label: 'Alta' },
-                    ],
-                    selected: [0],
-                    multiple: true
-                },
-                {
-                    name: 'Período',
-                    query: 'date',
-                    options: [
-                        { value: 0, label: 'Geral' },
-                        { value: 1, label: 'Menos de 7 dias' },
-                        { value: 2, label: 'De 7 a 30 dias' },
-                        { value: 3, label: 'Mais de 30 dias' }
-                    ],
-                    selected: [0],
-                    multiple: false
-                }
+            return [{
+                name: 'Status',
+                query: 'status',
+                options: [
+                    { value: 0, label: 'Aberto' },
+                    { value: 1, label: 'Em progresso' },
+                    { value: 2, label: 'Resolvido' },
+                    { value: 3, label: 'Em espera' },
+                    { value: 4, label: 'Fechado' },
+                ],
+                selected: [0, 1, 3],
+                multiple: true
+            },
+            {
+                name: 'Prioridade',
+                query: 'priority',
+                options: [
+                    { value: 0, label: 'Baixa' },
+                    { value: 1, label: 'Média' },
+                    { value: 2, label: 'Alta' },
+                ],
+                selected: [0],
+                multiple: true
+            },
+            {
+                name: 'Período',
+                query: 'date',
+                options: [
+                    { value: 0, label: 'Geral' },
+                    { value: 1, label: 'Menos de 7 dias' },
+                    { value: 2, label: 'De 7 a 30 dias' },
+                    { value: 3, label: 'Mais de 30 dias' }
+                ],
+                selected: [0],
+                multiple: false
+            }
             ];
         },
         getTicketsByStatus() {
@@ -128,11 +128,10 @@ export default {
         },
         getTicketsByStatusQuantity(id) {
             const index = this.ticketsByStatus.findIndex(item => item.statusId === id);
-            if(index > -1) {
+            if (index > -1) {
                 return this.ticketsByStatus[index].quantity;
-            } else {
-                return 0;
             }
+            return 0;
         }
     }
 };

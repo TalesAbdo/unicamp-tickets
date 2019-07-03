@@ -33,7 +33,6 @@ export default {
         };
     },
     mounted() {
-        console.log('entered');
         axios.get('api/service/all').then((response) => {
             console.log(response);
         });

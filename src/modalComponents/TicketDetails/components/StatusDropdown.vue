@@ -1,18 +1,18 @@
 <template>
 <div class="status-dropdown-container">
-    <span class="dropdown-title">{{title}}</span>
+    <span class="dropdown-title">Status</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
-                <i :class="icon(triggerValue)"/>
+                <icon :name="icon(triggerValue)"/>
                 <span>{{name(triggerValue)}}</span>
             </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a  v-for="(item) in itens" :key="item.id" class="dropdown-item is-flex">
-                <i :class="icon(item.id)"/>
-                 <span>{{name(item.id)}}</span>
+            <a  v-for="(status) in statuses" :key="status.id" class="dropdown-item is-flex" @click="statusClicked(status.id)">
+                <icon :name="icon(status.id)"/>
+                <span>{{name(status.id)}}</span>
             </a>
             </div>
         </div>
@@ -21,13 +21,16 @@
 </template>
 
 <script>
+import Icon from 'vue-awesome/components/Icon.vue';
+
 export default {
     name: 'statusDropdown',
+    components: {
+        Icon
+    },
     props: {
-        title: { type: String, required: true },
-        itens: { type: Array, required: true },
+        statuses: { type: Array, required: true },
         triggerValue: { type: Number, required: true },
-        dropdownType: { type: String, required: false, default: '' }
     },
     data() {
         return {
@@ -37,26 +40,25 @@ export default {
     methods: {
         icon(value) {
             switch (value) {
-            case 0: return 'fas fa-circle-notch';
-            case 1: return 'fas fa-thumbs-up';
-            case 2: return 'fas fa-check-circle';
-            case 3: return 'fas fa-anchor';
-            case 4: return 'fas fa-ban';
+            case 1: return 'circle-notch';
+            case 2: return 'thumbs-up';
+            case 3: return 'check-circle';
+            case 4: return 'anchor';
             default: return null;
             }
         },
         name(value) {
             switch (value) {
-            case 0: return 'Aberto';
-            case 1: return 'Em progresso';
-            case 2: return 'Resolvido';
-            case 3: return 'Em espera';
-            case 4: return 'Fechado';
+            case 1: return 'Aberto';
+            case 2: return 'Em progresso';
+            case 3: return 'Resolvido';
+            case 4: return 'Em espera';
             default: return null;
             }
         },
-        onClick() {
-            this.$emit('click');
+        statusClicked(statusId) {
+            this.$emit('click', statusId);
+            this.controlDropdown();
         },
         controlDropdown() {
             this.active = !this.active;

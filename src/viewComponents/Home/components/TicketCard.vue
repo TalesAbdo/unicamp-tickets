@@ -1,7 +1,7 @@
 <template>
     <div class="card" @click="onClick">
     <header class="card-header">
-        <TicketNumber :id="123124" />
+        <TicketNumber :id="ticket.id" />
         <p class="card-header-title">
             {{ticket.title}}
         </p>
@@ -22,9 +22,9 @@
 
         <div class="card-footer-item">
             <figure class="icon image is-24x24">
-                <img class="is-rounded" :src="ticket.assignedPhoto">
+                <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
             </figure>
-            <span>{{ticket.assignedId}}</span>
+            <span>{{ticket.assignedName}}</span>
         </div>
         <span class="card-footer-item">{{creationDate}}</span>
     </footer>
@@ -45,12 +45,12 @@ export default {
     },
     data() {
         return {
-            creationDate: moment(this.ticket.creationDate, 'DDMMYYYY').fromNow(),
+            creationDate: moment(this.ticket.createdAt.slice(0,10), 'YYYY-MM-DD').fromNow(),
         };
     },
     computed: {
         statusIcon() {
-            switch (this.ticket.status) {
+            switch (this.ticket.statusId) {
             case 1: return 'fas fa-circle-notch';
             case 2: return 'fas fa-thumbs-up';
             case 3: return 'fas fa-check-circle';
@@ -60,7 +60,7 @@ export default {
             }
         },
         statusName() {
-            switch (this.ticket.status) {
+            switch (this.ticket.statusId) {
             case 1: return 'Aberto';
             case 2: return 'Em progresso';
             case 3: return 'Resolvido';
@@ -70,7 +70,7 @@ export default {
             }
         },
         severityIcon() {
-            switch (this.ticket.severity) {
+            switch (this.ticket.severityId) {
             case 1: return 'has-text-success';
             case 2: return 'has-text-warning';
             case 3: return 'has-text-danger';
@@ -78,7 +78,7 @@ export default {
             }
         },
         severityName() {
-            switch (this.ticket.severity) {
+            switch (this.ticket.severityId) {
             case 1: return 'Baixa';
             case 2: return 'Média';
             case 3: return 'Alta';
@@ -88,6 +88,7 @@ export default {
     },
     methods: {
         onClick() {
+            this.$emit('onClick', this.ticket.id);
             this.$emit('modalControl', 'ticketDetails');
         },
     }
