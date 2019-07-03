@@ -4,14 +4,14 @@
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
-                <span>{{triggerValue}}</span>
+                <span>{{triggerValue || 'Escolha um serviço'}}</span>
             </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a  v-for="(service) in services" :key="service.id" class="dropdown-item is-flex" @click="serviceClicked(service.id)">
-                {{service.name}}
-            </a>
+                <a  v-for="(service) in services" :key="service.id" class="dropdown-item is-flex" @click="serviceClicked(service.id)">
+                    {{service.name}}
+                </a>
             </div>
         </div>
     </div>
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-    name: 'inputText',
+    name: 'serviceDropdownTicketDetails',
     props: {
         services: { type: Array, required: true },
         triggerValue: { type: String, required: false, default: '' }

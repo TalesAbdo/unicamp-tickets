@@ -9,8 +9,6 @@
                     <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
                 </div>
             </div>
-<!-- {{comments}} -->
-{{comment}}
             <div class="ticket-content">
                 <div class="left-content">
                     <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" @click="updateServiceId"/>
@@ -86,13 +84,10 @@ export default {
     watch: {
         ticketId() {
             this.getTicket();
+            this.getServices();
+            this.getMembers();
+            this.getComments();
         },
-    },
-    mounted() {
-        this.getTicket();
-        this.getServices();
-        this.getMembers();
-        this.getComments();
     },
     methods: {
         getTicket() {
@@ -169,7 +164,7 @@ export default {
                     group: 'foo',
                     title: 'Erro!',
                     text: 'Não foi possível alterar o serviço.',
-                    type: 'Error'
+                    type: 'error'
                 });
             });
         },
@@ -183,7 +178,7 @@ export default {
                     group: 'foo',
                     title: 'Erro!',
                     text: 'Não foi possível alterar o responsável.',
-                    type: 'Error'
+                    type: 'error'
                 });
             });
         },
@@ -197,7 +192,7 @@ export default {
                     group: 'foo',
                     title: 'Erro!',
                     text: 'Não foi possível alterar o status.',
-                    type: 'Error'
+                    type: 'error'
                 });
             });
         },
@@ -211,7 +206,7 @@ export default {
                     group: 'foo',
                     title: 'Erro!',
                     text: 'Não foi possível alterar a severidade.',
-                    type: 'Error'
+                    type: 'error'
                 });
             });
         },

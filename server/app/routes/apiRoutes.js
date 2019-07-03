@@ -10,7 +10,7 @@ module.exports = function (app, db) {
         }
         db.sequelize.query(
             `select t.id, t.title, t.severityId, t.statusId, t.createdAt, au.name as assignedName from ticket t
-            inner join user au on au.id = t.assignedId
+            left join user au on au.id = t.assignedId
             where statusId in (${req.body.statusList.join(',')})
             and severityId in (${req.body.severityList.join(',')})
             ${req.body.dateQuery}
@@ -25,10 +25,10 @@ module.exports = function (app, db) {
     app.get('/api/ticket/byid/:id', (req, res) => {
         db.sequelize.query(
             `select t.*, au.name as assignedName, ou.name as ownerName, ou.email as ownerEmail, s.name as serviceName from ticket t
-            inner join user au on au.id = t.assignedId
+            left join user au on au.id = t.assignedId
             inner join user ou on ou.id = t.ownerId
             inner join service s on s.id = t.serviceId
-            and t.id = ${req.params.id}`,
+            where t.id = ${req.params.id}`,
             {type: db.sequelize.QueryTypes.SELECT}
           ).then((result) => {
             res.json(result);
@@ -115,7 +115,7 @@ module.exports = function (app, db) {
     
     app.post('/api/ticket/new', (req, res) => {
         db.Ticket.create({
-            assignedId: req.body.assignedId,
+            assignedId: null, // All tickets start without assigned
             ownerId: req.body.ownerId,
             serviceId: req.body.serviceId,
             title: req.body.title,

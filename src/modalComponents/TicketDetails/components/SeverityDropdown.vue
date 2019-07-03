@@ -10,10 +10,10 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-            <a  v-for="(severity) in severities" :key="severity.id" class="dropdown-item is-flex" @click="severityClicked(severity.id)">
-                 <icon :class="icon(severity.id)" name="exclamation-triangle"/>
-                <span>{{name(severity.id)}}</span>
-            </a>
+                <a  v-for="(severity) in severities" :key="severity.id" class="dropdown-item is-flex" @click="severityClicked(severity.id)">
+                    <icon :class="icon(severity.id)" name="exclamation-triangle"/>
+                    <span>{{name(severity.id)}}</span>
+                </a>
             </div>
         </div>
     </div>

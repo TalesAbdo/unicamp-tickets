@@ -2,18 +2,19 @@
     <div :class="{'is-active': show}" class="modal new-ticket">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
+                    {{ticket}}
             <Title titleValue="Novo Ticket" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto" @typed="titleTyped" v-model="ticket.title"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" v-model="ticket.description"/>
+            <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto" @input="setTitle"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription"/>
 
-            <Service class = "margin-rem" v-model="ticket.serviceId"/>
+            <Service class="margin-rem" :triggerValue="ticket.serviceName" :services="services" @click="setService"/>
 
             <div class="severity-buttons-container">
                 <span class="has-text-weight-bold">Severidade</span>
                 <div class="buttons has-addons">
-                    <span :class="{'is-success is-selected': activeSevButton === 0}" class="button" @click="severityControl(0)">Baixa</span>
-                    <span :class="{'is-warning is-selected': activeSevButton === 1}" class="button" @click="severityControl(1)">Média</span>
-                    <span :class="{'is-danger is-selected': activeSevButton === 2}" class="button" @click="severityControl(2)">Alta</span>
+                    <span :class="{'is-success is-selected': ticket.severityId === 1}" class="button" @click="setSeverity(1)">Baixa</span>
+                    <span :class="{'is-warning is-selected': ticket.severityId === 2}" class="button" @click="setSeverity(2)">Média</span>
+                    <span :class="{'is-danger is-selected': ticket.severityId === 3}" class="button" @click="setSeverity(3)">Alta</span>
                 </div>
             </div>
 
@@ -60,27 +61,62 @@ export default {
                 description: null,
                 serviceId: null,
                 severityId: null,
-            }
+                serviceName: null,
+            },
+            services: []
         };
     },
+    mounted() {
+        this.getServices();
+    },
     methods: {
-        severityControl(value) {
-            this.activeSevButton = value;
-        },
         hide() {
             this.$emit('hide');
         },
+        setTitle(value) {
+            this.ticket.title = value;
+        },
+        setDescription(value) {
+            this.ticket.description = value;
+        },
+        setService(service) {
+            this.ticket.serviceName = service.name;
+            this.ticket.serviceId = service.id;
+        },
+        setSeverity(value) {
+            this.ticket.severityId = value;
+        },
+        getServices() {
+            axios.get('/api/service/all')
+                .then((response) => {
+                    this.services = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter a listagem de serviços.',
+                        type: 'error'
+                    });
+                });
+        },
         createTicket() {
-            axios.post('api/ticket/new',
-                {
-                    assignedId: null,
-                    ownerId: 1,
-                    serviceId: this.ticket.serviceId,
-                    title: this.ticket.title,
-                    description: this.ticket.description,
-                    severityId: this.ticket.severityId,
-                    statusId: 3,
-                }).then((response) => {
+            axios.post('api/ticket/new', { ...this.ticket, ownerId: 1 })
+            .then((response) => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Sucesso!',
+                    text: 'Ticket criado.',
+                    type: 'success'
+                });
+                hide();
+            }).catch(() => {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Erro!',
+                    text: 'Não foi criar o ticket.',
+                    type: 'error'
+                });
             });
         }
     }

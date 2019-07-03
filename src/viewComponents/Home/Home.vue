@@ -1,14 +1,14 @@
 <template>
     <div class="home-container">
         <div class="left-container">
-            <!-- <Button icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')" /> -->
+            <Button icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')"/>
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
         <div class="right-container">
             <OrdenationTitle class="right-header" :orderBy="orderBy" :isUp="isUp" @onItemClick="changeOrder"/>
             <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" @modalControl="modalControl" @onClick="setTicketDetailId"/>
         </div>
-        <!-- <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/> -->
+        <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/>
         <TicketDetails :show="showTicketDetails" @hide="modalControl('ticketDetails')" :ticketId="ticketDetailId"/>
     </div>
 </template>
@@ -93,6 +93,7 @@ export default {
             } else {
                 this.showTicketDetails = !this.showTicketDetails;
             }
+            this.getTicketList();
         },
         changeOrder(element) {
             this.orderBy = element;
@@ -111,24 +112,23 @@ export default {
                     name: 'Status',
                     query: 'status',
                     options: [
-                        { value: 0, label: 'Aberto' },
-                        { value: 1, label: 'Em progresso' },
-                        { value: 2, label: 'Resolvido' },
-                        { value: 3, label: 'Em espera' },
-                        { value: 4, label: 'Fechado' },
+                        { value: 1, label: 'Aberto' },
+                        { value: 2, label: 'Em progresso' },
+                        { value: 3, label: 'Resolvido' },
+                        { value: 4, label: 'Em espera' }
                     ],
-                    selected: [0, 1, 3],
+                    selected: [1, 3],
                     multiple: true
                 },
                 {
                     name: 'Prioridade',
                     query: 'priority',
                     options: [
-                        { value: 0, label: 'Baixa' },
-                        { value: 1, label: 'Média' },
-                        { value: 2, label: 'Alta' },
+                        { value: 1, label: 'Baixa' },
+                        { value: 2, label: 'Média' },
+                        { value: 3, label: 'Alta' },
                     ],
-                    selected: [0],
+                    selected: [1, 2, 3],
                     multiple: true
                 },
                 {

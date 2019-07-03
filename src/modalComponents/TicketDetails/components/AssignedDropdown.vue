@@ -4,10 +4,10 @@
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
-                <figure class="image is-24x24">
+                <figure v-if="triggerValue" class="image is-24x24">
                     <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
                 </figure>
-                <span>{{triggerValue}}</span>
+                <span>{{triggerValue || 'Escolha um responsável'}}</span>
             </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
