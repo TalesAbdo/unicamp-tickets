@@ -345,17 +345,20 @@ module.exports = function (app, db) {
     });
 
     app.get('/api/comment/all/:ticketid', (req, res) => {
-        db.Item.findAll({
-            where: {
-                ticketId: req.params.ticketid
-            }
-        }).then((result) => {
+        console.log('hereee');
+        db.sequelize.query(
+            `SELECT c.id, c.commentText, c.createdAt, u.name as userName from comment c
+             inner join user u on u.id = c.userId
+             where c.ticketId = ${req.params.ticketid}
+             order by id desc`,
+            {type: db.sequelize.QueryTypes.SELECT}
+          ).then((result) => {
             res.json(result);
         });
     });
 
     app.post('/api/comment/new', (req, res) => {
-        db.Item.create({
+        db.Comment.create({
             ticketId: req.body.ticketId,
             userId: req.body.userId,
             commentText: req.body.commentText

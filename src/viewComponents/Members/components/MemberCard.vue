@@ -44,7 +44,7 @@ export default {
                         group: 'foo',
                         title: 'Erro!',
                         text: 'Não foi possível deletar o membro, contate o administrador.',
-                        type: 'Danger'
+                        type: 'error'
                     });
                 });
         }

@@ -60,13 +60,13 @@ export default {
                 group: 'foo',
                 title: 'Atenção!',
                 text: 'Operação não realizada, contate o adminstrador da aplicação.',
-                type: 'danger'
+                type: 'error'
             },
             attentionMessage: {
                 group: 'foo',
                 title: 'Atenção!',
                 text: 'Preencha todas as informações necessárias.',
-                type: 'danger'
+                type: 'error'
             }
         };
     },

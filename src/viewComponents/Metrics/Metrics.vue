@@ -198,7 +198,7 @@ export default {
                     group: 'foo',
                     title: 'Erro!',
                     text: 'Algo deu errado na geração do gráfico, contate o adminstrador.',
-                    type: 'danger'
+                    type: 'error'
                 });
             }
         },

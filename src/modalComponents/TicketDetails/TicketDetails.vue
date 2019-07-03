@@ -9,9 +9,8 @@
                     <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
                 </div>
             </div>
-{{ticket}}
-{{services}}
-{{members}}
+<!-- {{comments}} -->
+{{comment}}
             <div class="ticket-content">
                 <div class="left-content">
                     <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" @click="updateServiceId"/>
@@ -30,13 +29,13 @@
             <div class="line-divider"> </div>
 
             <div class="comment-area-content">
-                <Textarea textareaTitle="Comentário" textareaPlaceHolder="seu comentário"/>
+                <Textarea textareaTitle="Comentário" textareaPlaceHolder="seu comentário" @input="setComment" :preValue="comment"/>
                 <div class="option-buttons">
-                    <button class="button is-black is-normal">Comentar</button>
+                    <button class="button is-black is-normal" @click="createComment">Comentar</button>
                 </div>
             </div>
 
-            <History/>
+            <History :comments="comments"/>
         </div>
     </div>
 </template>
@@ -78,24 +77,24 @@ export default {
             },
             services: [],
             members: [],
+            comments: [],
+            comment: null,
             statuses: [{ id: 1, value: 'Aberto' }, { id: 2, value: 'Em progresso' }, { id: 3, value: 'Resolvido' }, { id: 4, value: 'Em espera' }],
             severities: [{ id: 1, value: 'Baixa' }, { id: 2, value: 'Média' }, { id: 3, value: 'Alta' }]
         };
     },
     watch: {
         ticketId() {
-            this.updateAll();
+            this.getTicket();
         },
     },
     mounted() {
-        this.updateAll();
+        this.getTicket();
+        this.getServices();
+        this.getMembers();
+        this.getComments();
     },
     methods: {
-        updateAll() {
-            this.getTicket();
-            this.getServices();
-            this.getMembers();
-        },
         getTicket() {
             if (this.ticketId) {
                 axios.get(`/api/ticket/byid/${this.ticketId}`)
@@ -139,6 +138,22 @@ export default {
                             group: 'foo',
                             title: 'Erro!',
                             text: 'Não foi possível obter a listagem de membros.',
+                            type: 'Error'
+                        });
+                    });
+            }
+        },
+        getComments() {
+            if (this.ticketId) {
+                axios.get(`/api/comment/all/${this.ticketId}`)
+                    .then((response) => {
+                        this.comments = response.data;
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível obter a listagem de comentários.',
                             type: 'Error'
                         });
                     });
@@ -200,6 +215,40 @@ export default {
                 });
             });
         },
+        setComment(value) {
+            this.comment = value;
+        },
+        createComment() {
+            if (this.comment) {
+                axios.post('/api/comment/new', { ticketId: this.ticketId, userId: 1, commentText: this.comment })
+                .then((response) => {
+                    this.getTicket();
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Sucesso!',
+                        text: 'Comentário adicionado.',
+                        type: 'success'
+                    });
+                    this.comment = '';
+                    this.getComments();
+                })
+                .catch((e) => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível adicionar comentário.',
+                        type: 'error'
+                    });
+                });
+            } else {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Escreva um comentário.',
+                    type: 'warn'
+                });
+            }
+        },
         hide() {
             this.$emit('hide');
         },
@@ -239,6 +288,7 @@ export default {
 
             .ticket-number {
                 margin-right: .9rem;
+                min-width: 30px;
             }
         }
 

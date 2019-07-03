@@ -122,7 +122,7 @@ export default {
                         group: 'foo',
                         title: 'Erro!',
                         text: 'Erro ao obter a listagem de tickts por status',
-                        type: 'Danger'
+                        type: 'error'
                     });
                 });
         },

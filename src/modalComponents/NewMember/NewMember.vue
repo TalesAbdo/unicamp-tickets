@@ -100,7 +100,7 @@ export default {
                         group: 'foo',
                         title: 'Erro!',
                         text: 'Não foi possível obter a lista de membros.',
-                        type: 'Danger'
+                        type: 'error'
                     });
                 });
         },
@@ -128,7 +128,7 @@ export default {
                     group: 'foo',
                     title: 'Erro!',
                     text: 'Não foi possível adicionar o(s) membro(s).',
-                    type: 'Danger'
+                    type: 'error'
                 });
                 console.log(e);
             }

@@ -83,7 +83,7 @@ export default {
                         group: 'foo',
                         title: 'Erro!',
                         text: 'Não foi possível obter a lista de tickets.',
-                        type: 'Danger'
+                        type: 'error'
                     });
                 });
         },

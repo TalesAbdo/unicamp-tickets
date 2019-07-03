@@ -1,17 +1,17 @@
 <template>
     <div class="history-content">
         <span class="has-text-weight-bold">Histórico</span>
-        <div v-for="(item, index) in historyList" :key="index" class="comment">
+        <div v-for="(comment, index) in comments" :key="index" class="comment">
             <div class="history-header">
                 <figure class="image is-48x48">
-                    <img class="is-rounded" :src="item.imgSrc">
+                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
                 </figure>
-                <span><b>{{writtenUserName(item.userName)}}</b> <i>{{writtenDate(item.date)}}</i></span>
+                <span><b>{{writtenUserName(comment.userName)}}</b> <i>{{writtenDate(comment.createdAt)}}</i></span>
             </div>
             <div class="comment-content">
-                <span>{{item.msg}}</span>
+                <span>{{comment.commentText}}</span>
             </div>
-            <div v-if="index !== historyList.length-1" class="divider"/>
+            <div v-if="index !== comment.length-1" class="divider"/>
         </div>
     </div>
 </template>
@@ -21,17 +21,10 @@
 export default {
     name: 'ticketHistory',
     props: {
+        comments: { type: Array, required: true }
     },
     data() {
         return {
-            historyList: [
-                {
-                    historyId: 1, userName: 'Tales', date: '2019-03-11 13:23:44', msg: 'Resolver até amanhã por favor!', imgSrc: 'https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg' //eslint-disable-line
-                },
-                {
-                    historyId: 2, userName: 'Lorde', date: '2019-03-10 10:00:51', msg: 'Ticket em andamento.', imgSrc: 'https://pbs.twimg.com/profile_images/418421020727324672/HuJpLShB.jpeg'
-                }
-            ]
         };
     },
     computed: {
