@@ -1,7 +1,7 @@
 <template>
     <div class="card" @click="onClick">
     <header class="card-header">
-        <TicketNumber :id="123124" />
+        <TicketNumber :id="ticket.id" />
         <p class="card-header-title">
             {{ticket.title}}
         </p>
@@ -12,19 +12,19 @@
             <i class="fas fa-paperclip"></i>
         </div>
         <div class="card-footer-item">
-            <i :class="statusIcon" class="icon"/>
+            <icon class="icon" :name="statusIcon"/>
             <span>{{statusName}}</span>
         </div>
         <div class="card-footer-item">
-            <i :class="severityIcon" class="icon fas fa-exclamation-triangle"/>
+            <icon class="icon" :class="severityIcon" name="exclamation-triangle"/>
             <span>{{severityName}}</span>
         </div>
 
         <div class="card-footer-item">
-            <figure class="icon image is-24x24">
-                <img class="is-rounded" :src="ticket.assignedPhoto">
+            <figure v-if="ticket.assignedName" class="icon image is-24x24">
+                <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
             </figure>
-            <span>{{ticket.assignedId}}</span>
+            <span>{{ticket.assignedName || 'Sem responsável'}}</span>
         </div>
         <span class="card-footer-item">{{creationDate}}</span>
     </footer>
@@ -34,43 +34,42 @@
 <script>
 import moment from 'moment';
 import TicketNumber from 'shared/TicketNumber.vue';
+import Icon from 'vue-awesome/components/Icon.vue';
 
 export default {
     name: 'ticketCard',
     components: {
-        TicketNumber
+        TicketNumber, Icon
     },
     props: {
         ticket: { type: Object, required: true },
     },
     data() {
         return {
-            creationDate: moment(this.ticket.creationDate, 'DDMMYYYY').fromNow(),
+            creationDate: moment(this.ticket.createdAt.slice(0,10), 'YYYY-MM-DD').fromNow(),
         };
     },
     computed: {
         statusIcon() {
-            switch (this.ticket.status) {
-            case 1: return 'fas fa-circle-notch';
-            case 2: return 'fas fa-thumbs-up';
-            case 3: return 'fas fa-check-circle';
-            case 4: return 'fas fa-anchor';
-            case 5: return 'fas fa-ban';
+            switch (this.ticket.statusId) {
+            case 1: return 'circle-notch';
+            case 2: return 'thumbs-up';
+            case 3: return 'check-circle';
+            case 4: return 'anchor';
             default: return null;
             }
         },
         statusName() {
-            switch (this.ticket.status) {
+            switch (this.ticket.statusId) {
             case 1: return 'Aberto';
             case 2: return 'Em progresso';
             case 3: return 'Resolvido';
             case 4: return 'Em espera';
-            case 5: return 'Fechado';
             default: return null;
             }
         },
         severityIcon() {
-            switch (this.ticket.severity) {
+            switch (this.ticket.severityId) {
             case 1: return 'has-text-success';
             case 2: return 'has-text-warning';
             case 3: return 'has-text-danger';
@@ -78,7 +77,7 @@ export default {
             }
         },
         severityName() {
-            switch (this.ticket.severity) {
+            switch (this.ticket.severityId) {
             case 1: return 'Baixa';
             case 2: return 'Média';
             case 3: return 'Alta';
@@ -88,6 +87,7 @@ export default {
     },
     methods: {
         onClick() {
+            this.$emit('onClick', this.ticket.id);
             this.$emit('modalControl', 'ticketDetails');
         },
     }

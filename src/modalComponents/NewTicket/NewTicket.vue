@@ -2,7 +2,6 @@
     <div :class="{'is-active': show}" class="modal new-ticket">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
-                    {{ticket}}
             <Title titleValue="Novo Ticket" class="header-text"/>
             <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto" @input="setTitle"/>
             <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription"/>
@@ -101,23 +100,37 @@ export default {
                 });
         },
         createTicket() {
-            axios.post('api/ticket/new', { ...this.ticket, ownerId: 1 })
-            .then((response) => {
+            if (this.ticket.title && this.ticket.serviceId && this.ticket.severityId) {
+                axios.post('api/ticket/new', { ...this.ticket, ownerId: 1 })
+                .then((response) => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Sucesso!',
+                        text: 'Ticket criado.',
+                        type: 'success'
+                    });
+                    this.ticket.title = null;
+                    this.ticket.description = null;
+                    this.ticket.serviceId = null;
+                    this.ticket.severityId = null;
+                    this.ticket.serviceName = null;
+                    this.hide();
+                }).catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível criar o ticket.',
+                        type: 'error'
+                    });
+                });
+            } else {
                 this.$notify({
                     group: 'foo',
-                    title: 'Sucesso!',
-                    text: 'Ticket criado.',
-                    type: 'success'
+                    title: 'Cuidado!',
+                    text: 'Preencha todas as informações para abrir o ticket.',
+                    type: 'warn'
                 });
-                hide();
-            }).catch(() => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi criar o ticket.',
-                    type: 'error'
-                });
-            });
+            }
         }
     }
 };

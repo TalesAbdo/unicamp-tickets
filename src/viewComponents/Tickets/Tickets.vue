@@ -7,16 +7,15 @@
                 <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{getTicketsByStatusQuantity(2)}}</span>
                 <span><i class="fas fa-check-circle"/><b>Resolvidos:</b> {{getTicketsByStatusQuantity(3)}}</span>
                 <span><i class="fas fa-anchor"/><b>Em espera:</b> {{getTicketsByStatusQuantity(4)}}</span>
-                <span><i class="fas fa-ban"/><b>Fechados:</b> {{getTicketsByStatusQuantity(5)}}</span>
             </div>
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
 
         <div class="right-container">
             <OrdenationTitle class="right-header" :orderBy="orderBy" :isUp="isUp" @onItemClick="changeOrder"/>
-            <TicketCard v-for="(item) in tickets" :key="item" :ticket="ticket" @modalControl="modalControl"/>
+           <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" @modalControl="modalControl" @onClick="setTicketDetailId"/>
         </div>
-        <TicketDetails :show="showTicketDetails" @hide="modalControl" />
+        <TicketDetails :show="showTicketDetails" @hide="modalControl('ticketDetails')" :ticketId="ticketDetailId"/>
     </div>
 </template>
 
@@ -38,19 +37,10 @@ export default {
             showTicketDetails: false,
             orderBy: 'creationDate',
             isUp: false,
-            ticket: {
-                id: 1203,
-                title: 'hey',
-                status: 1,
-                severity: 3,
-                assignedId: 'Tales',
-                creationDate: '01-01-2000',
-                hasAttachment: false,
-                assignedPhoto: 'https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg'
-            },
-            tickets: [1, 2, 3, 4, 5, 6, 7],
+            tickets: [],
+            ticketDetailId: null,
             filters: [],
-            ticketsByStatus: [{}, {}, {}, {}, {}]
+            ticketsByStatus: [{}, {}, {}, {}]
         };
     },
     created() {
@@ -60,57 +50,46 @@ export default {
         } else {
             this.filters = this.getBaseFilters();
         }
+        this.getTicketList();
         this.getTicketsByStatus();
     },
     methods: {
-        modalControl() {
-            this.showTicketDetails = !this.showTicketDetails;
-        },
-        changeOrder(element) {
-            this.orderBy = element;
-            this.isUp = !this.isUp;
-        },
-        filtersUpdate(event) {
-            localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
-        },
-        getBaseFilters() {
-            return [{
-                name: 'Status',
-                query: 'status',
-                options: [
-                    { value: 0, label: 'Aberto' },
-                    { value: 1, label: 'Em progresso' },
-                    { value: 2, label: 'Resolvido' },
-                    { value: 3, label: 'Em espera' },
-                    { value: 4, label: 'Fechado' },
-                ],
-                selected: [0, 1, 3],
-                multiple: true
-            },
-            {
-                name: 'Prioridade',
-                query: 'priority',
-                options: [
-                    { value: 0, label: 'Baixa' },
-                    { value: 1, label: 'Média' },
-                    { value: 2, label: 'Alta' },
-                ],
-                selected: [0],
-                multiple: true
-            },
-            {
-                name: 'Período',
-                query: 'date',
-                options: [
-                    { value: 0, label: 'Geral' },
-                    { value: 1, label: 'Menos de 7 dias' },
-                    { value: 2, label: 'De 7 a 30 dias' },
-                    { value: 3, label: 'Mais de 30 dias' }
-                ],
-                selected: [0],
-                multiple: false
+        getTicketList() {
+            let dateQuery = '';
+
+            let sevenDate = new Date();
+            sevenDate.setDate(sevenDate.getDate() - 7);
+            sevenDate = sevenDate.toJSON().slice(0,19).replace('T', ' ');
+
+            let thirtyDate = new Date();
+            thirtyDate.setDate(thirtyDate.getDate() - 30);
+            thirtyDate = thirtyDate.toJSON().slice(0,19).replace('T', ' ');
+
+            if (this.filters[2].selected[0] === 1) {
+                dateQuery = `and t.createdAt > '${sevenDate}'`;
+            } else if (this.filters[2].selected[0] === 2) {
+                dateQuery = `and t.createdAt between '${sevenDate}' and '${thirtyDate}'`;
+            } else if (this.filters[2].selected[0] === 3) {
+                dateQuery = `and t.createdAt < '${thirtyDate}'`;
             }
-            ];
+
+            axios.post('/api/ticket/byuser',
+                {
+                    ownerId: null,
+                    statusList: this.filters[0].selected,
+                    severityList: this.filters[1].selected,
+                    dateQuery })
+                .then((response) => {
+                    this.tickets = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter a lista de tickets.',
+                        type: 'error'
+                    });
+                });
         },
         getTicketsByStatus() {
             axios.get('/api/ticket/bystatus')
@@ -132,7 +111,62 @@ export default {
                 return this.ticketsByStatus[index].quantity;
             }
             return 0;
-        }
+        },
+        modalControl() {
+            this.showTicketDetails = !this.showTicketDetails;
+            this.getTicketsByStatus();           
+            this.getTicketList();
+        },
+        changeOrder(element) {
+            this.orderBy = element;
+            this.isUp = !this.isUp;
+        },
+        setTicketDetailId(id) {
+            this.ticketDetailId = id;
+        },
+        async filtersUpdate(event) {
+            await localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
+            this.getTicketList();
+        },
+        baseFilters() {
+            return [
+                {
+                    name: 'Status',
+                    query: 'status',
+                    options: [
+                        { value: 1, label: 'Aberto' },
+                        { value: 2, label: 'Em progresso' },
+                        { value: 3, label: 'Resolvido' },
+                        { value: 4, label: 'Em espera' }
+                    ],
+                    selected: [1, 3],
+                    multiple: true
+                },
+                {
+                    name: 'Prioridade',
+                    query: 'priority',
+                    options: [
+                        { value: 1, label: 'Baixa' },
+                        { value: 2, label: 'Média' },
+                        { value: 3, label: 'Alta' },
+                    ],
+                    selected: [1, 2, 3],
+                    multiple: true
+                },
+                {
+                    name: 'Período',
+                    query: 'date',
+                    options: [
+                        { value: 0, label: 'Geral' },
+                        { value: 1, label: 'Menos de 7 dias' },
+                        { value: 2, label: 'De 7 a 30 dias' },
+                        { value: 3, label: 'Mais de 30 dias' }
+                    ],
+                    selected: [0],
+                    multiple: false
+                }
+            ];
+        },
     }
 };
 </script>
