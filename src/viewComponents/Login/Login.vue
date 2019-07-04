@@ -5,9 +5,7 @@
             <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"/>
             <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome"/>
 
-            <router-link to="/home">
-                <button class="button is-black is-normal margin-1rem">Conectar</button>
-            </router-link>
+                <button class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
 
             <button type="button" @click="modalControl" class="link-button">Não tem uma conta? Clique Aqui</button>
             <button type="button" class="link-button">Recuperar senha</button>
@@ -32,15 +30,14 @@ export default {
             showUserControl: false
         };
     },
-    mounted() {
-        axios.get('api/service/all').then((response) => {
-            console.log(response);
-        });
-    },
     methods: {
         modalControl() {
             this.showUserControl = !this.showUserControl;
         },
+        loginIntoApplication() {
+            console.log('hey')
+            window.location.href = '/#/home';
+        }
     }
 };
 </script>

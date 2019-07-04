@@ -262,12 +262,15 @@ module.exports = function (app, db) {
     });
 
     app.post('/api/user/new', (req, res) => {
-        db.User.create({
+        console.log(req.body)
+        db.User.findOrCreate({
+            where: {
+                email: req.body.email,
+            }, defaults: {
             name: req.body.name,
-            email: req.body.email,
             password: req.body.password,
             image: req.body.image
-        }).then((result) => {
+        }}).then((result) => {
             res.json(result);
         });
     });

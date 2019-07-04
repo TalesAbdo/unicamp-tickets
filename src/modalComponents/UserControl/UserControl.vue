@@ -3,18 +3,19 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <h1 class="header-text">Insira suas informações para criar sua conta!</h1>
-
-            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"/>
-            <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome"/>
-            <Input v-if="modalType === 'modifyUser'" class="margin-1rem" inputTitle="Nova Senha" inputPlaceHolder="sua senha caso queira alterá-la"/>
-            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha"/>
+            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email"/>
+            <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"/>
+            <Input v-if="modalType === 'modifyUser'" class="margin-1rem" inputTitle="Nova Senha"
+                    inputPlaceHolder="sua senha caso queira alterá-la" type="password"
+                    @input="setNewPassword" :preValue="user.newPassword"/>
+            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword"  :preValue="user.password"/>
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
                 <img class="image" src="@/assets/Logo.svg">
             </div>
 
-            <button class="button is-black is-normal">{{buttonText}}</button>
+            <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
         </form>
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
@@ -22,6 +23,8 @@
 
 <script>
 import Input from 'shared/Input.vue';
+
+const axios = require('axios');
 
 export default {
     name: 'userControl',
@@ -34,12 +37,77 @@ export default {
     },
     data() {
         return {
-            modalType: this.buttonText === 'Criar conta' ? 'newUser' : 'modifyUser'
+            modalType: this.buttonText === 'Criar conta' ? 'newUser' : 'modifyUser',
+            user: {
+                email: null,
+                name: null,
+                password: null,
+                newPassword: null,
+                image: null
+            }
         };
     },
     methods: {
         hide() {
             this.$emit('hide');
+        },
+        setEmail(value) {
+            this.user.email = value;
+        },
+        setName(value) {
+            this.user.name = value;
+        },
+        setPassword(value) {
+            this.user.password = value;
+        },
+        setNewPassword(value) {
+            this.user.newPassword = value;
+        },
+        userAction() {
+            if (this.modalType === 'newUser') {
+                this.createUser();
+            }
+        },
+        createUser() {
+            if (this.user.email && this.user.name && this.user.password) {
+                axios.post('api/user/new', { ...this.user })
+                .then((response) => {
+                    if (response.data[1]) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Sucesso!',
+                            text: 'Conta criada.',
+                            type: 'success'
+                        });
+                        this.user.email = null;
+                        this.user.name = null;
+                        this.user.password = null;
+                        this.hide();
+                    } else {
+                        throw error;
+                    }
+                }).catch((error) => {
+                    let text;
+                    if (error) {
+                        text = 'Email já em uso';
+                    } else {
+                        text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
+                    }
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: text,
+                        type: 'error'
+                    });
+                });
+            } else {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Preencha todas as informações para criar uma conta.',
+                    type: 'warn'
+                });
+            }
         },
     }
 };

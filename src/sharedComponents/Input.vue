@@ -1,7 +1,7 @@
 <template>
     <div class="input-container">
         <span class="input-title">{{inputTitle}}</span>
-        <input class="input-text" type="text" :placeHolder="placeHolder" autocomplete="off" v-model="typedValue"/>
+        <input class="input-text" :type="type" :placeHolder="placeHolder" autocomplete="off" v-model="typedValue"/>
         <div class="line"/>
     </div>
 </template>
@@ -12,7 +12,8 @@ export default {
     props: {
         inputTitle: { type: String, required: true },
         inputPlaceHolder: { type: String, required: true },
-        preValue: { type: String, required: false, default: '' }
+        preValue: { type: String, required: false, default: '' },
+        type: { type: String, required: false, default: 'text' },
     },
     computed: {
         placeHolder() {
