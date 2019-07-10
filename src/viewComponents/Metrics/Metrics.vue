@@ -60,10 +60,10 @@ import { saveAs } from 'file-saver';
 import Chart from 'chart.js';
 import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
+import XLSX from 'xlsx';
 import Service from './components/ServiceDropdown.vue';
 import Year from './components/YearDropdown.vue';
 import Month from './components/MonthDropdown.vue';
-import XLSX from 'xlsx';
 
 const axios = require('axios');
 
@@ -129,7 +129,7 @@ export default {
                 // For image export
                 plugins: [{
                     beforeDraw(c) {
-                        const { ctx } = c.chart;
+                        const { ctx } = c.chart; //eslint-disable-line
                         ctx.fillStyle = '#ffffff';
                         ctx.fillRect(0, 0, c.chart.width, c.chart.height);
                     }
@@ -155,21 +155,21 @@ export default {
             this.reportData.serviceId = value;
         },
         severityName(id) {
-            switch(id) {
-                case 1: return 'Baixa';
-                case 2: return 'Média';
-                case 3: return 'Alta';
-                default: return null;
+            switch (id) {
+            case 1: return 'Baixa';
+            case 2: return 'Média';
+            case 3: return 'Alta';
+            default: return null;
             }
         },
         statusName(id) {
-            switch(id) {
-                case 1: return 'Aberto';
-                case 2: return 'Em progresso';
-                case 3: return 'Resolvido';
-                case 4: return 'Em espera';
-                case 5: return 'Fechado';
-                default: return null;
+            switch (id) {
+            case 1: return 'Aberto';
+            case 2: return 'Em progresso';
+            case 3: return 'Resolvido';
+            case 4: return 'Em espera';
+            case 5: return 'Fechado';
+            default: return null;
             }
         },
         async getChartData() {
@@ -193,7 +193,6 @@ export default {
                     });
                 }
             } catch (e) {
-                console.log(e);
                 this.$notify({
                     group: 'foo',
                     title: 'Erro!',
@@ -212,38 +211,36 @@ export default {
         },
         createImage() {
             const canvas = document.getElementById('report-chart');
-            const today = new Date(); 
-            console.log(today);
+            const today = new Date();
             canvas.toBlob((blob) => {
-                saveAs(blob, `Analise-grafica-${today.getDate()}-${today.getMonth() + 1 < 10 ? '0'.concat(today.getMonth()+1) : today.getMonth()+1}-${today.getFullYear()}.jpg`);
+                saveAs(blob, `Analise-grafica-${today.getDate()}-${today.getMonth() + 1 < 10 ? '0'.concat(today.getMonth() + 1) : today.getMonth() + 1}-${today.getFullYear()}.jpg`);
             }, 'image/jpeg', 1);
         },
         async generateDataForReport() {
             try {
                 if ((this.reportData.initialDate) && (this.reportData.finalDate) && this.reportData.initialDate <= this.reportData.finalDate) {
                     const fieldNames = ['ID', 'SEVERIDADE', 'STATUS', 'TÍTULO', 'CRIADO EM', 'ÚLTIMA ATUALIZAÇÃO', 'SERVIÇO',
-                    'DONO', 'RESPONSÁVEL', 'DESCRIÇÃO'];
+                        'DONO', 'RESPONSÁVEL', 'DESCRIÇÃO'];
                     const data = [fieldNames];
-                    let result = await axios.post('/api/ticket/byfilter', this.reportData).then((response) => { 
-                        console.log(response);
+                    await axios.post('/api/ticket/byfilter', this.reportData).then((response) => {
                         response.data.forEach((item) => {
-                            let line = [item.id, this.severityName(item.severityId), this.statusName(item.statusId), item.title,
-                            item.created, item.updated, item.serviceName, item.ownerName, item.assignedName, item.description];
+                            const line = [item.id, this.severityName(item.severityId), this.statusName(item.statusId), item.title,
+                                item.created, item.updated, item.serviceName, item.ownerName, item.assignedName, item.description];
                             data.push(line);
                         });
                     });
                     return data;
-                } else {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Atenção!',
-                        text: 'Selecione uma data final maior que a inicial.',
-                        type: 'warn'
-                    });
                 }
+                this.$notify({
+                    group: 'foo',
+                    title: 'Atenção!',
+                    text: 'Selecione uma data final maior que a inicial.',
+                    type: 'warn'
+                });
             } catch (e) {
-                console.log(e);
+                return false;
             }
+            return true;
         },
         async createReport() {
             try {
@@ -258,7 +255,7 @@ export default {
                 const ws = XLSX.utils.aoa_to_sheet(data);
                 wb.Sheets['Pesquisa por tickets'] = ws;
 
-                let wscolumns = [{ wch: 8 }, { wch: 11 }, { wch: 12 }, { wch: 20 }, { wch: 23 }, { wch: 23 }, { wch: 25 }, { wch: 25 }, { wch: 25 }, { wch: 40 }];
+                const wscolumns = [{ wch: 8 }, { wch: 11 }, { wch: 12 }, { wch: 20 }, { wch: 23 }, { wch: 23 }, { wch: 25 }, { wch: 25 }, { wch: 25 }, { wch: 40 }];
 
 
                 ws['!cols'] = wscolumns;
@@ -274,7 +271,6 @@ export default {
                 const today = new Date();
                 saveAs(new Blob([buf], { type: 'application/octet-stream' }),
                     `Relatorio-${today.getDate()}-${today.getMonth() + 1 < 10 ? '0'.concat(today.getMonth()) : today.getMonth()}-${today.getFullYear()}.xlsx`);
-
             } catch (error) {
                 console.log('Could not generate report', error); // eslint-disable-line
             }
@@ -372,7 +368,7 @@ export default {
                 ::-webkit-calendar-picker-indicator {
                     background-color:white
                 }
-                
+
                  input[type=date] {
                     font-size: 18px;
                                         display: block;

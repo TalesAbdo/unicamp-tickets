@@ -56,6 +56,9 @@
       "@vue/airbnb"
     ],
     "rules": {
+      "import/extensions": [
+        "off"
+      ],
       "max-len": [
         "error",
         200

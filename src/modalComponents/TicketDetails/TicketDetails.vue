@@ -94,7 +94,7 @@ export default {
             if (this.ticketId) {
                 axios.get(`/api/ticket/byid/${this.ticketId}`)
                     .then((response) => {
-                        this.ticket = response.data[0];
+                        this.ticket = response.data[0]; // eslint-disable-line
                     })
                     .catch(() => {
                         this.$notify({
@@ -155,60 +155,60 @@ export default {
             }
         },
         updateServiceId(serviceId) {
-            axios.put(`/api/ticket/update/service/${this.ticketId}`, { serviceId: serviceId })
-            .then((response) => {
-                this.getTicket();
-            })
-            .catch(() => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível alterar o serviço.',
-                    type: 'error'
+            axios.put(`/api/ticket/update/service/${this.ticketId}`, { serviceId })
+                .then(() => {
+                    this.getTicket();
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível alterar o serviço.',
+                        type: 'error'
+                    });
                 });
-            });
         },
         updateAssignedId(assignedId) {
-            axios.put(`/api/ticket/update/assigned/${this.ticketId}`, { assignedId: assignedId })
-            .then((response) => {
-                this.getTicket();
-            })
-            .catch((e) => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível alterar o responsável.',
-                    type: 'error'
+            axios.put(`/api/ticket/update/assigned/${this.ticketId}`, { assignedId })
+                .then(() => {
+                    this.getTicket();
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível alterar o responsável.',
+                        type: 'error'
+                    });
                 });
-            });
         },
         updateStatusId(statusId) {
-            axios.put(`/api/ticket/update/status/${this.ticketId}`, { statusId: statusId })
-            .then((response) => {
-                this.getTicket();
-            })
-            .catch((e) => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível alterar o status.',
-                    type: 'error'
+            axios.put(`/api/ticket/update/status/${this.ticketId}`, { statusId })
+                .then(() => {
+                    this.getTicket();
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível alterar o status.',
+                        type: 'error'
+                    });
                 });
-            });
         },
         updateSeverityId(severityId) {
-            axios.put(`/api/ticket/update/severity/${this.ticketId}`, { severityId: severityId })
-            .then((response) => {
-                this.getTicket();
-            })
-            .catch((e) => {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Erro!',
-                    text: 'Não foi possível alterar a severidade.',
-                    type: 'error'
+            axios.put(`/api/ticket/update/severity/${this.ticketId}`, { severityId })
+                .then(() => {
+                    this.getTicket();
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível alterar a severidade.',
+                        type: 'error'
+                    });
                 });
-            });
         },
         setComment(value) {
             this.comment = value;
@@ -216,25 +216,25 @@ export default {
         createComment() {
             if (this.comment) {
                 axios.post('/api/comment/new', { ticketId: this.ticketId, userId: 1, commentText: this.comment })
-                .then((response) => {
-                    this.getTicket();
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Sucesso!',
-                        text: 'Comentário adicionado.',
-                        type: 'success'
+                    .then(() => {
+                        this.getTicket();
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Sucesso!',
+                            text: 'Comentário adicionado.',
+                            type: 'success'
+                        });
+                        this.comment = '';
+                        this.getComments();
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível adicionar comentário.',
+                            type: 'error'
+                        });
                     });
-                    this.comment = '';
-                    this.getComments();
-                })
-                .catch((e) => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Erro!',
-                        text: 'Não foi possível adicionar comentário.',
-                        type: 'error'
-                    });
-                });
             } else {
                 this.$notify({
                     group: 'foo',

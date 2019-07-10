@@ -102,27 +102,27 @@ export default {
         createTicket() {
             if (this.ticket.title && this.ticket.serviceId && this.ticket.severityId) {
                 axios.post('api/ticket/new', { ...this.ticket, ownerId: 1 })
-                .then((response) => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Sucesso!',
-                        text: 'Ticket criado.',
-                        type: 'success'
+                    .then(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Sucesso!',
+                            text: 'Ticket criado.',
+                            type: 'success'
+                        });
+                        this.ticket.title = null;
+                        this.ticket.description = null;
+                        this.ticket.serviceId = null;
+                        this.ticket.severityId = null;
+                        this.ticket.serviceName = null;
+                        this.hide();
+                    }).catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível criar o ticket.',
+                            type: 'error'
+                        });
                     });
-                    this.ticket.title = null;
-                    this.ticket.description = null;
-                    this.ticket.serviceId = null;
-                    this.ticket.severityId = null;
-                    this.ticket.serviceName = null;
-                    this.hide();
-                }).catch(() => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Erro!',
-                        text: 'Não foi possível criar o ticket.',
-                        type: 'error'
-                    });
-                });
             } else {
                 this.$notify({
                     group: 'foo',

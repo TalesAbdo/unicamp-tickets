@@ -87,6 +87,7 @@ export default {
                     });
                     alreadyInList = true;
                 }
+                return true;
             });
             if (!alreadyInList) {
                 this.chosenUsers.push(element);
@@ -130,7 +131,6 @@ export default {
                     text: 'Não foi possível adicionar o(s) membro(s).',
                     type: 'error'
                 });
-                console.log(e);
             }
         },
     }
