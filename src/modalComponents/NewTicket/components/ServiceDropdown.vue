@@ -34,7 +34,7 @@ export default {
         };
     },
     methods: {
-         serviceClicked(service) {
+        serviceClicked(service) {
             this.$emit('click', service);
             this.controlDropdown();
         },

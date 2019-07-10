@@ -59,11 +59,11 @@ export default {
 
             let sevenDate = new Date();
             sevenDate.setDate(sevenDate.getDate() - 7);
-            sevenDate = sevenDate.toJSON().slice(0,19).replace('T', ' ');
+            sevenDate = sevenDate.toJSON().slice(0, 19).replace('T', ' ');
 
             let thirtyDate = new Date();
             thirtyDate.setDate(thirtyDate.getDate() - 30);
-            thirtyDate = thirtyDate.toJSON().slice(0,19).replace('T', ' ');
+            thirtyDate = thirtyDate.toJSON().slice(0, 19).replace('T', ' ');
 
             if (this.filters[2].selected[0] === 1) {
                 dateQuery = `and t.createdAt > '${sevenDate}'`;
@@ -78,7 +78,8 @@ export default {
                     ownerId: null,
                     statusList: this.filters[0].selected,
                     severityList: this.filters[1].selected,
-                    dateQuery })
+                    dateQuery
+                })
                 .then((response) => {
                     this.tickets = response.data;
                 })
@@ -114,7 +115,7 @@ export default {
         },
         modalControl() {
             this.showTicketDetails = !this.showTicketDetails;
-            this.getTicketsByStatus();           
+            this.getTicketsByStatus();
             this.getTicketList();
         },
         changeOrder(element) {

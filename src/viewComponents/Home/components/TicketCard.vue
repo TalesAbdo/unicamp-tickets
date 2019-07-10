@@ -45,7 +45,7 @@ export default {
     },
     data() {
         return {
-            creationDate: moment(this.ticket.createdAt.slice(0,10), 'YYYY-MM-DD').fromNow(),
+            creationDate: moment(this.ticket.createdAt.slice(0, 10), 'YYYY-MM-DD').fromNow(),
         };
     },
     computed: {
