@@ -18,8 +18,6 @@
 import Input from 'shared/Input.vue';
 import UserControl from 'modal/UserControl/UserControl.vue';
 
-const axios = require('axios');
-
 export default {
     name: 'login',
     components: {
@@ -35,7 +33,6 @@ export default {
             this.showUserControl = !this.showUserControl;
         },
         loginIntoApplication() {
-            console.log('hey')
             window.location.href = '/#/home';
         }
     }

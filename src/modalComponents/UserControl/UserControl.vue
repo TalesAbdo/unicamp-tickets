@@ -71,35 +71,35 @@ export default {
         createUser() {
             if (this.user.email && this.user.name && this.user.password) {
                 axios.post('api/user/new', { ...this.user })
-                .then((response) => {
-                    if (response.data[1]) {
+                    .then((response) => {
+                        if (response.data[1]) {
+                            this.$notify({
+                                group: 'foo',
+                                title: 'Sucesso!',
+                                text: 'Conta criada.',
+                                type: 'success'
+                            });
+                            this.user.email = null;
+                            this.user.name = null;
+                            this.user.password = null;
+                            this.hide();
+                        } else {
+                            throw error; // eslint-disable-line
+                        }
+                    }).catch((error) => {
+                        let text;
+                        if (error) {
+                            text = 'Email já em uso';
+                        } else {
+                            text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
+                        }
                         this.$notify({
                             group: 'foo',
-                            title: 'Sucesso!',
-                            text: 'Conta criada.',
-                            type: 'success'
+                            title: 'Erro!',
+                            text,
+                            type: 'error'
                         });
-                        this.user.email = null;
-                        this.user.name = null;
-                        this.user.password = null;
-                        this.hide();
-                    } else {
-                        throw error;
-                    }
-                }).catch((error) => {
-                    let text;
-                    if (error) {
-                        text = 'Email já em uso';
-                    } else {
-                        text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
-                    }
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Erro!',
-                        text: text,
-                        type: 'error'
                     });
-                });
             } else {
                 this.$notify({
                     group: 'foo',
