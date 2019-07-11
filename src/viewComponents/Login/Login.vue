@@ -50,17 +50,17 @@ export default {
         },
         loginIntoApplication() {
             if (this.user.email && this.user.password) {
-                axios.post('/api/user/bynameandid', { ...this.user })
+                axios.post('/api/user/byemailandpassword', { ...this.user })
                     .then((response) => {
                         if (!response.data) {
                             this.$notify({
                                 group: 'foo',
-                                title: 'Cuidado!',
+                                title: 'Atenção!',
                                 text: 'Email ou senha inválidos.',
                                 type: 'warn'
                             });
                         } else {
-                            this.setUserData({ ...response.data, isLoggedIn: true });
+                            this.setUserData({ ...response.data });
                             window.location.href = '/#/home';
                         }
                     })

@@ -275,7 +275,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/user/bynameandid', (req, res) => {
+    app.post('/api/user/byemailandpassword', (req, res) => {
         console.log(req.body)
         db.User.findOne({
             where: {

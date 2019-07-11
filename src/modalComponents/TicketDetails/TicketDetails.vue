@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import TicketNumber from 'shared/TicketNumber.vue';
 import PersonInformation from 'shared/PersonInformation.vue';
 import Textarea from 'shared/Textarea.vue';
@@ -88,6 +89,11 @@ export default {
             this.getMembers();
             this.getComments();
         },
+    },
+    computed: {
+        ...mapState({
+            id: state => state.user.id
+        }),
     },
     methods: {
         getTicket() {
@@ -215,7 +221,7 @@ export default {
         },
         createComment() {
             if (this.comment) {
-                axios.post('/api/comment/new', { ticketId: this.ticketId, userId: 1, commentText: this.comment })
+                axios.post('/api/comment/new', { ticketId: this.ticketId, id: this.id, commentText: this.comment })
                     .then(() => {
                         this.getTicket();
                         this.$notify({
