@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
         <form class="form-container" autocomplete="off">
-            <img class="image" src="@/assets/Logo.svg">
+            <img class="image" src="@/assets/Login_Logo.svg">
             <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email"/>
             <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password"/>
 
@@ -76,7 +76,7 @@ export default {
                 this.$notify({
                     group: 'foo',
                     title: 'Cuidado!',
-                    text: 'Preencha as informações.',
+                    text: 'Preencha o email e a senha.',
                     type: 'warn'
                 });
             }
