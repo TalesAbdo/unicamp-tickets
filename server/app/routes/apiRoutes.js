@@ -275,6 +275,18 @@ module.exports = function (app, db) {
         });
     });
 
+    app.post('/api/user/bynameandid', (req, res) => {
+        console.log(req.body)
+        db.User.findOne({
+            where: {
+                email: req.body.email,
+                password: req.body.password
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
     app.put('/api/user/update/:id', (req, res) => {
         db.User.update({
             name: req.body.name,

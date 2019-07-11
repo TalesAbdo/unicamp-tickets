@@ -2,10 +2,10 @@
     <div class="login-container">
         <form class="form-container" autocomplete="off">
             <img class="image" src="@/assets/Logo.svg">
-            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"/>
-            <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome"/>
+            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email"/>
+            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password"/>
 
-                <button class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
+            <button type="button" class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
 
             <button type="button" @click="modalControl" class="link-button">Não tem uma conta? Clique Aqui</button>
             <button type="button" class="link-button">Recuperar senha</button>
@@ -15,8 +15,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Input from 'shared/Input.vue';
 import UserControl from 'modal/UserControl/UserControl.vue';
+
+const axios = require('axios');
 
 export default {
     name: 'login',
@@ -25,15 +28,58 @@ export default {
     },
     data() {
         return {
-            showUserControl: false
+            showUserControl: false,
+            user: {
+                email: null,
+                password: null,
+            }
         };
     },
     methods: {
+        ...mapActions({
+            setUserData: 'user/setData'
+        }),
         modalControl() {
             this.showUserControl = !this.showUserControl;
         },
+        setEmail(value) {
+            this.user.email = value;
+        },
+        setPassword(value) {
+            this.user.password = value;
+        },
         loginIntoApplication() {
-            window.location.href = '/#/home';
+            if (this.user.email && this.user.password) {
+                axios.post('/api/user/bynameandid', { ...this.user })
+                    .then((response) => {
+                        if (!response.data) {
+                            this.$notify({
+                                group: 'foo',
+                                title: 'Cuidado!',
+                                text: 'Email ou senha inválidos.',
+                                type: 'warn'
+                            });
+                        } else {
+                            this.setUserData({ ...response.data, isLoggedIn: true });
+                            window.location.href = '/#/home';
+                        }
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Erro ao tentar se autenticar na aplicação.',
+                            type: 'error'
+                        });
+                    });
+            } else {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Preencha as informações.',
+                    type: 'warn'
+                });
+            }
         }
     }
 };

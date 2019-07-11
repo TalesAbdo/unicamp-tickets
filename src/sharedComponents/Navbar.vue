@@ -1,5 +1,6 @@
 <template>
-    <nav v-if="true" class="navbar is-primary" role="navigation" aria-label="main navigation">
+<div>
+    <nav v-if="name && email" class="navbar is-primary" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <span class="navbar-item">
                 <img src="@/assets/Logo.svg">
@@ -41,10 +42,10 @@
                     <div class="navbar-dropdown is-right has-text-right">
                         <span class="navbar-item is-flex">
                             <span class="has-text-weight-bold">
-                                {{user.name}}
+                                {{name}}
                             </span>
                             <span class="is-italic">
-                                {{user.email}}
+                                {{email}}
                             </span>
                         </span>
 
@@ -54,11 +55,11 @@
                             <span class="icon"><i class="fas fa-cog"/></span>
                             <span>Alterar Informações da conta</span>
                         </a>
-                        <a class="navbar-item has-text-link">
+                        <!-- <a class="navbar-item has-text-link">
                             <span class="icon"><i class="fas fa-question"/></span>
                             <span>Como abrir um ticket?</span>
-                        </a>
-                        <a class="navbar-item has-text-link">
+                        </a> -->
+                        <a class="navbar-item has-text-link" @click="logout">
                             <span class="icon"><i class="fas fa-sign-out-alt"/></span>
                             <span>Sair</span>
                         </a>
@@ -67,30 +68,41 @@
             </div>
         </div>
     </nav>
+    </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+
 export default {
     name: 'navbar',
-    data() {
-        return {
-            user: {
-                name: 'Tales Abdo dos Santos',
-                email: 'talesabdo@dac.177305.br'
-            }
-        };
-    },
     computed: {
+        ...mapState({
+            name: state => state.user.name,
+            email: state => state.user.email
+        }),
         firstName() {
-            return this.user.name.split(' ')[0];
+            return this.name.split(' ')[0];
         }
     },
     methods: {
+        ...mapActions({
+            setUserData: 'user/setData'
+        }),
         verifyRoute(routeName) {
             if (routeName === this.$route.name) {
                 return 'is-actual-page';
             }
             return '';
+        },
+        logout() {
+            this.setUserData({
+                name: null,
+                email: null,
+                image: null,
+                isLoggedIn: false
+            });
+            window.location.href = '/#/';
         }
     }
 };
