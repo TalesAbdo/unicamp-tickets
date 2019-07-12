@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Title from 'shared/Title.vue';
 import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
@@ -64,6 +65,11 @@ export default {
             },
             services: []
         };
+    },
+    computed: {
+        ...mapState({
+            id: state => state.user.id
+        }),
     },
     mounted() {
         this.getServices();
@@ -101,7 +107,7 @@ export default {
         },
         createTicket() {
             if (this.ticket.title && this.ticket.serviceId && this.ticket.severityId) {
-                axios.post('api/ticket/new', { ...this.ticket, ownerId: 1 })
+                axios.post('api/ticket/new', { ...this.ticket, id: this.id })
                     .then(() => {
                         this.$notify({
                             group: 'foo',

@@ -3,13 +3,23 @@ export default {
 
     state() {
         return {
+            id: null,
             name: null,
             email: null,
             image: null,
         };
     },
+    getters: {
+        isAuthenticated: () => {
+            if (this.id) {
+                return true;
+            }
+            return false;
+        }
+    },
     mutations: {
         SET_USER(state, user) {
+            state.id = user.id; // eslint-disable-line
             state.name = user.name; // eslint-disable-line
             state.email = user.email; // eslint-disable-line
             state.isLoggedIn = user.isLoggedIn; // eslint-disable-line

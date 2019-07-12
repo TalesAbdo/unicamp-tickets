@@ -74,9 +74,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import UserControl from 'modal/UserControl/UserControl.vue';
 
 export default {
     name: 'navbar',
+    components: {
+        UserControl
+    },
     data() {
         return {
             showUserControl: false,

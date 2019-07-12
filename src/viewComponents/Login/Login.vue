@@ -55,21 +55,21 @@ export default {
                         if (!response.data) {
                             this.$notify({
                                 group: 'foo',
-                                title: 'Cuidado!',
+                                title: 'Atenção!',
                                 text: 'Email ou senha inválidos.',
                                 type: 'warn'
                             });
                         } else {
                             this.setUserData({ ...response.data });
                             axios.get(`/api/usersupport/byid/${response.id}`)
-                            .then((result) => {
-                                console.log(result);
-                                if (result.data) {
-                                    window.location.href = '/#/ticket';
-                                } else {
-                                    window.location.href = '/#/home';
-                                }
-                            }); 
+                                .then((result) => {
+                                    console.log(result);
+                                    if (result.data) {
+                                        window.location.href = '/#/ticket';
+                                    } else {
+                                        window.location.href = '/#/home';
+                                    }
+                                });
                         }
                     })
                     .catch(() => {

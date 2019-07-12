@@ -275,6 +275,17 @@ module.exports = function (app, db) {
         });
     });
 
+    app.get('/api/user/id/:id', (req, res) => {
+        console.log(req.body)
+        db.User.findOne({
+            where: {
+                id: req.params.id,
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
     app.post('/api/user/byemailandpassword', (req, res) => {
         console.log(req.body)
         db.User.findOne({
@@ -287,7 +298,10 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/user/update/:id', (req, res) => {
+    app.put('/api/user/update/', (req, res) => {
+        if(req.body.newPassword) {
+            req.body.password = req.body.newPassword;
+        }
         db.User.update({
             name: req.body.name,
             email: req.body.email,
@@ -295,7 +309,7 @@ module.exports = function (app, db) {
             image: req.body.image
         }, {
             where: {
-                id: req.params.id
+                id: req.body.id
             }
         }).then((result) => {
             res.json(result);
