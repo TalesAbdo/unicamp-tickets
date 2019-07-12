@@ -50,7 +50,7 @@ export default {
         },
         loginIntoApplication() {
             if (this.user.email && this.user.password) {
-                axios.post('/api/user/bynameandid', { ...this.user })
+                axios.post('/api/user/byemailandpassword', { ...this.user })
                     .then((response) => {
                         if (!response.data) {
                             this.$notify({
@@ -60,8 +60,16 @@ export default {
                                 type: 'warn'
                             });
                         } else {
-                            this.setUserData({ ...response.data, isLoggedIn: true });
-                            window.location.href = '/#/home';
+                            this.setUserData({ ...response.data });
+                            axios.get(`/api/usersupport/byid/${response.id}`)
+                            .then((result) => {
+                                console.log(result);
+                                if (result.data) {
+                                    window.location.href = '/#/ticket';
+                                } else {
+                                    window.location.href = '/#/home';
+                                }
+                            }); 
                         }
                     })
                     .catch(() => {

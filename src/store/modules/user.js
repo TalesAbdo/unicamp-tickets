@@ -6,7 +6,6 @@ export default {
             name: null,
             email: null,
             image: null,
-            isLoggedIn: false
         };
     },
     mutations: {

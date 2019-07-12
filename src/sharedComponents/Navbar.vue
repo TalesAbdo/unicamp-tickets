@@ -51,9 +51,9 @@
 
                         <hr class="navbar-divider">
 
-                        <a class="navbar-item has-text-link">
+                        <a class="navbar-item has-text-link"  @click="modalControl">
                             <span class="icon"><i class="fas fa-cog"/></span>
-                            <span>Alterar Informações da conta</span>
+                            <span>Minha conta</span>
                         </a>
                         <!-- <a class="navbar-item has-text-link">
                             <span class="icon"><i class="fas fa-question"/></span>
@@ -68,6 +68,7 @@
             </div>
         </div>
     </nav>
+    <UserControl :show="showUserControl" button-text="Modificar conta" @hide="modalControl" />
     </div>
 </template>
 
@@ -76,6 +77,11 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
     name: 'navbar',
+    data() {
+        return {
+            showUserControl: false,
+        };
+    },
     computed: {
         ...mapState({
             name: state => state.user.name,
@@ -103,7 +109,10 @@ export default {
                 isLoggedIn: false
             });
             window.location.href = '/#/';
-        }
+        },
+        modalControl() {
+            this.showUserControl = !this.showUserControl;
+        },
     }
 };
 </script>

@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import Input from 'shared/Input.vue';
 
 const axios = require('axios');
@@ -34,6 +35,7 @@ export default {
     props: {
         show: { type: Boolean, default: false },
         buttonText: { type: String, required: true, default: '' },
+        user: {}
     },
     data() {
         return {
@@ -47,7 +49,18 @@ export default {
             }
         };
     },
+    computed: {
+        ...mapState({
+            id: state => state.user.id,
+            name: state => state.user.name,
+            email: state => state.user.email,
+            password: state => state.user.password,
+        }),
+    },
     methods: {
+        ...mapActions({
+            setUserData: 'user/setData'
+        }),
         hide() {
             this.$emit('hide');
         },

@@ -275,7 +275,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/user/bynameandid', (req, res) => {
+    app.post('/api/user/byemailandpassword', (req, res) => {
         console.log(req.body)
         db.User.findOne({
             where: {
@@ -319,6 +319,17 @@ module.exports = function (app, db) {
             inner join supportUser su on u.id = su.userid`,
             {type: db.sequelize.QueryTypes.SELECT}
             ).then((result) => {
+            res.json(result);
+        });
+    });
+
+    app.get('/api/usersupport/id/:id', (req, res) => {
+        console.log(req.body)
+        db.User.findOne({
+            where: {
+                id: req.params.id,
+            }
+        }).then((result) => {
             res.json(result);
         });
     });
