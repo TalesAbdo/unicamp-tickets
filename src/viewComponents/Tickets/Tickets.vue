@@ -5,7 +5,7 @@
                 <span class="is-italic is-size-5">Controle</span>
                 <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{getTicketsByStatusQuantity(1)}}</span>
                 <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{getTicketsByStatusQuantity(2)}}</span>
-                <span><i class="fas fa-check-circle"/><b>Resolvidos:</b> {{getTicketsByStatusQuantity(3)}}</span>
+                <span><i class="fas fa-check-circle"/><b>Resolvido:</b> {{getTicketsByStatusQuantity(3)}}</span>
                 <span><i class="fas fa-anchor"/><b>Em espera:</b> {{getTicketsByStatusQuantity(4)}}</span>
             </div>
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
@@ -209,6 +209,7 @@ export default {
 
     .right-container {
         width: 50%;
+        align-self: flex-start;
 
         .right-header {
             margin-bottom: 1.5rem;

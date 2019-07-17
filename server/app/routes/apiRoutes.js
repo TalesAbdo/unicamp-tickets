@@ -128,7 +128,6 @@ module.exports = function (app, db) {
     });
 
     app.put('/api/ticket/update/assigned/:ticketid', (req, res) => {
-        console.log('bateu', req.body, req.params);
         db.Ticket.update({
             assignedId: req.body.assignedId
         }, {
@@ -262,7 +261,6 @@ module.exports = function (app, db) {
     });
 
     app.post('/api/user/new', (req, res) => {
-        console.log(req.body)
         db.User.findOrCreate({
             where: {
                 email: req.body.email,
@@ -276,7 +274,6 @@ module.exports = function (app, db) {
     });
 
     app.get('/api/user/id/:id', (req, res) => {
-        console.log(req.body)
         db.User.findOne({
             where: {
                 id: req.params.id,
@@ -287,7 +284,6 @@ module.exports = function (app, db) {
     });
 
     app.post('/api/user/byemailandpassword', (req, res) => {
-        console.log(req.body)
         db.User.findOne({
             where: {
                 email: req.body.email,
@@ -338,7 +334,6 @@ module.exports = function (app, db) {
     });
 
     app.get('/api/usersupport/id/:id', (req, res) => {
-        console.log(req.body)
         db.User.findOne({
             where: {
                 id: req.params.id,
@@ -385,7 +380,6 @@ module.exports = function (app, db) {
     });
 
     app.get('/api/comment/all/:ticketid', (req, res) => {
-        console.log('hereee');
         db.sequelize.query(
             `SELECT c.id, c.commentText, c.createdAt, u.name as userName from comment c
              inner join user u on u.id = c.userId

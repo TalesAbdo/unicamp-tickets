@@ -60,13 +60,13 @@ export default {
                                 type: 'warn'
                             });
                         } else {
-                            this.setUserData({ ...response.data });
-                            axios.get(`/api/usersupport/byid/${response.id}`)
+                            axios.get(`/api/usersupport/id/${response.data.id}`)
                                 .then((result) => {
-                                    console.log(result);
                                     if (result.data) {
-                                        window.location.href = '/#/ticket';
+                                        this.setUserData({ ...response.data, isSupport: true });
+                                        window.location.href = '/#/tickets';
                                     } else {
+                                        this.setUserData({ ...response.data });
                                         window.location.href = '/#/home';
                                     }
                                 });

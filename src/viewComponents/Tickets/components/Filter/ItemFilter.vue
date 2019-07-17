@@ -37,7 +37,7 @@ export default {
 @import '~src/css/main.scss';
 
 .filter-item {
-    background-color: whitesmoke;
+    background-color: $light-gray;
     color: $black;
     cursor: pointer;
     display: flex;

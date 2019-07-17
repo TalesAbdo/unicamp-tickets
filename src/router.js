@@ -51,7 +51,6 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(store.state.user.id);
     if (to.meta.requiresAuth) {
         if (store.state.user.id) {
             next();

@@ -1,6 +1,6 @@
 <template>
     <div class="ordenation-title-container">
-        <Title titleValue="Tickets"/>
+        <Title titleValue="Meus tickets"/>
         <div class="ordenation-container">
             <span class="has-text-weight-bold">Ordenar por:</span>
             <span :class="{'has-text-weight-bold': orderBy==='creationDate'}" class="has-text-info" id="option-1" @click="onClick('creationDate')">

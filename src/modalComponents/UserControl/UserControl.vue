@@ -2,13 +2,13 @@
     <div :class="{'is-active': show}" class="modal user-control">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
-            <h1 class="header-text">Insira suas informações para criar sua conta!</h1>
+            <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
             <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email"/>
             <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"/>
-            <Input v-if="modalType === 'modifyUser'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
+            <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password"
-                    @input="setNewPassword" :preValue="user.newPassword"/>
-            <Input class="margin-1rem" inputTitle="Senha atual (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword"  :preValue="user.password"/>
+                    @input="setNewPassword"/>
+            <Input class="margin-1rem" inputTitle="Senha atual (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword"/>
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
@@ -38,7 +38,7 @@ export default {
     },
     data() {
         return {
-            modalType: this.buttonText === 'Criar conta' ? 'newUser' : 'modifyUser',
+            modalType: this.buttonText === 'Criar conta' ? 'criar' : 'modificar',
             user: {
                 email: null,
                 name: null,
@@ -51,14 +51,18 @@ export default {
     computed: {
         ...mapState({
             id: state => state.user.id,
+            name: state => state.user.name,
+            email: state => state.user.email,
+            password: state => state.user.id,
         }),
     },
-    mounted() {
-        if (this.buttonText === 'modifyUser') {
-            axios.get(`/api/user/id/${this.id}`)
-                .then((response) => {
-                    this.user = response.data;
-                });
+    watch: {
+        show() {
+            if (this.buttonText === 'Modificar Conta') {
+                this.user.name = this.name;
+                this.user.email = this.email;
+                this.user.password = this.password;
+            }
         }
     },
     methods: {
@@ -81,7 +85,7 @@ export default {
             this.user.newPassword = value;
         },
         userAction() {
-            if (this.modalType === 'newUser') {
+            if (this.modalType === 'criar') {
                 this.createUser();
             } else {
                 this.updateUser();
@@ -128,42 +132,51 @@ export default {
                 });
             }
         },
-        updatteUser() {
+        updateUser() {
             if (this.user.email && this.user.name && this.user.password) {
-                axios.put('api/user/update', { ...this.user })
-                    .then((response) => {
-                        if (response.data[1]) {
+                if (this.user.password === this.password) {
+                    axios.put('api/user/update', { ...this.user })
+                        .then((response) => {
+                            if (response.data[1]) {
+                                this.$notify({
+                                    group: 'foo',
+                                    title: 'Sucesso!',
+                                    text: 'Conta criada.',
+                                    type: 'success'
+                                });
+                                this.user.email = null;
+                                this.user.name = null;
+                                this.user.password = null;
+                                this.hide();
+                            } else {
+                            throw error; // eslint-disable-line
+                            }
+                        }).catch((error) => {
+                            let text;
+                            if (error) {
+                                text = 'Email já em uso';
+                            } else {
+                                text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
+                            }
                             this.$notify({
                                 group: 'foo',
-                                title: 'Sucesso!',
-                                text: 'Conta criada.',
-                                type: 'success'
+                                title: 'Erro!',
+                                text,
+                                type: 'error'
                             });
-                            this.user.email = null;
-                            this.user.name = null;
-                            this.user.password = null;
-                            this.hide();
-                        } else {
-                            throw error; // eslint-disable-line
-                        }
-                    }).catch((error) => {
-                        let text;
-                        if (error) {
-                            text = 'Email já em uso';
-                        } else {
-                            text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
-                        }
-                        this.$notify({
-                            group: 'foo',
-                            title: 'Erro!',
-                            text,
-                            type: 'error'
                         });
+                } else {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Atenção!',
+                        text: 'Senha incorreta.',
+                        type: 'warn'
                     });
+                }
             } else {
                 this.$notify({
                     group: 'foo',
-                    title: 'Cuidado!',
+                    title: 'Atenção!',
                     text: 'Preencha todas as informações para criar uma conta.',
                     type: 'warn'
                 });
@@ -182,7 +195,7 @@ export default {
     }
 
     .modal-content {
-        width: 30%;
+        width: 40%;
         padding: 1.25rem;
         display: flex;
         align-items: center;

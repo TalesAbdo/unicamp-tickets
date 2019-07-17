@@ -12,19 +12,19 @@
             <i class="fas fa-paperclip"></i>
         </div>
         <div class="card-footer-item">
-            <icon class="icon" :name="statusIcon"/>
+            <i :class="statusIcon" class="icon"/>
             <span>{{statusName}}</span>
         </div>
         <div class="card-footer-item">
-            <icon class="icon" :class="severityIcon" name="exclamation-triangle"/>
+            <i :class="severityIcon" class="icon fas fa-exclamation-triangle"/>
             <span>{{severityName}}</span>
         </div>
 
         <div class="card-footer-item">
-            <figure v-if="ticket.assignedName" class="icon image is-24x24">
+            <figure class="icon image is-24x24">
                 <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
             </figure>
-            <span>{{ticket.assignedName || 'Sem responsável'}}</span>
+            <span>{{ticket.assignedName}}</span>
         </div>
         <span class="card-footer-item">{{creationDate}}</span>
     </footer>
@@ -34,12 +34,11 @@
 <script>
 import moment from 'moment';
 import TicketNumber from 'shared/TicketNumber.vue';
-import Icon from 'vue-awesome/components/Icon.vue';
 
 export default {
     name: 'ticketCard',
     components: {
-        TicketNumber, Icon
+        TicketNumber
     },
     props: {
         ticket: { type: Object, required: true },
@@ -52,10 +51,11 @@ export default {
     computed: {
         statusIcon() {
             switch (this.ticket.statusId) {
-            case 1: return 'circle-notch';
-            case 2: return 'thumbs-up';
-            case 3: return 'check-circle';
-            case 4: return 'anchor';
+            case 1: return 'fas fa-circle-notch';
+            case 2: return 'fas fa-thumbs-up';
+            case 3: return 'fas fa-check-circle';
+            case 4: return 'fas fa-anchor';
+            case 5: return 'fas fa-ban';
             default: return null;
             }
         },
@@ -65,6 +65,7 @@ export default {
             case 2: return 'Em progresso';
             case 3: return 'Resolvido';
             case 4: return 'Em espera';
+            case 5: return 'Fechado';
             default: return null;
             }
         },

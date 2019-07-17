@@ -6,7 +6,9 @@ export default {
             id: null,
             name: null,
             email: null,
-            image: null,
+            password: null,
+            isSupport: false,
+            image: null
         };
     },
     getters: {
@@ -22,7 +24,8 @@ export default {
             state.id = user.id; // eslint-disable-line
             state.name = user.name; // eslint-disable-line
             state.email = user.email; // eslint-disable-line
-            state.isLoggedIn = user.isLoggedIn; // eslint-disable-line
+            state.password = user.password; // eslint-disable-line    
+            state.isSupport = user.isSupport; // eslint-disable-line
         },
     },
     actions: {

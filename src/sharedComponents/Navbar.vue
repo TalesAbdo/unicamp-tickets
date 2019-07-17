@@ -15,7 +15,7 @@
 
         <div id="navbarBasicExample" class="navbar-menu">
 
-            <div class="navbar-start">
+            <div v-if="isSupport" class="navbar-start">
                 <a :class="verifyRoute('Tickets')" class="navbar-item" href="/#/tickets">
                     Tickets
                 </a>
@@ -68,7 +68,7 @@
             </div>
         </div>
     </nav>
-    <UserControl :show="showUserControl" button-text="Modificar conta" @hide="modalControl" />
+    <UserControl :show="showUserControl" button-text="Modificar Conta" @hide="modalControl" />
     </div>
 </template>
 
@@ -89,7 +89,8 @@ export default {
     computed: {
         ...mapState({
             name: state => state.user.name,
-            email: state => state.user.email
+            email: state => state.user.email,
+            isSupport: state => state.user.isSupport
         }),
         firstName() {
             return this.name.split(' ')[0];
@@ -110,7 +111,8 @@ export default {
                 name: null,
                 email: null,
                 image: null,
-                isLoggedIn: false
+                password: null,
+                isSupport: false
             });
             window.location.href = '/#/';
         },
