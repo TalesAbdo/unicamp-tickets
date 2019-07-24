@@ -1,7 +1,7 @@
 <template>
     <div class="input-container">
         <span class="input-title">{{inputTitle}}</span>
-        <input class="input-text" :type="type" :placeHolder="placeHolder" autocomplete="off" v-model="typedValue"/>
+        <input class="input-text" :type="type" :placeHolder="placeHolder" :maxlength="maxLength" autocomplete="off" v-model="typedValue"/>
         <div class="line"/>
     </div>
 </template>
@@ -14,6 +14,7 @@ export default {
         inputPlaceHolder: { type: String, required: true },
         preValue: { type: String, required: false, default: '' },
         type: { type: String, required: false, default: 'text' },
+        maxLength: { type: Number, required: false, default: 255 }
     },
     computed: {
         placeHolder() {

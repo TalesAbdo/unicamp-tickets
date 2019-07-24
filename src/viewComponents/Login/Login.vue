@@ -8,7 +8,7 @@
             <button type="button" class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
 
             <button type="button" @click="modalControl" class="link-button">Não tem uma conta? Clique Aqui</button>
-            <button type="button" class="link-button">Recuperar senha</button>
+            <!-- <button type="button" class="link-button">Recuperar senha</button> -->
         </form>
          <UserControl :show="showUserControl" button-text="Criar conta" @hide="modalControl" />
     </div>

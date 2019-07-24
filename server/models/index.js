@@ -31,7 +31,7 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 
 // Setting all foreign keys
-db["User"].hasOne(db["SupportUser"], { foreignKey: 'userId'});
+db["User"].hasOne(db["SupportUser"], { foreignKey: 'id'});
 db["Ticket"].hasMany(db["Comment"], { foreignKey: 'ticketId'});
 db["Ticket"].hasOne(db["Attachment"], { foreignKey: 'ticketId'});
 db["Service"].hasMany(db["Ticket"], { foreignKey: 'serviceId'});

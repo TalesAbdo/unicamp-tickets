@@ -188,6 +188,7 @@ module.exports = function (app, db) {
         });
     });
 
+//delete
     app.delete('/api/ticket/delete/:id', (req, res) => {
         db.Ticket.destroy({
             where: {
@@ -273,12 +274,14 @@ module.exports = function (app, db) {
         });
     });
 
+    //delete
     app.get('/api/user/id/:id', (req, res) => {
         db.User.findOne({
             where: {
                 id: req.params.id,
             }
         }).then((result) => {
+            console.log('here', result);
             res.json(result);
         });
     });
@@ -295,12 +298,12 @@ module.exports = function (app, db) {
     });
 
     app.put('/api/user/update/', (req, res) => {
+        console.log('here', req.body);
         if(req.body.newPassword) {
             req.body.password = req.body.newPassword;
         }
         db.User.update({
             name: req.body.name,
-            email: req.body.email,
             password: req.body.password,
             image: req.body.image
         }, {
@@ -356,6 +359,8 @@ module.exports = function (app, db) {
         });
     });
 
+
+    // delete
     // Update admin status
     app.put('/api/usersupport/update/:id', (req, res) => {
         db.SupportUser.update({
@@ -401,6 +406,7 @@ module.exports = function (app, db) {
         });
     });
 
+    //delete
     app.delete('/api/comment/delete/:id', (req, res) => {
         db.Item.destroy({
             where: {

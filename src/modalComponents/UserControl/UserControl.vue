@@ -1,14 +1,16 @@
 <template>
     <div :class="{'is-active': show}" class="modal user-control">
+
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
+                    {{user}}
             <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
-            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email"/>
-            <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"/>
+            <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
+            <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"  :maxLength="80"/>
             <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password"
-                    @input="setNewPassword"/>
-            <Input class="margin-1rem" inputTitle="Senha atual (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword"/>
+                    @input="setNewPassword"  :maxLength="20"/>
+            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword"  :maxLength="20"/>
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
@@ -40,6 +42,7 @@ export default {
         return {
             modalType: this.buttonText === 'Criar conta' ? 'criar' : 'modificar',
             user: {
+                id: null,
                 email: null,
                 name: null,
                 password: null,
@@ -53,15 +56,17 @@ export default {
             id: state => state.user.id,
             name: state => state.user.name,
             email: state => state.user.email,
-            password: state => state.user.id,
+            password: state => state.user.password,
         }),
     },
     watch: {
         show() {
             if (this.buttonText === 'Modificar Conta') {
+                this.user.id = this.id;
                 this.user.name = this.name;
                 this.user.email = this.email;
                 this.user.password = this.password;
+                this.newPassword = null;
             }
         }
     },
@@ -133,35 +138,28 @@ export default {
             }
         },
         updateUser() {
-            if (this.user.email && this.user.name && this.user.password) {
+            if (this.user.name && this.user.password) {
                 if (this.user.password === this.password) {
                     axios.put('api/user/update', { ...this.user })
                         .then((response) => {
-                            if (response.data[1]) {
+                            if (response) {
                                 this.$notify({
                                     group: 'foo',
                                     title: 'Sucesso!',
                                     text: 'Conta criada.',
                                     type: 'success'
                                 });
-                                this.user.email = null;
                                 this.user.name = null;
                                 this.user.password = null;
                                 this.hide();
                             } else {
                             throw error; // eslint-disable-line
                             }
-                        }).catch((error) => {
-                            let text;
-                            if (error) {
-                                text = 'Email já em uso';
-                            } else {
-                                text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
-                            }
+                        }).catch(() => {
                             this.$notify({
                                 group: 'foo',
                                 title: 'Erro!',
-                                text,
+                                text: 'Aconteceu algum erro',
                                 type: 'error'
                             });
                         });

@@ -14,7 +14,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(20),
             allowNull: false
         },
-        image: DataTypes.BLOB
+        image: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
     },
     { freezeTableName: true, tableName: 'user' });
     
