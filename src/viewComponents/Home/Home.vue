@@ -1,7 +1,14 @@
 <template>
     <div class="home-container">
         <div class="left-container">
-            <Button icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')"/>
+            <div v-if="isSupport" class="ticket-counter">
+                <span class="is-italic is-size-5">Controle</span>
+                <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{getTicketsByStatusQuantity(1)}}</span>
+                <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{getTicketsByStatusQuantity(2)}}</span>
+                <span><i class="fas fa-check-circle"/><b>Resolvido:</b> {{getTicketsByStatusQuantity(3)}}</span>
+                <span><i class="fas fa-anchor"/><b>Em espera:</b> {{getTicketsByStatusQuantity(4)}}</span>
+            </div>
+            <Button v-else icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')"/>
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
         <div class="right-container">
@@ -14,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import NewTicket from 'modal/NewTicket/NewTicket.vue';
 import TicketDetails from 'modal/TicketDetails/TicketDetails.vue';
 import Button from 'shared/Button.vue';
@@ -36,8 +44,14 @@ export default {
             isUp: false,
             tickets: [],
             ticketDetailId: null,
-            filters: []
+            filters: [],
+            ticketsByStatus: [{}, {}, {}, {}]
         };
+    },
+    computed: {
+        ...mapState({
+            isSupport: state => state.user.isSupport
+        }),
     },
     created() {
         const filtersPreference = localStorage.getItem('ticketsFilters');
@@ -48,6 +62,9 @@ export default {
         }
 
         this.getTicketList();
+        if (this.isSupport) {
+            this.getTicketsByStatus();
+        }
     },
     methods: {
         getTicketList() {
@@ -87,6 +104,27 @@ export default {
                         type: 'error'
                     });
                 });
+        },
+        getTicketsByStatus() {
+            axios.get('/api/ticket/bystatus')
+                .then((response) => {
+                    this.ticketsByStatus = response.data;
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Erro ao obter a listagem de tickts por status',
+                        type: 'error'
+                    });
+                });
+        },
+        getTicketsByStatusQuantity(id) {
+            const index = this.ticketsByStatus.findIndex(item => item.statusId === id);
+            if (index > -1) {
+                return this.ticketsByStatus[index].quantity;
+            }
+            return 0;
         },
         modalControl(modal) {
             if (modal === 'newTicket') {

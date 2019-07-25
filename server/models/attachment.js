@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     const Attachment = sequelize.define('Attachment', {
         path: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(300),
             allowNull: false
         },
     },

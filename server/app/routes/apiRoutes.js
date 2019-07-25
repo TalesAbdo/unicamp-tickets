@@ -274,6 +274,30 @@ module.exports = function (app, db) {
         });
     });
 
+    app.put('/api/user/support/new', (req, res) => {
+        db.User.update({
+            isSupport: true
+        }, {
+            where: {
+                id: req.body.id
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
+    app.put('/api/user/support/delete/:id', (req, res) => {
+        db.User.update({
+            isSupport: false
+        }, {
+            where: {
+                id: req.params.id
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
     //delete
     app.get('/api/user/id/:id', (req, res) => {
         db.User.findOne({
@@ -298,7 +322,6 @@ module.exports = function (app, db) {
     });
 
     app.put('/api/user/update/', (req, res) => {
-        console.log('here', req.body);
         if(req.body.newPassword) {
             req.body.password = req.body.newPassword;
         }

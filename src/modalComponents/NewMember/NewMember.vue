@@ -82,7 +82,7 @@ export default {
                     this.$notify({
                         group: 'foo',
                         title: 'Cuidado!',
-                        text: 'Este usuário já está na lista.',
+                        text: 'Este usuário já é um membro.',
                         type: 'warn'
                     });
                     alreadyInList = true;
@@ -114,12 +114,12 @@ export default {
         addMembers() {
             try {
                 this.chosenUsers.forEach((user) => {
-                    axios.post('/api/usersupport/new', { userId: user.id });
+                    axios.post('/api/user/support/new', { userId: user.id });
                 });
                 this.$notify({
                     group: 'foo',
                     title: 'Sucesso!',
-                    text: 'Usuário(s) adicionado(s) com êxito.',
+                    text: 'Membro(s) adicionado(s) com êxito.',
                     type: 'success'
                 });
                 this.chosenUsers = [];
@@ -128,7 +128,7 @@ export default {
                 this.$notify({
                     group: 'foo',
                     title: 'Erro!',
-                    text: 'Não foi possível adicionar o(s) membro(s).',
+                    text: 'Não foi possível adicionar o(s) usuário(s).',
                     type: 'error'
                 });
             }

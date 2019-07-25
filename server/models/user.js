@@ -15,9 +15,13 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         image: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(300),
             allowNull: true
         },
+        isSupport: {
+            type: DataTypes.BOOL,
+            allowNull: false,
+        }
     },
     { freezeTableName: true, tableName: 'user' });
     

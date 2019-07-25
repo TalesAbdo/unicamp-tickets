@@ -29,12 +29,12 @@ export default {
     },
     methods: {
         removeMember() {
-            axios.delete(`/api/usersupport/delete/${this.member.id}`)
+            axios.delete(`/api/user/support/delete/${this.member.id}`)
                 .then(() => {
                     this.$notify({
                         group: 'foo',
                         title: 'Sucesso!',
-                        text: 'Usuário deletado com êxito.',
+                        text: 'Membro de suporte deletado com êxito.',
                         type: 'success'
                     });
                     this.$emit('onUpdate');
@@ -43,7 +43,7 @@ export default {
                     this.$notify({
                         group: 'foo',
                         title: 'Erro!',
-                        text: 'Não foi possível deletar o membro, contate o administrador.',
+                        text: 'Não foi possível deletar o membro de suporte, contate o administrador.',
                         type: 'error'
                     });
                 });

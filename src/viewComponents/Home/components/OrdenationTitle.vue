@@ -3,8 +3,8 @@
         <Title titleValue="Meus tickets"/>
         <div class="ordenation-container">
             <span class="has-text-weight-bold">Ordenar por:</span>
-            <span :class="{'has-text-weight-bold': orderBy==='creationDate'}" class="has-text-info" id="option-1" @click="onClick('creationDate')">
-                <div :class="{'hidden': orderBy !=='creationDate'}" class="arrows-container">
+            <span class="has-text-weight-bold has-text-info" id="option-1" @click="onClick('creationDate')">
+                <div class="arrows-container">
                     <div class="arrow-up" :class="{ hidden: isUp}" />
                     <div class="arrow-down" :class="{ hidden: !isUp }" />
                 </div>
@@ -12,16 +12,6 @@
                     Data de criação
                 </span>
             </span>
-
-            <div :class="{'has-text-weight-bold': orderBy ==='resolutionDate'}" class="has-text-info" @click="onClick('resolutionDate')">
-                <div :class="{'hidden': orderBy !=='resolutionDate'}"  class="arrows-container">
-                    <div class="arrow-up" :class="{ hidden: isUp}" />
-                    <div class="arrow-down" :class="{ hidden: !isUp }" />
-                </div>
-                <span>
-                    Data de resolução
-                </span>
-            </div>
         </div>
     </div>
 </template>
@@ -35,7 +25,6 @@ export default {
         Title
     },
     props: {
-        orderBy: { type: String, required: true },
         isUp: { type: Boolean, required: true }
     },
     data() {

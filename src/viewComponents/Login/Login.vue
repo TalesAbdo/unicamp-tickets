@@ -60,16 +60,8 @@ export default {
                                 type: 'warn'
                             });
                         } else {
-                            axios.get(`/api/usersupport/id/${response.data.id}`)
-                                .then((result) => {
-                                    if (result.data) {
-                                        this.setUserData({ ...response.data, isSupport: true });
-                                        window.location.href = '/#/tickets';
-                                    } else {
-                                        this.setUserData({ ...response.data });
-                                        window.location.href = '/#/home';
-                                    }
-                                });
+                            this.setUserData({ ...response.data });
+                            window.location.href = '/#/home';
                         }
                     })
                     .catch(() => {
