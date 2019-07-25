@@ -7,6 +7,7 @@ import router from './router';
 import store from './store';
 
 moment.locale('pt-BR');
+// moment().tz('America/Sao_Paulo').format();
 Vue.component('icon', Icon); //eslint-disable-line
 Vue.use(Notifications);
 

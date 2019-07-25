@@ -20,7 +20,7 @@
                 <div class="line"/>
                 <div class="right-content">
                     <span class="has-text-weight-bold">Descrição</span>
-                    <span>{{ticket.description}}</span>
+                    <span class="description">{{ticket.description}}</span>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@ export default {
             members: [],
             comments: [],
             comment: null,
-            statuses: [{ id: 1, value: 'Aberto' }, { id: 2, value: 'Em progresso' }, { id: 3, value: 'Resolvido' }, { id: 4, value: 'Em espera' }],
+            statuses: [{ id: 1, value: 'Aberto' }, { id: 2, value: 'Em progresso' }, { id: 3, value: 'Em espera' }, { id: 4, value: 'Resolvido' }],
             severities: [{ id: 1, value: 'Baixa' }, { id: 2, value: 'Média' }, { id: 3, value: 'Alta' }]
         };
     },
@@ -130,7 +130,7 @@ export default {
         },
         getMembers() {
             if (this.ticketId) {
-                axios.get('/api/usersupport/all')
+                axios.get('/api/user/support/all')
                     .then((response) => {
                         this.members = response.data;
                     })
@@ -221,7 +221,7 @@ export default {
         },
         createComment() {
             if (this.comment) {
-                axios.post('/api/comment/new', { ticketId: this.ticketId, id: this.id, commentText: this.comment })
+                axios.post('/api/comment/new', { ticketId: this.ticketId, userId: this.id, commentText: this.comment })
                     .then(() => {
                         this.getTicket();
                         this.$notify({
@@ -314,6 +314,10 @@ export default {
                 width: 65%;
                 display: flex;
                 flex-direction: column;
+
+                .description {
+                    word-break: break-all;
+                }
             }
         }
 

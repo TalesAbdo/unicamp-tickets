@@ -55,7 +55,6 @@ export default {
             case 2: return 'fas fa-thumbs-up';
             case 3: return 'fas fa-check-circle';
             case 4: return 'fas fa-anchor';
-            case 5: return 'fas fa-ban';
             default: return null;
             }
         },
@@ -63,9 +62,8 @@ export default {
             switch (this.ticket.statusId) {
             case 1: return 'Aberto';
             case 2: return 'Em progresso';
-            case 3: return 'Resolvido';
-            case 4: return 'Em espera';
-            case 5: return 'Fechado';
+            case 3: return 'Em espera';
+            case 4: return 'Resolvido';
             default: return null;
             }
         },

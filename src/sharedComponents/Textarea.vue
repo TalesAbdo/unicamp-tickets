@@ -1,7 +1,7 @@
 <template>
     <div class="textarea-container">
         <span class="textarea-title">{{textareaTitle}}</span>
-        <textarea class="textarea" :placeholder="placeHolder" v-model="typedValue"/>
+        <textarea class="textarea" :placeholder="placeHolder" v-model="typedValue" :maxlength="maxLength"/>
     </div>
 </template>
 
@@ -11,7 +11,8 @@ export default {
     props: {
         textareaTitle: { type: String, required: true },
         textareaPlaceHolder: { type: String, required: true },
-        preValue: { type: String, required: false, default: '' }
+        preValue: { type: String, required: false, default: '' },
+        maxLength: { type: Number, required: false, default: 255 }
     },
     computed: {
         placeHolder() {

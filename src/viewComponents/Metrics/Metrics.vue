@@ -166,9 +166,8 @@ export default {
             switch (id) {
             case 1: return 'Aberto';
             case 2: return 'Em progresso';
-            case 3: return 'Resolvido';
-            case 4: return 'Em espera';
-            case 5: return 'Fechado';
+            case 3: return 'Em espera';
+            case 4: return 'Resolvido';
             default: return null;
             }
         },

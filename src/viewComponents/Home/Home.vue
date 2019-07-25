@@ -5,14 +5,14 @@
                 <span class="is-italic is-size-5">Controle</span>
                 <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{getTicketsByStatusQuantity(1)}}</span>
                 <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{getTicketsByStatusQuantity(2)}}</span>
-                <span><i class="fas fa-check-circle"/><b>Resolvido:</b> {{getTicketsByStatusQuantity(3)}}</span>
-                <span><i class="fas fa-anchor"/><b>Em espera:</b> {{getTicketsByStatusQuantity(4)}}</span>
+                <span><i class="fas fa-check-circle"/><b>Em espera:</b> {{getTicketsByStatusQuantity(3)}}</span>
+                <span><i class="fas fa-anchor"/><b>Resolvido:</b> {{getTicketsByStatusQuantity(4)}}</span>
             </div>
             <Button v-else icon="fa-ticket-alt" value="Abrir ticket" @click="modalControl('newTicket')"/>
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
         <div class="right-container">
-            <OrdenationTitle class="right-header" :orderBy="orderBy" :isUp="isUp" @onItemClick="changeOrder"/>
+            <OrdenationTitle class="right-header" :isUp="isUp" @onItemClick="changeOrder"/>
             <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" @modalControl="modalControl" @onClick="setTicketDetailId"/>
         </div>
         <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/>
@@ -40,7 +40,6 @@ export default {
         return {
             showNewTicket: false,
             showTicketDetails: false,
-            orderBy: 'creationDate',
             isUp: false,
             tickets: [],
             ticketDetailId: null,
@@ -50,6 +49,7 @@ export default {
     },
     computed: {
         ...mapState({
+            id: state => state.user.id,
             isSupport: state => state.user.isSupport
         }),
     },
@@ -86,12 +86,23 @@ export default {
                 dateQuery = `and t.createdAt < '${thirtyDate}'`;
             }
 
+            let orderBy = 'asc';
+            if (!this.isUp) {
+                orderBy = 'desc';
+            }
+
+            let ownerId = null;
+            if (!this.isSupport) {
+                ownerId = this.id;
+            }
+
             axios.post('/api/ticket/byuser',
                 {
-                    ownerId: null,
+                    ownerId,
                     statusList: this.filters[0].selected,
                     severityList: this.filters[1].selected,
-                    dateQuery
+                    dateQuery,
+                    orderBy
                 })
                 .then((response) => {
                     this.tickets = response.data;
@@ -134,9 +145,9 @@ export default {
             }
             this.getTicketList();
         },
-        changeOrder(element) {
-            this.orderBy = element;
+        changeOrder() {
             this.isUp = !this.isUp;
+            this.getTicketList();
         },
         setTicketDetailId(id) {
             this.ticketDetailId = id;
@@ -153,8 +164,8 @@ export default {
                     options: [
                         { value: 1, label: 'Aberto' },
                         { value: 2, label: 'Em progresso' },
-                        { value: 3, label: 'Resolvido' },
-                        { value: 4, label: 'Em espera' }
+                        { value: 3, label: 'Em espera' },
+                        { value: 4, label: 'Resolvido' }
                     ],
                     selected: [1, 3],
                     multiple: true

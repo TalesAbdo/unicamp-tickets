@@ -14,7 +14,8 @@ module.exports = function (app, db) {
             where statusId in (${req.body.statusList.join(',')})
             and severityId in (${req.body.severityList.join(',')})
             ${req.body.dateQuery}
-            ${ownerQuery}`,
+            ${ownerQuery}
+            order by createdAt ${req.body.orderBy}`,
             {type: db.sequelize.QueryTypes.SELECT}
           ).then((result) => {
             res.json(result);
@@ -268,7 +269,8 @@ module.exports = function (app, db) {
             }, defaults: {
             name: req.body.name,
             password: req.body.password,
-            image: req.body.image
+            image: req.body.image,
+            isSupport: req.body.isSupport
         }}).then((result) => {
             res.json(result);
         });
@@ -305,7 +307,6 @@ module.exports = function (app, db) {
                 id: req.params.id,
             }
         }).then((result) => {
-            console.log('here', result);
             res.json(result);
         });
     });
@@ -348,11 +349,9 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/usersupport/all', (req, res) => {
+    app.get('/api/user/support/all', (req, res) => {
         db.sequelize.query(
-            `select u.name, u.email, u.id, su.isAdmin
-            from user u
-            inner join supportUser su on u.id = su.userid`,
+            `select * from user where isSupport = 1`,
             {type: db.sequelize.QueryTypes.SELECT}
             ).then((result) => {
             res.json(result);

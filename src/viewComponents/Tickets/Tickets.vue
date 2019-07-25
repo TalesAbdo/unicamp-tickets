@@ -5,8 +5,8 @@
                 <span class="is-italic is-size-5">Controle</span>
                 <span><i class="fas fa-circle-notch"/><b>Aberto:</b> {{getTicketsByStatusQuantity(1)}}</span>
                 <span><i class="fas fa-thumbs-up"/><b>Em progresso:</b> {{getTicketsByStatusQuantity(2)}}</span>
-                <span><i class="fas fa-check-circle"/><b>Resolvido:</b> {{getTicketsByStatusQuantity(3)}}</span>
-                <span><i class="fas fa-anchor"/><b>Em espera:</b> {{getTicketsByStatusQuantity(4)}}</span>
+                <span><i class="fas fa-check-circle"/><b>Em espera:</b> {{getTicketsByStatusQuantity(3)}}</span>
+                <span><i class="fas fa-anchor"/><b>Resolvido:</b> {{getTicketsByStatusQuantity(4)}}</span>
             </div>
             <TicketFilters :filters="filters" @change="filtersUpdate"/>
         </div>
@@ -137,8 +137,8 @@ export default {
                     options: [
                         { value: 1, label: 'Aberto' },
                         { value: 2, label: 'Em progresso' },
-                        { value: 3, label: 'Resolvido' },
-                        { value: 4, label: 'Em espera' }
+                        { value: 3, label: 'Em espera' },
+                        { value: 4, label: 'Resolvido' }
                     ],
                     selected: [1, 3],
                     multiple: true

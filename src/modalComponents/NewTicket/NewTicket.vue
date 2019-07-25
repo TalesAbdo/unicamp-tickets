@@ -3,8 +3,8 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <Title titleValue="Novo Ticket" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto" @input="setTitle" :preValue="ticket.title"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="ticket.description"/>
+            <Input class="margin-rem" inputTitle="Assunto" inputPlaceHolder="o assunto" @input="setTitle" :preValue="ticket.title" :maxLength="100"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="ticket.description" :maxLength="3000"/>
 
             <Service class="margin-rem" :triggerValue="ticket.serviceName" :services="services" @click="setService"/>
 
@@ -107,7 +107,7 @@ export default {
         },
         createTicket() {
             if (this.ticket.title && this.ticket.serviceId && this.ticket.severityId) {
-                axios.post('api/ticket/new', { ...this.ticket, id: this.id })
+                axios.post('api/ticket/new', { ...this.ticket, ownerId: this.id })
                     .then(() => {
                         this.$notify({
                             group: 'foo',

@@ -5,8 +5,8 @@
         <form class="modal-content" autocomplete="off">
                     {{user}}
             <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
-            <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
-            <Input class="margin-1rem" inputTitle="Nome" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"  :maxLength="80"/>
+            <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
+            <Input class="margin-1rem" inputTitle="Nome (obrigatório)" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"  :maxLength="80"/>
             <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password"
                     @input="setNewPassword"  :maxLength="20"/>
@@ -47,6 +47,7 @@ export default {
                 name: null,
                 password: null,
                 newPassword: null,
+                isSupport: false,
                 image: null
             }
         };
@@ -97,6 +98,7 @@ export default {
             }
         },
         createUser() {
+            let text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
             if (this.user.email && this.user.name && this.user.password) {
                 axios.post('api/user/new', { ...this.user })
                     .then((response) => {
@@ -112,15 +114,9 @@ export default {
                             this.user.password = null;
                             this.hide();
                         } else {
-                            throw error; // eslint-disable-line
-                        }
-                    }).catch((error) => {
-                        let text;
-                        if (error) {
                             text = 'Email já em uso';
-                        } else {
-                            text = 'Não foi possível criar sua conta. Provavelmente este email já está em uso';
                         }
+                    }).catch(() => {
                         this.$notify({
                             group: 'foo',
                             title: 'Erro!',
@@ -146,11 +142,13 @@ export default {
                                 this.$notify({
                                     group: 'foo',
                                     title: 'Sucesso!',
-                                    text: 'Conta criada.',
+                                    text: 'Conta atualizada.',
                                     type: 'success'
                                 });
+                                this.setUserData(JSON.parse(response.config.data));
                                 this.user.name = null;
                                 this.user.password = null;
+                                this.user.newPassword = null;
                                 this.hide();
                             } else {
                             throw error; // eslint-disable-line
@@ -175,7 +173,7 @@ export default {
                 this.$notify({
                     group: 'foo',
                     title: 'Atenção!',
-                    text: 'Preencha todas as informações para criar uma conta.',
+                    text: 'Preencha todas as informações para alterar a conta.',
                     type: 'warn'
                 });
             }

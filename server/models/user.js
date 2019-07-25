@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true
         },
         isSupport: {
-            type: DataTypes.BOOL,
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         }
     },
