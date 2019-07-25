@@ -3,7 +3,7 @@
         <Title titleValue="Meus tickets"/>
         <div class="ordenation-container">
             <span class="has-text-weight-bold">Ordenar por:</span>
-            <span class="has-text-weight-bold has-text-info" id="option-1" @click="onClick('creationDate')">
+            <span class="has-text-weight-bold has-text-info" id="option-1" @click="onClick()">
                 <div class="arrows-container">
                     <div class="arrow-up" :class="{ hidden: isUp}" />
                     <div class="arrow-down" :class="{ hidden: !isUp }" />
@@ -32,8 +32,8 @@ export default {
         };
     },
     methods: {
-        onClick(element) {
-            this.$emit('onItemClick', element);
+        onClick() {
+            this.$emit('onItemClick');
         },
     }
 };
