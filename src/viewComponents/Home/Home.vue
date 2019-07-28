@@ -65,7 +65,7 @@ export default {
                 return true;
             }
             return false;
-        }
+        },
     },
     created() {
         const filtersPreference = localStorage.getItem('ticketsFilters');
@@ -76,9 +76,6 @@ export default {
         }
 
         this.getTicketList();
-        if (this.isSupport) {
-            this.getTicketsByStatus();
-        }
     },
     methods: {
         getTicketList() {
@@ -128,26 +125,15 @@ export default {
                     });
                 });
         },
-        getTicketsByStatus() {
-            axios.get('/api/ticket/bystatus')
-                .then((response) => {
-                    this.ticketsByStatus = response.data;
-                })
-                .catch(() => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Erro!',
-                        text: 'Erro ao obter a listagem de tickts por status',
-                        type: 'error'
-                    });
-                });
-        },
         getTicketsByStatusQuantity(id) {
-            const index = this.ticketsByStatus.findIndex(item => item.statusId === id);
-            if (index > -1) {
-                return this.ticketsByStatus[index].quantity;
-            }
-            return 0;
+            let total = 0;
+            this.tickets.map((item) => {
+                if (item.statusId === id) {
+                    total += 1;
+                }
+                return true;
+            });
+            return total;
         },
         modalControl(modal) {
             if (modal === 'newTicket') {
