@@ -3,12 +3,18 @@
     <span class="dropdown-title">Responsável</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
-            <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
+            <button v-if="isSupport && !isClosed" type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
                 <figure v-if="triggerValue" class="image is-24x24">
                     <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
                 </figure>
                 <span>{{triggerValue || 'Escolha um responsável'}}</span>
             </button>
+            <div v-else class="pure-text">
+                <figure v-if="triggerValue" class="image is-24x24">
+                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
+                </figure>
+                <span>{{triggerValue || 'Sem responsável'}}</span>
+            </div>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
@@ -25,11 +31,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     name: 'assignedDropdown',
     props: {
         members: { type: Array, required: true },
-        triggerValue: { type: String, required: false, default: '' }
+        triggerValue: { type: String, required: false, default: '' },
+        isClosed: { type: Boolean, required: false, default: false }
+    },
+    computed: {
+        ...mapState({
+            isSupport: state => state.user.isSupport
+        }),
     },
     data() {
         return {
@@ -85,6 +99,12 @@ export default {
                 outline-offset: 0px !important;
                 outline: none !important;
             }
+        }
+
+        .pure-text {
+            display: flex;
+            align-items: center;
+            height: 30px !important;
         }
 
         .dropdown-content {

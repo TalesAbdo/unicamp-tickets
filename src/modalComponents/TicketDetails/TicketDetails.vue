@@ -11,10 +11,10 @@
             </div>
             <div class="ticket-content">
                 <div class="left-content">
-                    <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" @click="updateServiceId"/>
-                    <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" @click="updateStatusId"/>
-                    <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" @click="updateSeverityId"/>
-                    <AssignedDropdown :triggerValue="ticket.assignedName" :members="members" @click="updateAssignedId"/>
+                    <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" :isClosed="isClosed" @click="updateServiceId"/>
+                    <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" :isClosed="isClosed" @click="updateStatusId"/>
+                    <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" :isClosed="isClosed" @click="updateSeverityId"/>
+                    <AssignedDropdown :triggerValue="ticket.assignedName" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
                     <AttachmentList />
                 </div>
                 <div class="line"/>
@@ -26,7 +26,7 @@
 
             <div class="line-divider"> </div>
 
-            <div class="comment-area-content">
+            <div v-if="!isClosed" class="comment-area-content">
                 <Textarea textareaTitle="Comentário" textareaPlaceHolder="seu comentário" @input="setComment" :preValue="comment" :maxLength="300"/>
                 <div class="option-buttons">
                     <button class="button is-black is-normal" @click="createComment">Comentar</button>
@@ -94,6 +94,12 @@ export default {
         ...mapState({
             id: state => state.user.id
         }),
+        isClosed() {
+            if (this.ticket.statusId === 4) {
+                return true;
+            }
+            return false;
+        }
     },
     methods: {
         getTicket() {

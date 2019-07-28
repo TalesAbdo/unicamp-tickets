@@ -3,10 +3,14 @@
     <span class="dropdown-title">Severidade</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
-            <button type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
+            <button v-if="isSupport && !isClosed" type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
                 <icon :class="icon(triggerValue)" name="exclamation-triangle"/>
                 <span>{{name(triggerValue)}}</span>
             </button>
+            <div v-else class="pure-text">
+                <icon :class="icon(triggerValue)" name="exclamation-triangle"/>
+                <span>{{name(triggerValue)}}</span>
+            </div>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
@@ -21,6 +25,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Icon from 'vue-awesome/components/Icon.vue';
 
 export default {
@@ -30,7 +35,13 @@ export default {
     },
     props: {
         severities: { type: Array, required: true },
-        triggerValue: { type: Number, required: true }
+        triggerValue: { type: Number, required: true },
+        isClosed: { type: Boolean, required: false, default: false }
+    },
+    computed: {
+        ...mapState({
+            isSupport: state => state.user.isSupport
+        }),
     },
     data() {
         return {
@@ -102,6 +113,12 @@ export default {
                 outline-offset: 0px !important;
                 outline: none !important;
             }
+        }
+
+        .pure-text {
+            display: flex;
+            align-items: center;
+            height: 30px !important;
         }
 
         .dropdown-content {
