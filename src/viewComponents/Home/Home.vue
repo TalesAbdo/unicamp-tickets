@@ -14,6 +14,7 @@
         <div class="right-container">
             <OrdenationTitle class="right-header" :isUp="isUp" @onItemClick="changeOrder"/>
             <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" @modalControl="modalControl" @onClick="setTicketDetailId"/>
+            <Button v-if="showMoreTicketsButton" icon="fa-plus" value="Ver mais 50 tickets" @click="increaseTotalTicketRequired()"/>
         </div>
         <NewTicket :show="showNewTicket" @hide="modalControl('newTicket')"/>
         <TicketDetails :show="showTicketDetails" @hide="modalControl('ticketDetails')" :ticketId="ticketDetailId"/>
@@ -34,7 +35,7 @@ const axios = require('axios');
 export default {
     name: 'home',
     components: {
-        NewTicket, TicketDetails, TicketCard, OrdenationTitle, Button, TicketFilters
+        NewTicket, TicketDetails, TicketCard, Button, TicketFilters, OrdenationTitle
     },
     data() {
         return {
@@ -44,7 +45,8 @@ export default {
             tickets: [],
             ticketDetailId: null,
             filters: [],
-            ticketsByStatus: [{}, {}, {}, {}]
+            ticketsByStatus: [{}, {}, {}, {}],
+            totalTicketsRequired: 100
         };
     },
     computed: {
@@ -52,6 +54,18 @@ export default {
             id: state => state.user.id,
             isSupport: state => state.user.isSupport
         }),
+        titleValue() {
+            if (this.isSupport) {
+                return 'Tickets';
+            }
+            return 'Meus Tickets';
+        },
+        showMoreTicketsButton() {
+            if (this.tickets.length >= this.totalTicketsRequired) {
+                return true;
+            }
+            return false;
+        }
     },
     created() {
         const filtersPreference = localStorage.getItem('ticketsFilters');
@@ -86,15 +100,12 @@ export default {
                 dateQuery = `and t.createdAt < '${thirtyDate}'`;
             }
 
-            let orderBy = 'asc';
-            if (!this.isUp) {
-                orderBy = 'desc';
-            }
-
             let ownerId = null;
             if (!this.isSupport) {
                 ownerId = this.id;
             }
+
+            const fetchQuery = `LIMIT ${this.totalTicketsRequired}`;
 
             axios.post('/api/ticket/byuser',
                 {
@@ -102,10 +113,11 @@ export default {
                     statusList: this.filters[0].selected,
                     severityList: this.filters[1].selected,
                     dateQuery,
-                    orderBy
+                    fetchQuery
                 })
                 .then((response) => {
                     this.tickets = response.data;
+                    this.isUp = false;
                 })
                 .catch(() => {
                     this.$notify({
@@ -145,16 +157,48 @@ export default {
             }
             this.getTicketList();
         },
-        changeOrder() {
-            this.isUp = !this.isUp;
-            this.getTicketList();
-        },
         setTicketDetailId(id) {
             this.ticketDetailId = id;
         },
         async filtersUpdate(event) {
             await localStorage.setItem('ticketsFilters', JSON.stringify(event.values));
             this.getTicketList();
+        },
+        increaseTotalTicketRequired() {
+            this.totalTicketsRequired += 50;
+            this.getTicketList();
+        },
+        changeOrder() {
+            this.isUp = !this.isUp;
+            if (this.isUp) {
+                this.tickets.sort(this.ascOrder);
+            } else {
+                this.tickets.sort(this.descOrder);
+            }
+        },
+        ascOrder(a, b) {
+            const itemA = a.createdAt;
+            const itemB = b.createdAt;
+
+            let comparison = 0;
+            if (itemA > itemB) {
+                comparison = 1;
+            } else if (itemA < itemB) {
+                comparison = -1;
+            }
+            return comparison;
+        },
+        descOrder(a, b) {
+            const itemA = a.createdAt;
+            const itemB = b.createdAt;
+
+            let comparison = 0;
+            if (itemA < itemB) {
+                comparison = 1;
+            } else if (itemA > itemB) {
+                comparison = -1;
+            }
+            return comparison;
         },
         baseFilters() {
             return [
@@ -237,9 +281,14 @@ export default {
     .right-container {
         width: 50%;
         align-self: flex-start;
+        justify-content: center;
 
         .right-header {
             margin-bottom: 1.5rem;
+        }
+
+        .increase-total-tickets {
+            align-self: center;
         }
     }
 }

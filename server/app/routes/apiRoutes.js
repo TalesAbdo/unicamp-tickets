@@ -15,13 +15,13 @@ module.exports = function (app, db) {
             and severityId in (${req.body.severityList.join(',')})
             ${req.body.dateQuery}
             ${ownerQuery}
-            order by createdAt ${req.body.orderBy}`,
+            order by createdAt desc
+            ${req.body.fetchQuery}`,
             {type: db.sequelize.QueryTypes.SELECT}
           ).then((result) => {
             res.json(result);
         });
     });
-
 
     app.get('/api/ticket/byid/:id', (req, res) => {
         db.sequelize.query(
@@ -183,17 +183,6 @@ module.exports = function (app, db) {
         }, {
             where: {
                 id: req.params.ticketid
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-//delete
-    app.delete('/api/ticket/delete/:id', (req, res) => {
-        db.Ticket.destroy({
-            where: {
-                id: req.params.id
             }
         }).then((result) => {
             res.json(result);
@@ -383,17 +372,6 @@ module.exports = function (app, db) {
         });
     });
 
-    //delete
-    app.delete('/api/comment/delete/:id', (req, res) => {
-        db.Item.destroy({
-            where: {
-                id: req.params.id
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-    
     app.get('/api/attachment/:ticketid', (req, res) => {
         db.Item.findAll({}).then((result) => {
             res.json(result);
