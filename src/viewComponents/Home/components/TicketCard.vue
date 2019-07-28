@@ -114,6 +114,10 @@ export default {
         display: flex;
         align-items: center;
         padding-left: .75rem;
+
+        &-title {
+            word-break: break-all;
+        }
     }
 
     .card-footer {

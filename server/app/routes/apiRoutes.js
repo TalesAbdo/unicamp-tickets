@@ -68,7 +68,7 @@ module.exports = function (app, db) {
             GROUP BY MONTH(createdAt);`,
             {type: db.sequelize.QueryTypes.SELECT}
             ).then((result) => {
-            res.json([{MONTH: '1uuuu', VALUE: 23}, {MONTH: '1uuuu', VALUE: 70}, {MONTH: '1uuuu', VALUE: 56} ]);
+            res.json(result);
         });
     });
 
@@ -107,7 +107,7 @@ module.exports = function (app, db) {
             left join USER su on t.assignedId = su.id
             WHERE ((t.createdAt) >= '${req.body.initialDate}' AND (t.createdAt) <= '${req.body.finalDate}')
             ${serviceQuery}
-            ${serviceQuery}`,
+            ${severityQuery}`,
             {type: db.sequelize.QueryTypes.SELECT}
             ).then((result) => {
             res.json(result);
@@ -290,41 +290,6 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/user/support/new', (req, res) => {
-        db.User.update({
-            isSupport: true
-        }, {
-            where: {
-                id: req.body.id
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    app.delete('/api/user/support/delete/:id', (req, res) => {
-        db.User.update({
-            isSupport: false
-        }, {
-            where: {
-                id: req.params.id
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    //delete
-    app.get('/api/user/id/:id', (req, res) => {
-        db.User.findOne({
-            where: {
-                id: req.params.id,
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
     app.post('/api/user/byemailandpassword', (req, res) => {
         db.User.findOne({
             where: {
@@ -363,44 +328,21 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/user/support/all', (req, res) => {
-        db.sequelize.query(
-            `select * from user where isSupport = 1`,
-            {type: db.sequelize.QueryTypes.SELECT}
-            ).then((result) => {
-            res.json(result);
-        });
-    });
-
-    app.get('/api/usersupport/id/:id', (req, res) => {
-        db.User.findOne({
+    app.put('/api/user/support/new', (req, res) => {
+        db.User.update({
+            isSupport: true
+        }, {
             where: {
-                id: req.params.id,
+                id: req.body.id
             }
         }).then((result) => {
             res.json(result);
         });
     });
 
-    app.post('/api/usersupport/new', (req, res) => {
-        db.SupportUser.findOrCreate({
-            where: {
-                userId: req.body.userId
-            },
-            defaults: {
-                isAdmin: 0
-            }
-        }).then(([result, created]) => {
-            res.json(result);
-        });
-    });
-
-
-    // delete
-    // Update admin status
-    app.put('/api/usersupport/update/:id', (req, res) => {
-        db.SupportUser.update({
-            isAdmin: req.body.isAdmin
+    app.delete('/api/user/support/delete/:id', (req, res) => {
+        db.User.update({
+            isSupport: false
         }, {
             where: {
                 id: req.params.id
@@ -410,12 +352,11 @@ module.exports = function (app, db) {
         });
     });
 
-    app.delete('/api/usersupport/delete/:id', (req, res) => {
-        db.SupportUser.destroy({
-            where: {
-                userId: req.params.id
-            }
-        }).then((result) => {
+    app.get('/api/user/support/all', (req, res) => {
+        db.sequelize.query(
+            `select * from user where isSupport = 1`,
+            {type: db.sequelize.QueryTypes.SELECT}
+            ).then((result) => {
             res.json(result);
         });
     });

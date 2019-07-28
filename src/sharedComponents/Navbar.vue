@@ -16,7 +16,7 @@
         <div id="navbarBasicExample" class="navbar-menu">
 
             <div v-if="isSupport" class="navbar-start">
-                <a :class="verifyRoute('Tickets')" class="navbar-item" href="/#/tickets">
+                <a :class="verifyRoute('Tickets')" class="navbar-item" href="/#/home">
                     Tickets
                 </a>
                 <a :class="verifyRoute('Services')" class="navbar-item" href="/#/services">
