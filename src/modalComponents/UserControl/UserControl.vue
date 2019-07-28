@@ -6,11 +6,11 @@
                     {{user}}
             <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
             <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
-            <Input class="margin-1rem" inputTitle="Nome (obrigatório)" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name"  :maxLength="80"/>
+            <Input class="margin-1rem" inputTitle="Nome (obrigatório)" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name" :maxLength="80"/>
             <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password"
                     @input="setNewPassword"  :maxLength="20"/>
-            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword"  :maxLength="20"/>
+            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :maxLength="20"/>
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>

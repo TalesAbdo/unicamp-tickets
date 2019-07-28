@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 const axios = require('axios');
 
 export default {
@@ -27,26 +29,40 @@ export default {
     props: {
         member: { type: Object, required: true }
     },
+    computed: {
+        ...mapState({
+            id: state => state.user.id
+        }),
+    },
     methods: {
         removeMember() {
-            axios.delete(`/api/user/support/delete/${this.member.id}`)
-                .then(() => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Sucesso!',
-                        text: 'Membro de suporte deletado com êxito.',
-                        type: 'success'
-                    });
-                    this.$emit('onUpdate');
-                })
-                .catch(() => {
-                    this.$notify({
-                        group: 'foo',
-                        title: 'Erro!',
-                        text: 'Não foi possível deletar o membro de suporte, contate o administrador.',
-                        type: 'error'
-                    });
+            if (this.id === this.member.id) {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Você não pode se remover, peça para outro usuário.',
+                    type: 'warn'
                 });
+            } else {
+                axios.delete(`/api/user/support/delete/${this.member.id}`)
+                    .then(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Sucesso!',
+                            text: 'Membro de suporte deletado com êxito.',
+                            type: 'success'
+                        });
+                        this.$emit('onUpdate');
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível deletar o membro de suporte, contate o administrador.',
+                            type: 'error'
+                        });
+                    });
+            }
         }
     }
 };

@@ -92,7 +92,7 @@ export default {
             this.ticket.severityId = value;
         },
         getServices() {
-            axios.get('/api/service/all')
+            axios.get('/api/service/all/active')
                 .then((response) => {
                     this.services = response.data;
                 })

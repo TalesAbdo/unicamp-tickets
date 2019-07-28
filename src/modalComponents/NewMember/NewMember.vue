@@ -72,7 +72,7 @@ export default {
             this.activeSearch = true;
         },
         desactivateSearch() {
-            setTimeout(() => { this.activeSearch = false; }, 250);
+            setTimeout(() => { this.activeSearch = false; }, 220);
         },
         onUserClick(element) {
             this.typedText = '';
@@ -93,8 +93,8 @@ export default {
                 this.chosenUsers.push(element);
             }
         },
-        getUserList() {
-            axios.post('/api/user/bynameandemail', { typedText: this.typedText })
+        async getUserList() {
+            await axios.post('/api/user/bynameandemail', { typedText: this.typedText })
                 .then((response) => { this.searchResult = response.data; })
                 .catch(() => {
                     this.$notify({
@@ -113,8 +113,8 @@ export default {
         },
         addMembers() {
             try {
-                this.chosenUsers.forEach((user) => {
-                    axios.post('/api/user/support/new', { userId: user.id });
+                this.chosenUsers.forEach(async (user) => {
+                    await axios.put('/api/user/support/new', { id: user.id });
                 });
                 this.$notify({
                     group: 'foo',

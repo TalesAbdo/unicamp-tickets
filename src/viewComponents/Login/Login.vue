@@ -2,8 +2,8 @@
     <div class="login-container">
         <form class="form-container" autocomplete="off">
             <img class="image" src="@/assets/Login_Logo.svg">
-            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email"/>
-            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password"/>
+            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email" :maxLength="50"/>
+            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
             <button type="button" class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
 

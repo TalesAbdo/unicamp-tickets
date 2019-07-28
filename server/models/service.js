@@ -7,6 +7,10 @@ module.exports = function (sequelize, DataTypes) {
         description: {
             type: DataTypes.STRING(200),
             allowNull: true
+        },
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
         }
     },
     { freezeTableName: true, tableName: 'service', timestamps: false });

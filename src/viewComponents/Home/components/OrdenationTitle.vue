@@ -1,6 +1,6 @@
 <template>
     <div class="ordenation-title-container">
-        <Title titleValue="Meus tickets"/>
+        <Title :titleValue="titleValue"/>
         <div class="ordenation-container">
             <span class="has-text-weight-bold">Ordenar por:</span>
             <span class="has-text-weight-bold has-text-info" id="option-1" @click="onClick()">
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+
+import { mapState } from 'vuex';
 import Title from 'shared/Title.vue';
 
 export default {
@@ -30,6 +32,17 @@ export default {
     data() {
         return {
         };
+    },
+    computed: {
+        ...mapState({
+            isSupport: state => state.user.isSupport
+        }),
+        titleValue() {
+            if (this.isSupport) {
+                return 'Tickets';
+            }
+            return 'Meus Tickets';
+        }
     },
     methods: {
         onClick() {

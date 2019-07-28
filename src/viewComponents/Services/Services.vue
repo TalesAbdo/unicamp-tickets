@@ -32,7 +32,8 @@ export default {
             oldService: {
                 id: null,
                 name: '',
-                description: ''
+                description: '',
+                isActive: true
             }
         };
     },
@@ -59,7 +60,8 @@ export default {
                 this.oldService = {
                     id: null,
                     name: '',
-                    description: ''
+                    description: '',
+                    isActive: true
                 };
             } else {
                 this.oldService = value;

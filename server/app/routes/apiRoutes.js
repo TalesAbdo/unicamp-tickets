@@ -206,6 +206,16 @@ module.exports = function (app, db) {
         });
     });
 
+    app.get('/api/service/all/active', (req, res) => {
+        db.Service.findAll({
+            where: {
+                isActive: 1
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+
     app.get('/api/service/:id', (req, res) => {
         db.Service.findOne({
             where: {
@@ -219,7 +229,8 @@ module.exports = function (app, db) {
     app.post('/api/service/new', (req, res) => {
         db.Service.create({
             name: req.body.name,
-            description: req.body.description
+            description: req.body.description,
+            isActive: req.body.isActive
         }).then((result) => {
             res.json(result);
         });
@@ -238,8 +249,11 @@ module.exports = function (app, db) {
         });
     });
 
-    app.delete('/api/service/delete/:id', (req, res) => {
-        db.Service.destroy({
+    app.put('/api/service/archive/:id', (req, res) => {
+        console.log(req.body);
+        db.Service.update({
+            isActive: req.body.isActive
+        }, {
             where: {
                 id: req.params.id
             }
@@ -288,7 +302,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/user/support/delete/:id', (req, res) => {
+    app.delete('/api/user/support/delete/:id', (req, res) => {
         db.User.update({
             isSupport: false
         }, {

@@ -36,8 +36,8 @@ export default {
         this.getMemberList();
     },
     methods: {
-        getMemberList() {
-            axios.get('/api/usersupport/all')
+        async getMemberList() {
+            await axios.get('/api/user/support/all')
                 .then((response) => {
                     this.members = response.data;
                 })

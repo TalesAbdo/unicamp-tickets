@@ -4,9 +4,12 @@
             <span class="is-size-4 has-text-weight-bold">{{service.name}}</span>
             <span class="service-description">{{service.description}}</span>
         </div>
-        <div class="edition-container" @click="onClick">
-            <i class="fas fa-pen"/>
-            <span>Editar</span>
+        <div class="right-container">
+            <span v-if="!service.isActive" class="archived-tag">Arquivado</span>
+            <div class="edition-container" @click="onClick">
+                <i class="fas fa-pen"/>
+                <span>Editar</span>
+            </div>
         </div>
     </div>
 </template>
@@ -50,25 +53,42 @@ export default {
         .service-description {
             color: $dark-gray;
         }
-    }
-
-    .edition-container {
-        align-self: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        padding: .5rem;
-        transition: .3s;
-
-        &:hover {
-            background-color: $light-gray;
-            transition: .3s;
-            cursor: pointer;
-        }
 
         span {
-            margin-left: .3rem;
+            word-break: break-all;
+        }
+    }
+
+    .right-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        max-width: 25%;
+
+        .archived-tag {
+            color: $primary;
+            margin: 0 1rem;
+            font-size: 14px;
+        }
+
+        .edition-container {
+            align-self: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            padding: .5rem;
+            transition: .3s;
+
+            &:hover {
+                background-color: $light-gray;
+                transition: .3s;
+                cursor: pointer;
+            }
+
+            span {
+                margin-left: .3rem;
+            }
         }
     }
 }

@@ -2,12 +2,14 @@
     <div :class="{'is-active': show}" class="modal service-control">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
+            {{oldService}}
+            {{service}}
             <Title :titleValue="titleText" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="oldService.name"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="oldService.description"/>
+            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="oldService.name" :maxLength="60"/>
+            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="oldService.description" :maxLength="200"/>
             <div class="footer-buttons">
                 <button type="button" class="button is-black" @click="createUpdateService">{{buttonText}}</button>
-                <button v-if="oldService.id" type="button" class="button is-danger is-inverted"  @click="deleteService">Remover Serviço</button>
+                <button v-if="oldService.id" type="button" class="button is-danger is-inverted"  @click="deleteService">{{archiveText}}</button>
             </div>
         </form>
         <button class="modal-close is-large" aria-label="close"/>
@@ -43,12 +45,19 @@ export default {
             }
             return 'Criar Serviço';
         },
+        archiveText() {
+            if (this.oldService.isActive) {
+                return 'Arquivar Serviço';
+            }
+            return 'Desarquivar Serviço';
+        }
     },
     data() {
         return {
             service: {
                 name: null,
                 description: null,
+                isActive: true,
             },
             successMessage: {
                 group: 'foo',
@@ -70,11 +79,6 @@ export default {
             }
         };
     },
-    watch: {
-        oldService() {
-            this.service = this.oldService;
-        },
-    },
     methods: {
         hide() {
             this.$emit('hide');
@@ -85,38 +89,43 @@ export default {
         setDescription(value) {
             this.service.description = value;
         },
-        createUpdateService() {
+        async createUpdateService() {
             try {
                 if (this.service.name && this.service.description) {
                     const params = {
                         name: this.service.name,
-                        description: this.service.description
+                        description: this.service.description,
+                        isActive: this.service.isActive
                     };
                     if (this.oldService.id) {
-                        axios.put(`api/service/update/${this.oldService.id}`, params)
+                        await axios.put(`api/service/update/${this.oldService.id}`, params)
                             .then(() => {
                                 this.$notify(this.successMessage);
                             });
                     } else {
-                        axios.post('api/service/new', params)
+                        await axios.post('api/service/new', params)
                             .then(() => {
                                 this.$notify(this.successMessage);
                             });
                     }
+                    this.service.name = null;
+                    this.service.description = null;
                     this.hide();
                 } else {
                     this.$notify(this.attentionMessage);
                 }
             } catch (error) {
                 this.$notify(this.errorMessage);
-                console.log(error); // eslint-disable-line
             }
         },
-        deleteService() {
+        async deleteService() {
             try {
-                axios.delete(`api/service/delete/${this.oldService.id}`)
+                await axios.put(`api/service/archive/${this.oldService.id}`, { isActive: !this.oldService.isActive })
                     .then(() => {
                         this.$notify(this.successMessage);
+                        this.service.name = null;
+                        this.service.description = null;
+                        this.service.isActive = true;
                         this.hide();
                     });
             } catch (error) {

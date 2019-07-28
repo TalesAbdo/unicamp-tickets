@@ -37,7 +37,7 @@ export default {
         };
     },
     mounted() {
-        axios.get('api/service/all')
+        axios.get('api/service/all/active')
             .then((response) => {
                 this.services = response.data;
                 this.services.unshift({ name: 'Todos', id: null, description: '' });

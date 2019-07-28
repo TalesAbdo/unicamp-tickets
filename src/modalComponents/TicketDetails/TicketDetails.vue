@@ -27,7 +27,7 @@
             <div class="line-divider"> </div>
 
             <div class="comment-area-content">
-                <Textarea textareaTitle="Comentário" textareaPlaceHolder="seu comentário" @input="setComment" :preValue="comment"/>
+                <Textarea textareaTitle="Comentário" textareaPlaceHolder="seu comentário" @input="setComment" :preValue="comment" :maxLength="300"/>
                 <div class="option-buttons">
                     <button class="button is-black is-normal" @click="createComment">Comentar</button>
                 </div>
@@ -114,7 +114,7 @@ export default {
         },
         getServices() {
             if (this.ticketId) {
-                axios.get('/api/service/all')
+                axios.get('/api/service/all/active')
                     .then((response) => {
                         this.services = response.data;
                     })

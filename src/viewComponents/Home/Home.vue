@@ -216,6 +216,22 @@ export default {
         flex-direction: column;
         align-self: flex-start;
         margin-top: .4rem;
+
+        .ticket-counter {
+            display: flex;
+            flex-direction: column;
+            background-color: $white;
+            border-left: 3px solid $primary;
+            padding-left: .25rem;
+
+            span {
+                margin-bottom: .35rem;
+
+                b {
+                    margin-left: .35rem;
+                }
+            }
+        }
     }
 
     .right-container {
