@@ -4,6 +4,16 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(300),
             allowNull: false
         },
+        name: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+            validate: {
+                len: {
+                    args: [0, 100],
+                    msg: ['Nome do arquivo deve ter no máximo 100 caracteres.']
+                }
+            }
+        },
     },
     { freezeTableName: true, tableName: 'attachment', timestamps: false });
 

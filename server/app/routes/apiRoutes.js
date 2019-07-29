@@ -125,6 +125,9 @@ module.exports = function (app, db) {
             statusId: 1, // All tickets start open
         }).then((result) => {
             res.json(result);
+        })
+        .catch((err) => {
+            res.json(err);
         });
     });
 
@@ -134,19 +137,6 @@ module.exports = function (app, db) {
         }, {
             where: {
                 id: req.params.ticketid
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    //APAGAR
-    app.put('/api/ticket/update/owner/:ticketid/:ownerid', (req, res) => {
-        db.Ticket.update({
-            ownerId: req.params.ownerId
-        }, {
-            where: {
-                id: req.params.id
             }
         }).then((result) => {
             res.json(result);
@@ -222,6 +212,9 @@ module.exports = function (app, db) {
             isActive: req.body.isActive
         }).then((result) => {
             res.json(result);
+        })
+        .catch((err) => {
+            res.json(err);
         });
     });
 
@@ -235,6 +228,9 @@ module.exports = function (app, db) {
             }
         }).then((result) => {
             res.json(result);
+        })
+        .catch((err) => {
+            res.json(err);
         });
     });
 
@@ -243,6 +239,54 @@ module.exports = function (app, db) {
         db.Service.update({
             isActive: req.body.isActive
         }, {
+            where: {
+                id: req.params.id
+            }
+        }).then((result) => {
+            res.json(result);
+        });
+    });
+    
+    app.post('/api/user/new', (req, res) => {
+        db.User.findOrCreate({
+            where: {
+                email: req.body.email,
+            }, defaults: {
+            name: req.body.name,
+            password: req.body.password,
+            image: req.body.image,
+            isSupport: req.body.isSupport
+        }}).then((result) => {
+            res.json(result);
+        })
+        .catch((err) => {
+            res.json(err);
+        });
+    });
+
+    app.put('/api/user/update/', (req, res) => {
+        if(req.body.newPassword) {
+            req.body.password = req.body.newPassword;
+        }
+        db.User.update({
+            name: req.body.name,
+            password: req.body.password,
+            image: req.body.image
+        }, {
+            where: {
+                id: req.body.id
+            }
+        }).then((result) => {
+            res.json(result);
+        })
+        .catch((err) => {
+            res.json(err);
+        });
+    });
+
+    //Verify use
+    app.delete('/api/user/delete/:id', (req, res) => {
+        db.User.destroy({
             where: {
                 id: req.params.id
             }
@@ -265,52 +309,11 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/user/new', (req, res) => {
-        db.User.findOrCreate({
-            where: {
-                email: req.body.email,
-            }, defaults: {
-            name: req.body.name,
-            password: req.body.password,
-            image: req.body.image,
-            isSupport: req.body.isSupport
-        }}).then((result) => {
-            res.json(result);
-        });
-    });
-
     app.post('/api/user/byemailandpassword', (req, res) => {
         db.User.findOne({
             where: {
                 email: req.body.email,
                 password: req.body.password
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    app.put('/api/user/update/', (req, res) => {
-        if(req.body.newPassword) {
-            req.body.password = req.body.newPassword;
-        }
-        db.User.update({
-            name: req.body.name,
-            password: req.body.password,
-            image: req.body.image
-        }, {
-            where: {
-                id: req.body.id
-            }
-        }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    app.delete('/api/user/delete/:id', (req, res) => {
-        db.User.destroy({
-            where: {
-                id: req.params.id
             }
         }).then((result) => {
             res.json(result);
@@ -328,6 +331,15 @@ module.exports = function (app, db) {
             res.json(result);
         });
     });
+    
+    app.get('/api/user/support/all', (req, res) => {
+        db.sequelize.query(
+            `select * from user where isSupport = 1`,
+            {type: db.sequelize.QueryTypes.SELECT}
+            ).then((result) => {
+            res.json(result);
+        });
+    });
 
     app.delete('/api/user/support/delete/:id', (req, res) => {
         db.User.update({
@@ -337,15 +349,6 @@ module.exports = function (app, db) {
                 id: req.params.id
             }
         }).then((result) => {
-            res.json(result);
-        });
-    });
-
-    app.get('/api/user/support/all', (req, res) => {
-        db.sequelize.query(
-            `select * from user where isSupport = 1`,
-            {type: db.sequelize.QueryTypes.SELECT}
-            ).then((result) => {
             res.json(result);
         });
     });
@@ -369,6 +372,9 @@ module.exports = function (app, db) {
             commentText: req.body.commentText
         }).then((result) => {
             res.json(result);
+        })
+        .catch((err) => {
+            res.json(err);
         });
     });
 

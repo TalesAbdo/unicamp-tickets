@@ -21,6 +21,9 @@ export default {
     },
     mutations: {
         SET_USER(state, user) {
+            if (user.newPassword) {
+                user.password = user.newPassword; // eslint-disable-line
+            }
             state.id = user.id; // eslint-disable-line
             state.name = user.name; // eslint-disable-line
             state.email = user.email; // eslint-disable-line
