@@ -6,7 +6,10 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [1, 300],
-                    msg: ['Por favor, insira um comentário com no mínimo 1 e no máximo 300 caracteres.']
+                    msg: 'Por favor, insira um comentário com no máximo 300 caracteres.'
+                },
+                notNull: {
+                    msg: 'Por favor, insira um comentário com no máximo 300 caracteres.'
                 }
             }
         }

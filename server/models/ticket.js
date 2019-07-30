@@ -6,13 +6,30 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [3, 100],
-                    msg: ['Por favor, insira um título com pelo menos 3 e no máximo 100 caracteres.']
-                }
+                    msg: 'Por favor, insira um título com pelo menos 3 e no máximo 100 caracteres.'
+                },
+                notNull: {
+                    msg: 'Insira um título.'
+                },
             }
         },
         severityId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Escolha uma severidade.'
+                },
+            }
+        },
+        serviceId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Escolha um produto.'
+                },
+            }
         },
         statusId: {
             type: DataTypes.INTEGER,
@@ -24,8 +41,11 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [0, 3000],
-                    msg: ['Por favor, insira uma descrição com no máximo 3000 caracteres.']
-                }
+                    msg: 'Por favor, insira uma descrição com no máximo 3000 caracteres.'
+                },
+                notNull: {
+                    msg: 'Por favor, insira uma descrição com no máximo 3000 caracteres.'
+                },
             }
         },
     },

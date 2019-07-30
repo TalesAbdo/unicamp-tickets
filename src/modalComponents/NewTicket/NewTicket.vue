@@ -106,9 +106,16 @@ export default {
                 });
         },
         createTicket() {
-            if (this.ticket.title && this.ticket.serviceId && this.ticket.severityId) {
-                axios.post('api/ticket/new', { ...this.ticket, ownerId: this.id })
-                    .then(() => {
+            axios.post('api/ticket/new', { ...this.ticket, ownerId: this.id })
+                .then((response) => {
+                    if (response.data.errors) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Cuidado!',
+                            text: response.data.errors[0].message,
+                            type: 'warn'
+                        });
+                    } else if (response) {
                         this.$notify({
                             group: 'foo',
                             title: 'Sucesso!',
@@ -121,22 +128,17 @@ export default {
                         this.ticket.severityId = null;
                         this.ticket.serviceName = null;
                         this.hide();
-                    }).catch(() => {
-                        this.$notify({
-                            group: 'foo',
-                            title: 'Erro!',
-                            text: 'Não foi possível criar o ticket.',
-                            type: 'error'
-                        });
+                    } else {
+                    throw 'Aconteceu algum erro, contate o adminstrador.'; // eslint-disable-line
+                    }
+                }).catch((err) => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: err,
+                        type: 'error'
                     });
-            } else {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Cuidado!',
-                    text: 'Preencha todas as informações para abrir o ticket.',
-                    type: 'warn'
                 });
-            }
         }
     }
 };

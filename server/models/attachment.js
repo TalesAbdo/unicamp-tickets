@@ -10,8 +10,11 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [0, 100],
-                    msg: ['Nome do arquivo deve ter no máximo 100 caracteres.']
-                }
+                    msg: 'Nome do arquivo deve ter no máximo 100 caracteres.'
+                },
+                notNull: {
+                    msg: 'Insira um nome para o arquivo.'
+                },
             }
         },
     },

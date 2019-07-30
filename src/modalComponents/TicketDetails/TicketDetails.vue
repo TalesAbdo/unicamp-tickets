@@ -226,9 +226,16 @@ export default {
             this.comment = value;
         },
         createComment() {
-            if (this.comment) {
-                axios.post('/api/comment/new', { ticketId: this.ticketId, userId: this.id, commentText: this.comment })
-                    .then(() => {
+            axios.post('/api/comment/new', { ticketId: this.ticketId, userId: this.id, commentText: this.comment })
+                .then((response) => {
+                    if (response.data.errors) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Cuidado!',
+                            text: response.data.errors[0].message,
+                            type: 'warn'
+                        });
+                    } else if (response) {
                         this.getTicket();
                         this.$notify({
                             group: 'foo',
@@ -238,23 +245,17 @@ export default {
                         });
                         this.comment = '';
                         this.getComments();
-                    })
-                    .catch(() => {
-                        this.$notify({
-                            group: 'foo',
-                            title: 'Erro!',
-                            text: 'Não foi possível adicionar comentário.',
-                            type: 'error'
-                        });
+                    } else {
+                        throw 'Aconteceu algum erro, contate o adminstrador.'; // eslint-disable-line
+                    }
+                }).catch((err) => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: err,
+                        type: 'error'
                     });
-            } else {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Cuidado!',
-                    text: 'Escreva um comentário.',
-                    type: 'warn'
                 });
-            }
         },
         hide() {
             this.$emit('hide');

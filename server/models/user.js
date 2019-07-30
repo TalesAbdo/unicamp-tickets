@@ -27,15 +27,15 @@ module.exports = function (sequelize, DataTypes) {
                     msg: ['Insira um email válido.']
                 },
                 len: {
-                    args: [1, 50],
+                    args: [3, 50],
                     msg: 'Por favor, insira um email com no máximo 50 caracteres.'
                 },
                 notNull: {
                     msg: 'Insira um email.'
                 },
                 not: {
-                    args: ["[\'\"]",'i'], 
-                    msg: 'Aspas não são aceitas no email.'
+                    args: ["[\'\"\!\^\?\(\)\[\]]",'i'], 
+                    msg: 'Insira um email válido.'
                 }
             }
         },
@@ -45,7 +45,7 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [5, 20],
-                    msg: ['Por favor, insira uma senha com no mínimo 5 e no máximo 20 caracteres.']
+                    msg: 'Por favor, insira uma senha com no mínimo 5 e no máximo 20 caracteres.'
                 },
                 notNull: {
                     msg: 'Insira uma senha.'

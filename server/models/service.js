@@ -6,7 +6,10 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [3, 60],
-                    msg: ['Por favor, insira um nome com no mínimo 3 e no máximo 60 caracteres.']
+                    msg: 'Por favor, insira um nome com no mínimo 3 e no máximo 60 caracteres.'
+                },
+                notNull: {
+                    msg: 'Por favor, insira um nome com no máximo 60 caracteres.'
                 }
             }
         },
@@ -16,8 +19,8 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 len: {
                     args: [3, 200],
-                    msg: ['Por favor, insira uma descrição com no mínimo 3 e no máximo 200 caracteres.']
-                }
+                    msg: 'Por favor, insira uma descrição com no mínimo 3 e no máximo 200 caracteres.'
+                },
             }
         },
         isActive: {
