@@ -3,8 +3,6 @@
 
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
-                    {{user}}
-                    {{password}}
             <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
             <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
             <Input class="margin-1rem" inputTitle="Nome (obrigatório)" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name" :maxLength="80"/>

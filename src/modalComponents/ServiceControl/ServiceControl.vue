@@ -2,11 +2,12 @@
     <div :class="{'is-active': show}" class="modal service-control">
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
-            {{oldService}}
-            {{service}}
             <Title :titleValue="titleText" class="header-text"/>
-            <Input class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="oldService.name" :maxLength="60"/>
-            <Textarea class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="oldService.description" :maxLength="200"/>
+            <Input v-if="oldService.name" class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="oldService.name" :maxLength="60"/>
+            <Input v-else class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="service.name" :maxLength="60"/>
+            <Textarea v-if="oldService.description" vclass="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição"
+                      @input="setDescription" :preValue="oldService.description" :maxLength="200"/>
+            <Textarea v-else class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="service.description" :maxLength="200"/>
             <div class="footer-buttons">
                 <button type="button" class="button is-black" @click="createUpdateService">{{buttonText}}</button>
                 <button v-if="oldService.id" type="button" class="button is-danger is-inverted"  @click="deleteService">{{archiveText}}</button>
@@ -91,32 +92,84 @@ export default {
         },
         async createUpdateService() {
             try {
-                if (this.service.name && this.service.description) {
-                    const params = {
-                        name: this.service.name,
-                        description: this.service.description,
-                        isActive: this.service.isActive
-                    };
-                    if (this.oldService.id) {
-                        await axios.put(`api/service/update/${this.oldService.id}`, params)
-                            .then(() => {
-                                this.$notify(this.successMessage);
-                            });
-                    } else {
-                        await axios.post('api/service/new', params)
-                            .then(() => {
-                                this.$notify(this.successMessage);
-                            });
-                    }
-                    this.service.name = null;
-                    this.service.description = null;
-                    this.hide();
+                const params = {
+                    name: this.service.name,
+                    description: this.service.description,
+                    isActive: this.service.isActive
+                };
+
+                if (this.oldService.id) {
+                    this.updateService(params);
                 } else {
-                    this.$notify(this.attentionMessage);
+                    this.createService(params);
                 }
-            } catch (error) {
-                this.$notify(this.errorMessage);
+            } catch (e) {
+                console.log(e); // eslint-disable-line
             }
+        },
+        async createService(params) {
+            await axios.post('api/service/new', params)
+                .then((response) => {
+                    if (response.data.errors) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Cuidado!',
+                            text: response.data.errors[0].message,
+                            type: 'warn'
+                        });
+                    } else if (response) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Sucesso!',
+                            text: 'Serviço criado.',
+                            type: 'success'
+                        });
+                        this.service.name = null;
+                        this.service.description = null;
+                        this.hide();
+                    } else {
+                        throw 'Aconteceu algum na hora de criar o serviço, contate o adminstrador.'; // eslint-disable-line
+                    }
+                }).catch((err) => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: err,
+                        type: 'error'
+                    });
+                });
+        },
+        async updateService(params) {
+            await axios.put(`api/service/update/${this.oldService.id}`, params)
+                .then((response) => {
+                    if (response.data.errors) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Cuidado!',
+                            text: response.data.errors[0].message,
+                            type: 'warn'
+                        });
+                    } else if (response) {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Sucesso!',
+                            text: 'Serviço atualizado.',
+                            type: 'success'
+                        });
+                        this.service.name = null;
+                        this.service.description = null;
+                        this.hide();
+                    } else {
+                        throw 'Aconteceu algum na hora de atualizar o serviço, contate o adminstrador.'; // eslint-disable-line
+                    }
+                }).catch((err) => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: err,
+                        type: 'error'
+                    });
+                });
         },
         async deleteService() {
             try {

@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
                     msg: 'Por favor, insira um nome com no mínimo 3 e no máximo 60 caracteres.'
                 },
                 notNull: {
-                    msg: 'Por favor, insira um nome com no máximo 60 caracteres.'
+                    msg: 'Por favor, insira um nome com no mínimo 3 e no máximo 60 caracteres.'
                 }
             }
         },
