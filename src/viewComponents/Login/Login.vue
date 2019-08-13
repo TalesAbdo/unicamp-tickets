@@ -18,8 +18,7 @@
 import { mapActions } from 'vuex';
 import Input from 'shared/Input.vue';
 import UserControl from 'modal/UserControl/UserControl.vue';
-
-const axios = require('axios');
+import axios from 'src/axios/axios.js';
 
 export default {
     name: 'login',
@@ -50,7 +49,7 @@ export default {
         },
         loginIntoApplication() {
             if (this.user.email && this.user.password) {
-                axios.post('/api/user/byemailandpassword', { ...this.user })
+                axios.post('user/authenticate', { ...this.user })
                     .then((response) => {
                         if (!response.data) {
                             this.$notify({

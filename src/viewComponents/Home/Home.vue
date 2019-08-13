@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import { mapState } from 'vuex';
 import NewTicket from 'modal/NewTicket/NewTicket.vue';
 import TicketDetails from 'modal/TicketDetails/TicketDetails.vue';
@@ -29,8 +30,6 @@ import Button from 'shared/Button.vue';
 import TicketCard from './components/TicketCard.vue';
 import OrdenationTitle from './components/OrdenationTitle.vue';
 import TicketFilters from './components/Filter/TicketFilters.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'home',
@@ -104,7 +103,7 @@ export default {
 
             const fetchQuery = `LIMIT ${this.totalTicketsRequired}`;
 
-            axios.post('/api/ticket/byuser',
+            axios.post('ticket/user',
                 {
                     ownerId,
                     statusList: this.filters[0].selected,
@@ -113,6 +112,7 @@ export default {
                     fetchQuery
                 })
                 .then((response) => {
+                    console.log('response', response);
                     this.tickets = response.data;
                     this.isUp = false;
                 })

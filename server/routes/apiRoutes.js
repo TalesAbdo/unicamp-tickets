@@ -3,7 +3,7 @@ module.exports = function (app, db) {
     const Sequelize = require('sequelize');
     const Op = Sequelize.Op;
 
-    app.post('/api/ticket/byuser', (req, res) => {
+    app.post('/ticket/byuser', (req, res) => {
         let ownerQuery = '';
         if (req.body.ownerId) {
             ownerQuery = `and ownerId = ${req.body.ownerId}`;
@@ -23,7 +23,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/ticket/byid/:id', (req, res) => {
+    app.get('/ticket/byid/:id', (req, res) => {
         db.sequelize.query(
             `select t.*, au.name as assignedName, ou.name as ownerName, ou.email as ownerEmail, s.name as serviceName from ticket t
             left join user au on au.id = t.assignedId
@@ -36,7 +36,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/ticket/year', (req, res) => {
+    app.get('/ticket/year', (req, res) => {
         db.sequelize.query(
             'SELECT YEAR(createdAt) YEAR FROM TICKET GROUP BY YEAR(createdAt);',
             {type: db.sequelize.QueryTypes.SELECT}
@@ -45,7 +45,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/ticket/bystatus', (req, res) => {
+    app.get('/ticket/bystatus', (req, res) => {
         db.sequelize.query(
             'select statusId, count(*) as quantity from ticket group by statusId',
             {type: db.sequelize.QueryTypes.SELECT}
@@ -55,7 +55,7 @@ module.exports = function (app, db) {
     });
 
     // Queries with join are made with raw query because are simpler to understand and modify
-    app.post('/api/ticket/byamount', (req, res) => {
+    app.post('/ticket/byamount', (req, res) => {
         let serviceQuery = ''
         if(req.body.serviceId) {
             serviceQuery = `AND serviceId = ${req.body.serviceId}`
@@ -72,7 +72,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/ticket/byclosingtime', (req, res) => {
+    app.post('/ticket/byclosingtime', (req, res) => {
         let serviceQuery = ''
         if(req.body.serviceId) {
             serviceQuery = `AND serviceId = ${req.body.serviceId}`
@@ -90,7 +90,7 @@ module.exports = function (app, db) {
     });
 
     // This way was easier and more applicable. Also, it's a post so a body can be passed
-    app.post('/api/ticket/byfilter', (req, res) => {
+    app.post('/ticket/byfilter', (req, res) => {
         let serviceQuery = '';
         let severityQuery = '';
         if (req.body.serviceId) {
@@ -114,7 +114,7 @@ module.exports = function (app, db) {
         });
     });
     
-    app.post('/api/ticket/new', (req, res) => {
+    app.post('/ticket/new', (req, res) => {
         db.Ticket.create({
             assignedId: null, // All tickets start without assigned
             ownerId: req.body.ownerId,
@@ -131,7 +131,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/assigned/:ticketid', (req, res) => {
+    app.put('/ticket/update/assigned/:ticketid', (req, res) => {
         db.Ticket.update({
             assignedId: req.body.assignedId
         }, {
@@ -143,7 +143,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/service/:ticketid', (req, res) => {
+    app.put('/ticket/update/service/:ticketid', (req, res) => {
         db.Ticket.update({
             serviceId: req.body.serviceId
         }, {
@@ -155,7 +155,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/severity/:ticketid', (req, res) => {
+    app.put('/ticket/update/severity/:ticketid', (req, res) => {
         db.Ticket.update({
             severityId: req.body.severityId
         }, {
@@ -167,7 +167,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/ticket/update/status/:ticketid', (req, res) => {
+    app.put('/ticket/update/status/:ticketid', (req, res) => {
         db.Ticket.update({
             statusId: req.body.statusId
         }, {
@@ -179,13 +179,13 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/service/all', (req, res) => {
+    app.get('/service/all', (req, res) => {
         db.Service.findAll({}).then((result) => {
             res.json(result);
         });
     });
 
-    app.get('/api/service/all/active', (req, res) => {
+    app.get('/service/all/active', (req, res) => {
         db.Service.findAll({
             where: {
                 isActive: 1
@@ -195,7 +195,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/service/:id', (req, res) => {
+    app.get('/service/:id', (req, res) => {
         db.Service.findOne({
             where: {
                 id: req.params.id
@@ -205,7 +205,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/service/new', (req, res) => {
+    app.post('/service/new', (req, res) => {
         db.Service.create({
             name: req.body.name,
             description: req.body.description,
@@ -218,7 +218,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/service/update/:id', (req, res) => {
+    app.put('/service/update/', (req, res) => {
         db.Service.update({
             name: req.body.name,
             description: req.body.description
@@ -234,7 +234,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/service/archive/:id', (req, res) => {
+    app.put('/service/archive/:id', (req, res) => {
         console.log(req.body);
         db.Service.update({
             isActive: req.body.isActive
@@ -247,7 +247,7 @@ module.exports = function (app, db) {
         });
     });
     
-    app.post('/api/user/new', (req, res) => {
+    app.post('/user/new', (req, res) => {
         db.User.findOrCreate({
             where: {
                 email: req.body.email,
@@ -264,7 +264,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/user/update/', (req, res) => {
+    app.put('/user/update/', (req, res) => {
         if(req.body.newPassword) {
             req.body.password = req.body.newPassword;
         }
@@ -285,7 +285,7 @@ module.exports = function (app, db) {
     });
 
     //Verify use
-    app.delete('/api/user/delete/:id', (req, res) => {
+    app.delete('/user/delete/:id', (req, res) => {
         db.User.destroy({
             where: {
                 id: req.params.id
@@ -295,7 +295,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/user/bynameandemail', (req, res) => {
+    app.post('/user/bynameandemail', (req, res) => {
         db.User.findAll({
             where: {
                 [Op.or]: [
@@ -309,7 +309,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/user/byemailandpassword', (req, res) => {
+    app.post('/user/byemailandpassword', (req, res) => {
         db.User.findOne({
             where: {
                 email: req.body.email,
@@ -320,7 +320,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.put('/api/user/support/new', (req, res) => {
+    app.put('/user/support/new', (req, res) => {
         db.User.update({
             isSupport: true
         }, {
@@ -332,7 +332,7 @@ module.exports = function (app, db) {
         });
     });
     
-    app.get('/api/user/support/all', (req, res) => {
+    app.get('/user/support/all', (req, res) => {
         db.sequelize.query(
             `select * from user where isSupport = 1`,
             {type: db.sequelize.QueryTypes.SELECT}
@@ -341,7 +341,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.delete('/api/user/support/delete/:id', (req, res) => {
+    app.delete('/user/support/delete/:id', (req, res) => {
         db.User.update({
             isSupport: false
         }, {
@@ -353,7 +353,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/comment/all/:ticketid', (req, res) => {
+    app.get('/comment/all/:ticketid', (req, res) => {
         db.sequelize.query(
             `SELECT c.id, c.commentText, c.createdAt, u.name as userName from comment c
              inner join user u on u.id = c.userId
@@ -365,7 +365,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.post('/api/comment/new', (req, res) => {
+    app.post('/comment/new', (req, res) => {
         db.Comment.create({
             ticketId: req.body.ticketId,
             userId: req.body.userId,
@@ -378,13 +378,13 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/attachment/:ticketid', (req, res) => {
+    app.get('/attachment/:ticketid', (req, res) => {
         db.Item.findAll({}).then((result) => {
             res.json(result);
         });
     });
 
-    app.post('/api/atachment/new', (req, res) => {
+    app.post('/atachment/new', (req, res) => {
         db.Item.create({
             name: req.body.name,
             category: req.body.category,
@@ -394,7 +394,7 @@ module.exports = function (app, db) {
         });
     });
 
-    app.delete('/api/attachment/delete/:id', (req, res) => {
+    app.delete('/attachment/delete/:id', (req, res) => {
         db.Item.destroy({
             where: {
                 id: req.params.id

@@ -22,8 +22,7 @@
 </template>
 
 <script>
-
-const axios = require('axios');
+import axios from 'src/axios/axios.js';
 
 export default {
     name: 'serviceDropdown',
@@ -37,7 +36,7 @@ export default {
         };
     },
     mounted() {
-        axios.get('api/service/all/active')
+        axios.get('service/all/active')
             .then((response) => {
                 this.services = response.data;
                 this.services.unshift({ name: 'Todos', id: null, description: '' });

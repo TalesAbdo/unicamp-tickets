@@ -13,12 +13,11 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import ServiceControl from 'modal/ServiceControl/ServiceControl.vue';
 import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
 import ServiceCard from './components/ServiceCard.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'service',
@@ -42,7 +41,7 @@ export default {
     },
     methods: {
         getServiceList() {
-            axios.get('api/service/all')
+            axios.get('service/all')
                 .then((response) => {
                     this.services = response.data;
                 })

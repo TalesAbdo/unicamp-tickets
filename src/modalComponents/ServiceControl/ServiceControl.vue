@@ -18,11 +18,10 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import Title from 'shared/Title.vue';
 import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'serviceControl',
