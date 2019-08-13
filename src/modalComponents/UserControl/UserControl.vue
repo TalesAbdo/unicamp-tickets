@@ -97,7 +97,6 @@ export default {
         createUser() {
             axios.post('user/new', { ...this.user })
                 .then((response) => {
-                    console.log('response front', response);
                     if (response.data.errors) {
                         this.$notify({
                             group: 'foo',

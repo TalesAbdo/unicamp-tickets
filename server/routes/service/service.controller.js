@@ -27,15 +27,6 @@ async function archiveService(req, res) {
     }
 }
 
-async function getService(req, res) {
-    try {
-        const result = await service.getService(req.params.id);
-        res.json(result);
-    } catch (err) {
-        res.json(err);
-    }
-}
-
 async function getServices(req, res) {
     try {
         const result = await service.getServices();
@@ -48,6 +39,15 @@ async function getServices(req, res) {
 async function getActiveServices(req, res) {
     try {
         const result = await service.getActiveServices();
+        res.json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
+async function getService(req, res) {
+    try {
+        const result = await service.getService(req.params.id);
         res.json(result);
     } catch (err) {
         res.json(err);

@@ -13,7 +13,7 @@ async function insertUser(params) {
                 name: params.name,
                 password: params.password,
                 image: params.image,
-                isSupport: params.isSupport
+                isSupport: false // All users start as common
             }
         }).then(result => result).catch(err => err);
     } catch (error) {
@@ -37,11 +37,11 @@ async function updateUser(params) {
     }
 }
 
-async function deleteUser(id) {
+async function deleteUser(userId) {
     try {
         return db.User.destroy({
             where: {
-                id
+                userId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {
@@ -78,13 +78,13 @@ async function authenticateUser(params) {
     }
 }
 
-async function insertSupportUser(id) {
+async function insertSupportUser(userId) {
     try {
         return db.User.update({
             isSupport: true
         }, {
             where: {
-                id
+                userId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {

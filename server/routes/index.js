@@ -27,9 +27,9 @@ router.get('/comment/all/:ticketid', comment.getCommentsByTicket);
 router.post('/service/new', service.insertService);
 router.put('/service/update', service.updateService);
 router.put('/service/archive', service.archiveService);
-router.get('/service/:id', service.getService);
 router.get('/service/all', service.getServices);
 router.get('/service/all/active', service.getActiveServices);
+router.get('/service/:id', service.getService);
 
 // Ticket
 router.post('/ticket/new', ticket.insertTicket);
@@ -38,6 +38,7 @@ router.put('/ticket/update/service', ticket.updateTicketService);
 router.put('/ticket/update/severity', ticket.updateTicketSeverity);
 router.put('/ticket/update/status', ticket.updateTicketStatus);
 router.get('/ticket/id/:id', ticket.getTicket);
+router.post('/ticket/all', ticket.getTickets);
 router.post('/ticket/user', ticket.getTicketsByUser);
 router.get('/ticket/year', ticket.getYearsWithTickets);
 router.get('/ticket/bystatus', ticket.getTicketsByStatus);

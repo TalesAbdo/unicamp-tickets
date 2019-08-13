@@ -5,7 +5,7 @@ async function insertService(params) {
         return db.Service.create({
             name: params.name,
             description: params.description,
-            isActive: params.isActive
+            isActive: true
         }).then(result => result).catch(err => err);
     } catch (error) {
         return error;
@@ -41,18 +41,6 @@ async function archiveService(params) {
     }
 }
 
-async function getService(serviceId) {
-    try {
-        return db.Service.findOne({
-            where: {
-                id: serviceId
-            }
-        }).then(result => result).catch(err => err);
-    } catch (error) {
-        return error;
-    }
-}
-
 async function getServices() {
     try {
         return db.Service.findAll({}).then(result => result).catch(err => err);
@@ -66,6 +54,18 @@ async function getActiveServices() {
         return db.Service.findAll({
             where: {
                 isActive: 1
+            }
+        }).then(result => result).catch(err => err);
+    } catch (error) {
+        return error;
+    }
+}
+
+async function getService(serviceId) {
+    try {
+        return db.Service.findOne({
+            where: {
+                id: serviceId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {
