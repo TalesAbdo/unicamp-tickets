@@ -1,0 +1,572 @@
+openapi: 3.0.0
+
+info:
+  title: Unicamp Tickets
+  description: Tickets Tool for Unicamp
+  contact:
+    name: 'Tales Abdo dos Santos'
+    email: talesabdo@outlook.com
+  version: 1.0.0
+
+paths:
+  /user/new:
+    post:
+      operationId: insertUser
+      summary: Create a new user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/userNameParam'
+        - $ref: '#/components/parameters/emailParam'
+        - $ref: '#/components/parameters/passwordParam'
+        - $ref: '#/components/parameters/imageParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /user/update:
+    put:
+      operationId: updateUser
+      summary: Update an especific user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/userNameParam'
+        - $ref: '#/components/parameters/passwordParam'
+        - $ref: '#/components/parameters/imageParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /user/delete/{id}:
+    delete:
+      operationId: deleteUser
+      summary: Delete an especific user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /user/search:
+    post:
+      operationId: searchUsers
+      summary: Search for users with similar name or email
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/typedTextParam'
+      responses:
+        200:
+          description: Return an array with all matching users
+
+  /user/authenticate:
+    post:
+      operationId: authenticateUser
+      summary: Authenticate the inserted credentials
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/emailParam'
+        - $ref: '#/components/parameters/passwordParam'
+      responses:
+        200:
+          description: Return credential's existence
+
+  /user/support/new/{id}:
+    put:
+      operationId: insertSupportUser
+      summary: Give support user access to an existing common user
+      tags:
+        - Support User
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /user/support/delete/{id}:
+    delete:
+      operationId: deleteSupportUser
+      summary: Remove support user access from an existing common user
+      tags:
+        - Support User
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /user/support/all:
+    get:
+      operationId: getSupportUsers
+      summary: Get all existing support users
+      tags:
+        - Support User
+      responses:
+        200:
+          description: Return an array with all existing support users
+
+  /comment/new:
+    post:
+      operationId: insertComment
+      summary: Create a comment on a ticket
+      tags:
+        - Comment
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/commentTextParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /comment/all/{ticketid}:
+    get:
+      operationId: getComments
+      summary: Get all comments from a ticket
+      tags:
+        - Comment
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+      responses:
+        200:
+          description: Return an array with all comments from a ticket
+
+  /service/new:
+    post:
+      operationId: insertService
+      summary: Create a new service
+      tags:
+        - Service
+      parameters:
+        - $ref: '#/components/parameters/serviceNameParam'
+        - $ref: '#/components/parameters/serviceDescriptionParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /service/update:
+    put:
+      operationId: updateService
+      summary: Update a service data
+      tags:
+        - Service
+      parameters:
+        - $ref: '#/components/parameters/serviceNameParam'
+        - $ref: '#/components/parameters/serviceDescriptionParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /service/archive:
+    put:
+      operationId: archiveService
+      summary: Turn a service as archived, making it disabled to new tickets
+      tags:
+        - Service
+      parameters:
+        - $ref: '#/components/parameters/serviceIdParam'
+        - $ref: '#/components/parameters/isActiveParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /service/all:
+    get:
+      operationId: getServices
+      summary: Get all services
+      tags:
+        - Service
+      responses:
+        200:
+          description: Return an array with all services
+
+  /service/all/active:
+    get:
+      operationId: getActiveServices
+      summary: Get all active services (not archived)
+      tags:
+        - Service
+      responses:
+        200:
+          description: Return an array with all active services
+
+  /service/{id}:
+    get:
+      operationId: getService
+      summary: Get a service
+      tags:
+        - Service
+      parameters:
+        - $ref: '#/components/parameters/serviceIdParam'
+      responses:
+        200:
+          description: Return the requested service data
+
+  /ticket/new:
+    post:
+      operationId: insertTicket
+      summary: Create a new ticket
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ownerIdParam'
+        - $ref: '#/components/parameters/serviceIdParam'
+        - $ref: '#/components/parameters/ticketTitleParam'
+        - $ref: '#/components/parameters/ticketDescriptionParam'
+        - $ref: '#/components/parameters/severityIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /ticket/update/assigned:
+    put:
+      operationId: updateTicketAssigned
+      summary: Update a ticket assigned
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+        - $ref: '#/components/parameters/assignedIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /ticket/update/service:
+    put:
+      operationId: updateTicketService
+      summary: Update a ticket service
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+        - $ref: '#/components/parameters/serviceIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /ticket/update/severity:
+    put:
+      operationId: updateTicketSeverity
+      summary: Update a ticket severity
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+        - $ref: '#/components/parameters/severityIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /ticket/update/status:
+    put:
+      operationId: updateTicketStatus
+      summary: Update a ticket status
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+        - $ref: '#/components/parameters/statusIdParam'
+      responses:
+        200:
+          description: Return OK message
+
+  /ticket/id/{id}:
+    get:
+      operationId: getTicket
+      summary: Get a ticket data
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+      responses:
+        200:
+          description: Return ticket data
+
+  /ticket/user:
+    post:
+      operationId: getTicketsByUser
+      summary: Get all tickets opened by an user, considering the filters. If no owner is informed, bring all the tickets
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/ownerIdParam'
+        - $ref: '#/components/parameters/statusListParam'
+        - $ref: '#/components/parameters/severityListParam'
+        - $ref: '#/components/parameters/dateQueryParam'
+        - $ref: '#/components/parameters/fetchQueryParam'
+      responses:
+        200:
+          description: Return all user's tickets data
+
+  /ticket/year:
+    get:
+      operationId: getYearsWithTickets
+      summary: Get all years that have at least one ticket
+      tags:
+        - Ticket
+      responses:
+        200:
+          description: Return all years with tickets
+
+  /ticket/bystatus:
+    get:
+      operationId: getTicketsByStatus
+      summary: Get the sum of tickets grouped by status
+      tags:
+        - Ticket
+      responses:
+        200:
+          description: Return an array the statusId and tickets total amount of that status.
+
+  /ticket/byamout:
+    post:
+      operationId: getTicketsByMonthYear
+      summary: Get the sum of tickets grouped by month of a year
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/serviceIdParam'
+        - $ref: '#/components/parameters/initialMonthParam'
+        - $ref: '#/components/parameters/finalMonthParam'
+        - $ref: '#/components/parameters/yearParam'
+      responses:
+        200:
+          description: Return an array with tickets total amount of each month of a year.
+
+  /ticket/byclosingtime:
+    post:
+      operationId: getTicketsByClosingTime
+      summary: Get the average tickets closing time of each month of a year
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/serviceIdParam'
+        - $ref: '#/components/parameters/initialMonthParam'
+        - $ref: '#/components/parameters/finalMonthParam'
+        - $ref: '#/components/parameters/yearParam'
+      responses:
+        200:
+          description: Return an array with average tickets closing time of each month of a year.
+
+  /ticket/relatory:
+    post:
+      operationId: getTicketsRelatory
+      summary: Get tickets according to filters.
+      tags:
+        - Ticket
+      parameters:
+        - $ref: '#/components/parameters/serviceIdParam'
+        - $ref: '#/components/parameters/severityIdParam'
+        - $ref: '#/components/parameters/initialDateParam'
+        - $ref: '#/components/parameters/finalDateParam'
+      responses:
+        200:
+          description: Return an array with filtered tickets.
+
+components:
+  parameters:
+    userIdParam:
+      name: userId
+      in: path
+      required: true
+      description: ID from an user
+      schema:
+        type: integer
+    emailParam:
+      name: email
+      in: query
+      required: true
+      description: Email from an user
+      schema:
+        type: string
+    userNameParam:
+      name: name
+      in: query
+      required: true
+      description: Name from an user
+      schema:
+        type: string
+    passwordParam:
+      name: password
+      in: query
+      required: true
+      description: Password from an user
+      schema:
+        type: string
+    imageParam:
+      name: image
+      in: query
+      required: true
+      description: Path from user image
+      schema:
+        type: string
+    typedTextParam:
+      name: typedText
+      in: query
+      required: true
+      description: String used for search by name and email
+      schema:
+        type: string
+    isSupportParam:
+      name: isSupport
+      in: query
+      required: true
+      description: User access to support features
+      schema:
+        type: boolean
+    ticketIdParam:
+      name: ticketId
+      in: path
+      required: true
+      description: ID from a ticket
+      schema:
+        type: integer
+    commentTextParam:
+      name: commentText
+      in: path
+      required: true
+      description: Text from a comment
+      schema:
+        type: integer
+    serviceNameParam:
+      name: name
+      in: query
+      required: true
+      description: Name from a product
+      schema:
+        type: string
+    serviceDescriptionParam:
+      name: description
+      in: query
+      required: true
+      description: Description from a product
+      schema:
+        type: string
+    serviceIdParam:
+      name: serviceId
+      in: path
+      required: true
+      description: ID from a service
+      schema:
+        type: integer
+    isActiveParam:
+      name: isActive
+      in: path
+      required: true
+      description: Active status from a service
+      schema:
+        type: boolean
+    ownerIdParam:
+      name: ownerId
+      in: path
+      required: true
+      description: ID from the user that opened the ticket
+      schema:
+        type: integer
+    ticketTitleParam:
+      name: ticketTitleId
+      in: path
+      required: true
+      description: Ticket title
+      schema:
+        type: string
+    ticketDescriptionParam:
+      name: ticketDescriptionId
+      in: path
+      required: true
+      description: Ticket description
+      schema:
+        type: string
+    severityIdParam:
+      name: severityId
+      in: path
+      required: true
+      description: Ticket severity id
+      schema:
+        type: integer
+    assignedIdParam:
+      name: assignedId
+      in: path
+      required: true
+      description: Ticket assigned id
+      schema:
+        type: integer
+    statusIdParam:
+      name: statusId
+      in: path
+      required: true
+      description: Ticket status id
+      schema:
+        type: integer
+    statusListParam:
+      name: statusList
+      in: query
+      required: true
+      description: List of status for query
+      schema:
+        type: array
+        items:
+          type: integer
+    severityListParam:
+      name: severityList
+      in: query
+      required: true
+      description: List of severity for query
+      schema:
+        type: array
+        items:
+          type: integer
+    dateQueryParam:
+      name: statusList
+      in: query
+      required: true
+      description: Date period for the query
+      schema:
+        type: string
+    fetchQueryParam:
+      name: statusList
+      in: query
+      required: true
+      description: Amount of tickets for the query
+      schema:
+        type: string
+    initialMonthParam:
+      name: initialMonth
+      in: query
+      required: true
+      description: Initial month
+      schema:
+        type: integer
+    finalMonthParam:
+      name: finalMonth
+      in: query
+      required: true
+      description: Final month
+      schema:
+        type: integer
+    yearParam:
+      name: year
+      in: query
+      required: true
+      description: Year
+      schema:
+        type: integer
+    initialDateParam:
+      name: initialDate
+      in: query
+      required: true
+      description: Initial date
+      schema:
+        type: string
+    finalDateParam:
+      name: finalDate
+      in: query
+      required: true
+      description: Final date
+      schema:
+        type: string

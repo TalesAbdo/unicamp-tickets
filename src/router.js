@@ -1,11 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from './store/index.js';
-// import Login from 'view/Login/Login.vue';
-// import Home from 'view/Home/Home.vue';
-// import Services from 'view/Services/Services.vue';
-// import Members from 'view/Members/Members.vue';
-// import Metrics from 'view/Metrics/Metrics.vue';
 
 Vue.use(Router);
 
@@ -14,31 +9,31 @@ const router = new Router({
         {
             path: '/',
             name: 'login',
-            component: () => import(/* webpackChunkName: "about" */ 'view/Login/Login.vue'),
+            component: () => import('view/Login/Login.vue'),
         },
         {
             path: '/home',
             name: 'Home',
             meta: { requiresAuth: true },
-            component: () => import(/* webpackChunkName: "about" */ 'view/Home/Home.vue'),
+            component: () => import('view/Home/Home.vue'),
         },
         {
             path: '/services',
             name: 'Services',
             meta: { requiresAuth: true },
-            component: () => import(/* webpackChunkName: "about" */ 'view/Services/Services.vue'),
+            component: () => import('view/Services/Services.vue'),
         },
         {
             path: '/members',
             name: 'Members',
             meta: { requiresAuth: true },
-            component: () => import(/* webpackChunkName: "about" */ 'view/Members/Members.vue'),
+            component: () => import('view/Members/Members.vue'),
         },
         {
             path: '/metrics',
             name: 'Metrics',
             meta: { requiresAuth: true },
-            component: () => import(/* webpackChunkName: "about" */ 'view/Metrics/Metrics.vue'),
+            component: () => import('view/Metrics/Metrics.vue'),
         },
     ],
 });

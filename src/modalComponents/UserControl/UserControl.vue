@@ -25,8 +25,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Input from 'shared/Input.vue';
-
-const axios = require('axios');
+import axios from 'src/axios/axios.js';
 
 export default {
     name: 'userControl',
@@ -96,7 +95,7 @@ export default {
             }
         },
         createUser() {
-            axios.post('api/user/new', { ...this.user })
+            axios.post('user/new', { ...this.user })
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -130,7 +129,7 @@ export default {
         },
         updateUser() {
             if (this.user.password === this.password) {
-                axios.put('api/user/update', { ...this.user })
+                axios.put('user/update', { ...this.user })
                     .then((response) => {
                         if (response.data.errors) {
                             this.$notify({

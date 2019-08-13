@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import { saveAs } from 'file-saver';
 import Chart from 'chart.js';
 import Button from 'shared/Button.vue';
@@ -64,8 +65,6 @@ import XLSX from 'xlsx';
 import Service from './components/ServiceDropdown.vue';
 import Year from './components/YearDropdown.vue';
 import Month from './components/MonthDropdown.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'metrics',
@@ -176,9 +175,9 @@ export default {
                 if (this.periodData.finalMonth >= this.periodData.initialMonth) {
                     let apiPath;
                     if (this.periodData.type === 'countTicket') {
-                        apiPath = 'api/ticket/byamount';
+                        apiPath = 'ticket/byamount';
                     } else {
-                        apiPath = 'api/ticket/byclosingtime';
+                        apiPath = 'ticket/byclosingtime';
                     }
 
                     await axios.post(apiPath, this.periodData).then((response) => { this.fillChartData(response.data); });
@@ -221,7 +220,7 @@ export default {
                     const fieldNames = ['ID', 'SEVERIDADE', 'STATUS', 'TÍTULO', 'CRIADO EM', 'ÚLTIMA ATUALIZAÇÃO', 'SERVIÇO',
                         'DONO', 'RESPONSÁVEL', 'DESCRIÇÃO'];
                     const data = [fieldNames];
-                    await axios.post('/api/ticket/byfilter', this.reportData).then((response) => {
+                    await axios.post('ticket/relatory', this.reportData).then((response) => {
                         response.data.forEach((item) => {
                             const line = [item.id, this.severityName(item.severityId), this.statusName(item.statusId), item.title,
                                 item.created, item.updated, item.serviceName, item.ownerName, item.assignedName, item.description];
@@ -277,7 +276,6 @@ export default {
     }
 };
 </script>
-
 
 <style lang="scss">
 @import '~src/css/main.scss';
@@ -370,8 +368,8 @@ export default {
 
                  input[type=date] {
                     font-size: 18px;
-                                        display: block;
-                    }
+                    display: block;
+                }
 
                 ::-webkit-datetime-edit-text { color:$dark-gray; }
                 ::-webkit-datetime-edit-month-field { color:$dark-gray; }

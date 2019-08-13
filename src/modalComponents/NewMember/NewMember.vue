@@ -31,10 +31,9 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import Title from 'shared/Title.vue';
 import UserSearchDropdown from './components/UserSearchDropdown.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'newMember',
@@ -94,7 +93,7 @@ export default {
             }
         },
         async getUserList() {
-            await axios.post('/api/user/bynameandemail', { typedText: this.typedText })
+            await axios.post('user/search', { typedText: this.typedText })
                 .then((response) => { this.searchResult = response.data; })
                 .catch(() => {
                     this.$notify({
@@ -114,7 +113,7 @@ export default {
         addMembers() {
             try {
                 this.chosenUsers.forEach(async (user) => {
-                    await axios.put('/api/user/support/new', { id: user.id });
+                    await axios.put(`user/support/new/${user.id}`);
                 });
                 this.$notify({
                     group: 'foo',

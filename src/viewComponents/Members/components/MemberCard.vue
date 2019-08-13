@@ -20,9 +20,8 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import { mapState } from 'vuex';
-
-const axios = require('axios');
 
 export default {
     name: 'memberCard',
@@ -44,7 +43,7 @@ export default {
                     type: 'warn'
                 });
             } else {
-                axios.delete(`/api/user/support/delete/${this.member.id}`)
+                axios.delete(`user/support/delete/${this.member.id}`)
                     .then(() => {
                         this.$notify({
                             group: 'foo',

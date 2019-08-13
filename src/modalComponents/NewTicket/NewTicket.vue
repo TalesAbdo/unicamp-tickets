@@ -36,14 +36,13 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import { mapState } from 'vuex';
 import Title from 'shared/Title.vue';
 import Input from 'shared/Input.vue';
 import Textarea from 'shared/Textarea.vue';
 import FileButton from 'shared/FileButton.vue';
 import Service from './components/ServiceDropdown.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'newTicket',
@@ -92,7 +91,7 @@ export default {
             this.ticket.severityId = value;
         },
         getServices() {
-            axios.get('/api/service/all/active')
+            axios.get('service/all/active')
                 .then((response) => {
                     this.services = response.data;
                 })

@@ -14,12 +14,11 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import NewMember from 'modal/NewMember/NewMember.vue';
 import Button from 'shared/Button.vue';
 import Title from 'shared/Title.vue';
 import MemberCard from './components/MemberCard.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'members',
@@ -37,7 +36,7 @@ export default {
     },
     methods: {
         async getMemberList() {
-            await axios.get('/api/user/support/all')
+            await axios.get('user/support/all')
                 .then((response) => {
                     this.members = response.data;
                 })

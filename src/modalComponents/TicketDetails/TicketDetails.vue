@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import { mapState } from 'vuex';
 import TicketNumber from 'shared/TicketNumber.vue';
 import PersonInformation from 'shared/PersonInformation.vue';
@@ -49,8 +50,6 @@ import StatusDropdown from './components/StatusDropdown.vue';
 import SeverityDropdown from './components/SeverityDropdown.vue';
 import AssignedDropdown from './components/AssignedDropdown.vue';
 import AttachmentList from './components/AttachmentList.vue';
-
-const axios = require('axios');
 
 export default {
     name: 'ticketDetails',
@@ -104,7 +103,7 @@ export default {
     methods: {
         getTicket() {
             if (this.ticketId) {
-                axios.get(`/api/ticket/byid/${this.ticketId}`)
+                axios.get(`ticket/id/${this.ticketId}`)
                     .then((response) => {
                         this.ticket = response.data[0]; // eslint-disable-line
                     })
@@ -120,7 +119,7 @@ export default {
         },
         getServices() {
             if (this.ticketId) {
-                axios.get('/api/service/all/active')
+                axios.get('service/all/active')
                     .then((response) => {
                         this.services = response.data;
                     })
@@ -136,7 +135,7 @@ export default {
         },
         getMembers() {
             if (this.ticketId) {
-                axios.get('/api/user/support/all')
+                axios.get('user/support/all')
                     .then((response) => {
                         this.members = response.data;
                     })
@@ -152,7 +151,7 @@ export default {
         },
         getComments() {
             if (this.ticketId) {
-                axios.get(`/api/comment/all/${this.ticketId}`)
+                axios.get(`comment/all/${this.ticketId}`)
                     .then((response) => {
                         this.comments = response.data;
                     })
@@ -167,7 +166,7 @@ export default {
             }
         },
         updateServiceId(serviceId) {
-            axios.put(`/api/ticket/update/service/${this.ticketId}`, { serviceId })
+            axios.put('ticket/update/service', { ticketId: this.ticketId, serviceId })
                 .then(() => {
                     this.getTicket();
                 })
@@ -181,7 +180,7 @@ export default {
                 });
         },
         updateAssignedId(assignedId) {
-            axios.put(`/api/ticket/update/assigned/${this.ticketId}`, { assignedId })
+            axios.put('ticket/update/assigned', { ticketId: this.ticketId, assignedId })
                 .then(() => {
                     this.getTicket();
                 })
@@ -195,7 +194,7 @@ export default {
                 });
         },
         updateStatusId(statusId) {
-            axios.put(`/api/ticket/update/status/${this.ticketId}`, { statusId })
+            axios.put('ticket/update/status', { ticketId: this.ticketId, statusId })
                 .then(() => {
                     this.getTicket();
                 })
@@ -209,7 +208,7 @@ export default {
                 });
         },
         updateSeverityId(severityId) {
-            axios.put(`/api/ticket/update/severity/${this.ticketId}`, { severityId })
+            axios.put('ticket/update/severity', { ticketId: this.ticketId, severityId })
                 .then(() => {
                     this.getTicket();
                 })
@@ -226,7 +225,7 @@ export default {
             this.comment = value;
         },
         createComment() {
-            axios.post('/api/comment/new', { ticketId: this.ticketId, userId: this.id, commentText: this.comment })
+            axios.post('comment/new', { ticketId: this.ticketId, userId: this.id, commentText: this.comment })
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({

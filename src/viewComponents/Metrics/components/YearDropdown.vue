@@ -22,8 +22,7 @@
 </template>
 
 <script>
-
-const axios = require('axios');
+import axios from 'src/axios/axios.js';
 
 export default {
     name: 'yearDropdown',
@@ -35,7 +34,7 @@ export default {
         };
     },
     async mounted() {
-        await axios.get('api/ticket/year/')
+        await axios.get('ticket/year')
             .then((response) => {
                 this.years = response.data;
             });
