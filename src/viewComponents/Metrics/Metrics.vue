@@ -277,7 +277,6 @@ export default {
 };
 </script>
 
-
 <style lang="scss">
 @import '~src/css/main.scss';
 
@@ -369,8 +368,8 @@ export default {
 
                  input[type=date] {
                     font-size: 18px;
-                                        display: block;
-                    }
+                    display: block;
+                }
 
                 ::-webkit-datetime-edit-text { color:$dark-gray; }
                 ::-webkit-datetime-edit-month-field { color:$dark-gray; }

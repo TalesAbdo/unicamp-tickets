@@ -18,7 +18,7 @@ services:
   backend:
     image: node:8.1
     volumes:
-      - ../LearningRepository:/my-app
+      - ../unicamp-tickets:/my-app
     ports:
       - 3000:3000
     command: bash -c "cd /my-app && npm i && npm i -g nodemon && nodemon app.js"  
@@ -26,11 +26,9 @@ services:
   # gerar build e dps colocar para rodar 
     image: nginx:1.17
     volumes:
-      - ../LearningRepository/dist:/usr/share/nginx/html
+      - ../unicamp-tickets/dist:/usr/share/nginx/html
     ports:
       - 8080:80
     #command: bash -c "nginx -g deamon"
       
-
-
   #     # docker build -t vuejs-cookbook/dockerize-vuejs-app .

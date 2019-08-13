@@ -1,4 +1,3 @@
-
 const comment = require('./comment.model.js');
 
 async function insertComment(req, res) {
