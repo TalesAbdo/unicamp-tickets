@@ -13,7 +13,7 @@
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
-                <img class="image" src="@/assets/Logo.svg">
+                <FileInput />
             </div>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
@@ -26,11 +26,12 @@
 import { mapActions, mapState } from 'vuex';
 import Input from 'shared/Input.vue';
 import axios from 'src/axios/axios.js';
+import FileInput from './components/FileInput.vue';
 
 export default {
     name: 'userControl',
     components: {
-        Input
+        Input, FileInput
     },
     props: {
         show: { type: Boolean, default: false },
@@ -204,15 +205,6 @@ export default {
                 color: $black;
                 font-weight: bold;
                 cursor: default;
-            }
-
-            .image {
-                margin-top: 8px;
-                margin-left: 8px;
-                height: 120px;
-                width: 120px;
-                border: 1.1px $primary solid;
-                border-radius: 4px;
             }
         }
 
