@@ -9,6 +9,7 @@ const ticket = require('./ticket/ticket.controller');
 
 // User
 router.post('/user/new', user.insertUser);
+router.post('/user/image', user.insertUserImage);
 router.put('/user/update', user.updateUser);
 router.delete('/user/delete/:id', user.deleteUser);
 router.post('/user/search', user.searchUsers);

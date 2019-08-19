@@ -3,9 +3,9 @@
         <label class="file-label">
             <input
                 ref="formFiles"
-                :multiple="isMulti"
                 class="file-input"
                 type="file"
+                accept="image/*"
                 name="form-file-input"
                 @change="onChange">
 
@@ -24,13 +24,11 @@
 <script>
 export default {
     props: {
-        isMulti: { type: Boolean, required: false, default: true },
-        isInline: { type: String, required: false, default: '' }
     },
     methods: {
         onChange() {
             const files = Array.prototype.map.call(
-                this.$refs.stFormFiles.files,
+                this.$refs.formFiles.files,
                 item => item
             );
             // reseting input type, so the same files can be added again

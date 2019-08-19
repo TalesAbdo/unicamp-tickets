@@ -34,7 +34,7 @@
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link is-arrowless">
                         <figure class="image">
-                            <img class="is-rounded" src="https://pm1.narvii.com/6883/bc1d3a9b73c656fe7773392421f2205d90e8eb09r1-198-255v2_128.jpg">
+                            <img class="is-rounded" :src="image">
                         </figure>
                         {{firstName}}
                     </a>
@@ -90,7 +90,8 @@ export default {
         ...mapState({
             name: state => state.user.name,
             email: state => state.user.email,
-            isSupport: state => state.user.isSupport
+            isSupport: state => state.user.isSupport,
+            image: state => state.user.image
         }),
         firstName() {
             return this.name.split(' ')[0];
@@ -108,11 +109,12 @@ export default {
         },
         logout() {
             this.setUserData({
+                id: null,
                 name: null,
                 email: null,
-                image: null,
                 password: null,
-                isSupport: false
+                isSupport: false,
+                image: null,
             });
             window.location.href = '/#/';
         },

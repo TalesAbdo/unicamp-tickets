@@ -29,6 +29,7 @@ export default {
             state.email = user.email; // eslint-disable-line
             state.password = user.password; // eslint-disable-line    
             state.isSupport = user.isSupport; // eslint-disable-line
+            state.image = user.image;
         },
     },
     actions: {

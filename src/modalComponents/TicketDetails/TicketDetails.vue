@@ -6,7 +6,7 @@
                 <span class="has-text-weight-bold is-size-5">{{ticket.title}}</span>
                 <div class="sub-header">
                     <TicketNumber class="ticket-number" :id="ticket.id"/>
-                    <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
+                    <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :imageSrc="image"/>
                 </div>
             </div>
             <div class="ticket-content">
@@ -91,7 +91,8 @@ export default {
     },
     computed: {
         ...mapState({
-            id: state => state.user.id
+            id: state => state.user.id,
+            image: state => state.user.image
         }),
         isClosed() {
             if (this.ticket.statusId === 4) {

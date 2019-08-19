@@ -12,7 +12,7 @@ async function insertUser(params) {
             defaults: {
                 name: params.name,
                 password: params.password,
-                image: params.image,
+                image: '@server/files/user-image/default-image.jpg', // All users start with default image
                 isSupport: false // All users start as common
             }
         }).then(result => result).catch(err => err);
@@ -117,6 +117,18 @@ async function getSupportUsers() {
     }
 }
 
+async function insertUserImage(params) {
+    try {
+        await fs.writeFileSync(`@server/files/user-image/${params.email}.jpg`, params.image, 'binary', () => {
+            console.log('The file was saved!');
+        });
+
+        return true;
+    } catch (error) {
+        return error;
+    }
+}
+
 module.exports = {
     insertUser,
     updateUser,
@@ -125,5 +137,6 @@ module.exports = {
     authenticateUser,
     insertSupportUser,
     deleteSupportUser,
-    getSupportUsers
+    getSupportUsers,
+    insertUserImage
 };

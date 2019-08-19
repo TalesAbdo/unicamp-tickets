@@ -2,6 +2,11 @@ const user = require('./user.model');
 
 async function insertUser(req, res) {
     try {
+        if (!req.body.image) {
+            req.body.image = '@server/files/user-image/default-image.jpg';
+        } else {
+            req.body.image = `@server/files/user-image/${req.body.email}.jpg`;
+        }
         const result = await user.insertUser(req.body);
         res.json(result);
     } catch (err) {
@@ -75,6 +80,15 @@ async function getSupportUsers(req, res) {
     }
 }
 
+async function insertUserImage(req, res) {
+    try {
+        const result = await user.insertUserImage(req.body);
+        res.json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
 module.exports = {
     insertUser,
     updateUser,
@@ -83,5 +97,6 @@ module.exports = {
     authenticateUser,
     insertSupportUser,
     deleteSupportUser,
-    getSupportUsers
+    getSupportUsers,
+    insertUserImage
 };

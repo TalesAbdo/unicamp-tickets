@@ -11,9 +11,10 @@
                     @input="setNewPassword" :maxLength="20"/>
             <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
-            <div class="user-image margin-1rem">
+            <div v-if="modalType === 'modificar'" class="user-image margin-1rem">
                 <span class="title">Imagem</span>
-                <FileInput />
+                <FileInput @change="addImage"/>
+                <span class="image-warning">Insira um email para habilitar a inserção de imagem</span>
             </div>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
@@ -48,7 +49,7 @@ export default {
                 newPassword: null,
                 isSupport: false,
                 image: null
-            }
+            },
         };
     },
     computed: {
@@ -87,6 +88,9 @@ export default {
         },
         setNewPassword(value) {
             this.user.newPassword = value;
+        },
+        setImage(value) {
+            this.user.image = value;
         },
         userAction() {
             if (this.modalType === 'criar') {
@@ -150,6 +154,7 @@ export default {
                             this.user.name = null;
                             this.user.password = null;
                             this.user.newPassword = null;
+                            this.user.image = null;
                             this.hide();
                         }
                     });
@@ -160,6 +165,39 @@ export default {
                     text: 'Senha incorreta.',
                     type: 'warn'
                 });
+            }
+        },
+        addImage(image) {
+            if (image && image.size >= '10485760') {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'O arquivo ultrapassa 10mb.',
+                    type: 'warn'
+                });
+            } else if (image && image.type.split('/')[0] === 'image') {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Insira uma imagem.',
+                    type: 'warn'
+                });
+            } else {
+                // this.imageFile =
+                axios.put('user/image', { email: this.user.email, image })
+                    .then((response) => {
+                        if (response) {
+                            this.user.image = true;
+                        } else if (response) {
+                            this.$notify({
+                                group: 'foo',
+                                title: 'Erro!',
+                                text: 'Erro ao inserir imagem.',
+                                type: 'error'
+                            });
+                            this.user.image = false;
+                        }
+                    });
             }
         }
     }
@@ -205,6 +243,11 @@ export default {
                 color: $black;
                 font-weight: bold;
                 cursor: default;
+            }
+
+            .image-warning {
+                color: red;
+                font-size: 12px;
             }
         }
 
