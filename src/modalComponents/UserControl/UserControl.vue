@@ -50,6 +50,7 @@ export default {
                 isSupport: false,
                 image: null
             },
+            imageFile: null
         };
     },
     computed: {
@@ -132,9 +133,9 @@ export default {
                     });
                 });
         },
-        updateUser() {
+        async updateUser() {
             if (this.user.password === this.password) {
-                axios.put('user/update', { ...this.user })
+                await axios.put('user/update', { ...this.user })
                     .then((response) => {
                         if (response.data.errors) {
                             this.$notify({
@@ -156,6 +157,17 @@ export default {
                             this.user.newPassword = null;
                             this.user.image = null;
                             this.hide();
+                        }
+                    });
+                await axios.put('user/image', { email: this.email, image: this.imageFile })
+                    .then((response) => {
+                        if (response.data.errors) {
+                            this.$notify({
+                                group: 'foo',
+                                title: 'Cuidado!',
+                                text: response.data.errors[0].message,
+                                type: 'warn'
+                            });
                         }
                     });
             } else {

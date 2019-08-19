@@ -9,21 +9,23 @@
                 name="form-file-input"
                 @change="onChange">
 
-            <span class="file-cta">
-                <span class="archive-file-icon">
-                    <i class="fas fa-upload" />
-                </span>
-                <span class="label">
-                    Insira uma foto
-                </span>
-            </span>
+            <img :src="image"/>
         </label>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-    props: {
+    data() {
+        return {
+        };
+    },
+    computed: {
+        ...mapState({
+            image: state => state.user.image,
+        }),
     },
     methods: {
         onChange() {

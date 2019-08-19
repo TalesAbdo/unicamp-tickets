@@ -19,6 +19,7 @@ export default {
         FileButton
     },
     props: {
+        ticketId: { type: Number, required: true }
     },
     data() {
         return {

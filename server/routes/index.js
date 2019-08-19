@@ -1,11 +1,11 @@
 const express = require('express');
-
 const router = express.Router();
 
 const user = require('./user/user.controller');
 const comment = require('./comment/comment.controller');
 const service = require('./service/service.controller');
 const ticket = require('./ticket/ticket.controller');
+const attachment = require('./attachment/attachment.controller');
 
 // User
 router.post('/user/new', user.insertUser);
@@ -46,5 +46,9 @@ router.get('/ticket/bystatus', ticket.getTicketsByStatus);
 router.post('/ticket/byamount', ticket.getTicketsByMonthYear);
 router.post('/ticket/byclosingtime', ticket.getTicketsByClosingTime);
 router.post('/ticket/relatory', ticket.getTicketsRelatory);
+
+// Attachments
+router.post('/attachment/new', attachment.insertAttachment);
+router.get('/attachment/ticket/:id', attachment.getAttachments);
 
 module.exports = router;
