@@ -26,6 +26,25 @@ async function updateUser(req, res) {
     }
 }
 
+async function insertUserImage(req, res) {
+    try {
+        const result = await user.insertUserImage(req.body);
+        res.json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
+async function getUserImage(req, res) {
+    try {
+        const result = await user.getUserImage(req.params.email);
+        console.log('resulthere', result);
+        res.json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
 async function deleteUser(req, res) {
     try {
         const result = await user.deleteUser(req.params.id);
@@ -80,23 +99,15 @@ async function getSupportUsers(req, res) {
     }
 }
 
-async function insertUserImage(req, res) {
-    try {
-        const result = await user.insertUserImage(req.body);
-        res.json(result);
-    } catch (err) {
-        res.json(err);
-    }
-}
-
 module.exports = {
     insertUser,
     updateUser,
+    insertUserImage,
+    getUserImage,
     deleteUser,
     searchUsers,
     authenticateUser,
     insertSupportUser,
     deleteSupportUser,
     getSupportUsers,
-    insertUserImage
 };

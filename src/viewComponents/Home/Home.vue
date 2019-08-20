@@ -112,7 +112,6 @@ export default {
                     fetchQuery
                 })
                 .then((response) => {
-                    console.log('response', response);
                     this.tickets = response.data;
                     this.isUp = false;
                 })

@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../../models/index.js');
+const fs = require('fs');
 
 const { Op } = Sequelize.Op;
 
@@ -32,6 +33,34 @@ async function updateUser(params) {
                 id: params.id
             }
         }).then(result => result).catch(err => err);
+    } catch (error) {
+        return error;
+    }
+}
+
+async function insertUserImage(params) {
+    try {
+        await fs.writeFileSync(`@server/files/user-image/${params.email}.jpg`, params.image, 'binary', () => {
+            console.log('The file was saved!');
+        });
+
+        return true;
+    } catch (error) {
+        return error;
+    }
+}
+
+async function getUserImage(email) {
+    try {
+        let path = 'server/files/user-image/default-image.jpg';
+        fs.access(`../files/user-image/${email}`, fs.F_OK, (err) => {
+            if (err) {
+              console.error('Image doesnt exist. Will use default');
+              return true;
+            }
+            path = `server/files/user-image/${email}.jpg`;
+          });
+          return path;
     } catch (error) {
         return error;
     }
@@ -117,26 +146,15 @@ async function getSupportUsers() {
     }
 }
 
-async function insertUserImage(params) {
-    try {
-        await fs.writeFileSync(`@server/files/user-image/${params.email}.jpg`, params.image, 'binary', () => {
-            console.log('The file was saved!');
-        });
-
-        return true;
-    } catch (error) {
-        return error;
-    }
-}
-
 module.exports = {
     insertUser,
     updateUser,
+    insertUserImage,
+    getUserImage,
     deleteUser,
     searchUsers,
     authenticateUser,
     insertSupportUser,
     deleteSupportUser,
     getSupportUsers,
-    insertUserImage
 };

@@ -10,6 +10,7 @@ const attachment = require('./attachment/attachment.controller');
 // User
 router.post('/user/new', user.insertUser);
 router.post('/user/image', user.insertUserImage);
+router.get('/user/:email/image', user.getUserImage);
 router.put('/user/update', user.updateUser);
 router.delete('/user/delete/:id', user.deleteUser);
 router.post('/user/search', user.searchUsers);
@@ -39,7 +40,6 @@ router.put('/ticket/update/service', ticket.updateTicketService);
 router.put('/ticket/update/severity', ticket.updateTicketSeverity);
 router.put('/ticket/update/status', ticket.updateTicketStatus);
 router.get('/ticket/id/:id', ticket.getTicket);
-router.post('/ticket/all', ticket.getTickets);
 router.post('/ticket/user', ticket.getTicketsByUser);
 router.get('/ticket/year', ticket.getYearsWithTickets);
 router.get('/ticket/bystatus', ticket.getTicketsByStatus);

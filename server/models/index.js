@@ -15,10 +15,13 @@ const db = {};
 //     sequelize = new Sequelize(config.database, config.username, config.password, config);
 // }
 
-const sequelize = new Sequelize('unicamptickets', 'root', 'password', {
-    host: 'db',
-    dialect: 'mysql',
-});
+const sequelize = new Sequelize({
+    "username": "root",
+    "password": "",
+    "database": "unicamptickets",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": "false"});
 
 fs
     .readdirSync(__dirname)

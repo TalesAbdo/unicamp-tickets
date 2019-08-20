@@ -1,10 +1,11 @@
+const cors = require('cors');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var db = require('./models');
-var apiRoutes = require('./app/routes/apiRoutes.js');
+var router = require('./routes/index.js');
 
-var PORT = process.env.PORT || 3002;
+var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.json());
@@ -15,7 +16,12 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 // Static directory
 app.use(express.static('dist'));
 
-apiRoutes(app, db);
+app.use(cors({
+    origin: 'http://localhost:8080'
+}));
+
+app.use('/api', router);
+
 
 db.sequelize.sync().then(function () {
     app.listen(PORT, function () {

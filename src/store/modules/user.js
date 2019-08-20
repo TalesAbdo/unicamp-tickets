@@ -3,12 +3,12 @@ export default {
 
     state() {
         return {
-            id: null,
-            name: null,
-            email: null,
-            password: null,
+            id: 16,
+            name: 'talesss',
+            email: 'ttt@o.com',
+            password: 'senha',
             isSupport: false,
-            image: null
+            image: 'talesabdo@outlook.com.jpg'
         };
     },
     getters: {
@@ -29,7 +29,7 @@ export default {
             state.email = user.email; // eslint-disable-line
             state.password = user.password; // eslint-disable-line    
             state.isSupport = user.isSupport; // eslint-disable-line
-            state.image = user.image;
+            state.image = user.image; // eslint-disable-line
         },
     },
     actions: {

@@ -33,9 +33,7 @@
             <div class="navbar-end">
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link is-arrowless">
-                        <figure class="image">
-                            <img class="is-rounded" :src="image">
-                        </figure>
+                        <UserImage :imagePath="image"/>
                         {{firstName}}
                     </a>
 
@@ -73,13 +71,15 @@
 </template>
 
 <script>
+import axios from 'src/axios/axios.js';
 import { mapActions, mapState } from 'vuex';
 import UserControl from 'modal/UserControl/UserControl.vue';
+import UserImage from './UserImage.vue';
 
 export default {
     name: 'navbar',
     components: {
-        UserControl
+        UserControl, UserImage
     },
     data() {
         return {
@@ -95,7 +95,9 @@ export default {
         }),
         firstName() {
             return this.name.split(' ')[0];
-        }
+        },
+    },
+    mounted () {
     },
     methods: {
         ...mapActions({
@@ -147,7 +149,7 @@ export default {
 
     .image {
         margin-right: 0.35rem;
-        width: 32px;
+        width: 30px;
     }
 
     .navbar-link {
