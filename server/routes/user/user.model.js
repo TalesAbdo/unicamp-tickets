@@ -13,7 +13,7 @@ async function insertUser(params) {
             defaults: {
                 name: params.name,
                 password: params.password,
-                image: '@server/files/user-image/default-image.jpg', // All users start with default image
+                image: 'default-image.jpg', // All users start with default image
                 isSupport: false // All users start as common
             }
         }).then(result => result).catch(err => err);

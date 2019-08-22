@@ -97,7 +97,7 @@ export default {
             return this.name.split(' ')[0];
         },
     },
-    mounted () {
+    mounted() {
     },
     methods: {
         ...mapActions({

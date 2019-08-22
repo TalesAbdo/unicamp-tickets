@@ -1,7 +1,7 @@
 <template>
    <div class="person-information">
-        <figure class="image is-48x48">
-            <img class="is-rounded" :src="imageSrc">
+        <figure class="icon image is-48x48">
+            <UserImage :imagePath="image"/>
         </figure>
         <div class="text-info">
             <span class="text has-text-weight-bold">{{firstLine}}</span>
@@ -11,12 +11,17 @@
 </template>
 
 <script>
+import UserImage from './UserImage.vue';
+
 export default {
     name: 'personInformation',
+    components: {
+        UserImage
+    },
     props: {
         firstLine: { type: String, required: true },
         secondLine: { type: String, required: true },
-        imageSrc: { type: String, required: true },
+        image: { type: String, required: true },
     },
     methods: {
         onClick() {

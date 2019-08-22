@@ -11,7 +11,7 @@ async function insertComment(req, res) {
 
 async function getCommentsByTicket(req, res) {
     try {
-        const result = await comment.getCommentsByTicket(req.params.ticketId);
+        const result = await comment.getCommentsByTicket(req.params.ticketid);
         res.json(result);
     } catch (err) {
         res.json(err);

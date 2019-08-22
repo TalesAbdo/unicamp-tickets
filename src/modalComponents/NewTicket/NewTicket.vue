@@ -105,7 +105,7 @@ export default {
                 });
         },
         createTicket() {
-            axios.post('api/ticket/new', { ...this.ticket, ownerId: this.id })
+            axios.post('ticket/new', { ...this.ticket, ownerId: this.id })
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({

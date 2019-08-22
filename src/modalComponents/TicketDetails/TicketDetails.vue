@@ -6,7 +6,7 @@
                 <span class="has-text-weight-bold is-size-5">{{ticket.title}}</span>
                 <div class="sub-header">
                     <TicketNumber class="ticket-number" :id="ticket.id"/>
-                    <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :imageSrc="image"/>
+                    <PersonInformation v-if="ticket.ownerImage" :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :image="image"/>
                 </div>
             </div>
             <div class="ticket-content">
@@ -15,7 +15,7 @@
                     <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" :isClosed="isClosed" @click="updateStatusId"/>
                     <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" :isClosed="isClosed" @click="updateSeverityId"/>
                     <AssignedDropdown :triggerValue="ticket.assignedName" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
-                    <AttachmentList />
+                    <AttachmentList :ticketId="1"/>
                 </div>
                 <div class="line"/>
                 <div class="right-content">
@@ -32,7 +32,7 @@
                     <button class="button is-black is-normal" @click="createComment">Comentar</button>
                 </div>
             </div>
-
+{{ticket}}
             <History :comments="comments"/>
         </div>
     </div>
@@ -66,6 +66,7 @@ export default {
                 id: 0,
                 ownerName: '',
                 ownerEmail: '',
+                ownerImage: null,
                 title: '',
                 description: '',
                 serviceName: 'Escolha um serviço',
