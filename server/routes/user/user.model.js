@@ -1,4 +1,5 @@
 const fs = require('fs');
+const uuidv4 = require('uuid/v4');
 const Sequelize = require('sequelize');
 const db = require('../../models/index.js');
 
@@ -13,7 +14,7 @@ async function insertUser(params) {
             defaults: {
                 name: params.name,
                 password: params.password,
-                image: 'default-image.jpg', // All users start with default image
+                image: `${uuidv4()}.jpg`,
                 isSupport: false // All users start as common
             }
         }).then(result => result).catch(err => err);

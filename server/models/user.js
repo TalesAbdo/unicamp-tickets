@@ -1,4 +1,4 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         name: {
             type: DataTypes.STRING(80),
@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
                     msg: 'Insira um email.'
                 },
                 not: {
-                    args: ["[\'\"\!\^\?\(\)\[\]]",'i'], 
+                    args: ["[\'\"\!\^\?\(\)\[\]]", 'i'], // eslint-disable-line
                     msg: 'Insira um email válido.'
                 }
             }
@@ -51,13 +51,13 @@ module.exports = function (sequelize, DataTypes) {
                     msg: 'Insira uma senha.'
                 },
                 not: {
-                    args: ["[\'\"]",'i'], 
+                    args: ["[\'\"]", 'i'], // eslint-disable-line
                     msg: 'Aspas não são aceitas na senha.'
                 }
             }
         },
         image: {
-            type: DataTypes.STRING(300),
+            type: DataTypes.STRING(60),
             allowNull: true
         },
         isSupport: {
@@ -66,6 +66,6 @@ module.exports = function (sequelize, DataTypes) {
         }
     },
     { freezeTableName: true, tableName: 'user' });
-    
+
     return User;
 };
