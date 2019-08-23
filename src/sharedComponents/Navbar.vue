@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import axios from 'src/axios/axios.js';
 import { mapActions, mapState } from 'vuex';
 import UserControl from 'modal/UserControl/UserControl.vue';
 import UserImage from './UserImage.vue';

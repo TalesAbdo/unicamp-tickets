@@ -39,7 +39,7 @@
 <script>
 import moment from 'moment';
 import TicketNumber from 'shared/TicketNumber.vue';
-import UserImage from 'shared/UserImageTicketCard.vue';
+import UserImage from 'shared/UserImage.vue';
 
 export default {
     name: 'ticketCard',
