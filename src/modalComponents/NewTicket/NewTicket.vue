@@ -128,7 +128,7 @@ export default {
                         this.ticket.serviceName = null;
                         this.hide();
                     } else {
-                    throw 'Aconteceu algum erro, contate o adminstrador.'; // eslint-disable-line
+                        throw 'Aconteceu algum erro, contate o adminstrador.';
                     }
                 }).catch((err) => {
                     this.$notify({

@@ -75,7 +75,7 @@ async function updateTicketStatus(params) {
 async function getTicket(ticketId) {
     try {
         return db.sequelize.query(
-            `select t.*, au.name as assignedName, ou.name as ownerName, ou.email as ownerEmail, ou.image as ownerImage, s.name as serviceName from ticket t
+            `select t.*, au.name as assignedName, au.image as assignedImage, ou.name as ownerName, ou.email as ownerEmail, ou.image as ownerImage, s.name as serviceName from ticket t
             left join user au on au.id = t.assignedId
             inner join user ou on ou.id = t.ownerId
             inner join service s on s.id = t.serviceId

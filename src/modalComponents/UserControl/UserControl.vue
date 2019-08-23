@@ -122,7 +122,7 @@ export default {
                         this.user.password = null;
                         this.hide();
                     } else {
-                        throw 'Email já em uso'; // eslint-disable-line
+                        throw 'Email já em uso';
                     }
                 }).catch((err) => {
                     this.$notify({

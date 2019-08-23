@@ -22,6 +22,6 @@ const PORT = 3000;
 
 db.sequelize.sync().then(() => {
     app.listen(PORT, () => {
-        console.log(`Listening on PORT ${PORT}`); // eslint-disable-line
+        console.log(`Listening on PORT ${PORT}`);
     });
 });

@@ -14,7 +14,7 @@
                     <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" :isClosed="isClosed" @click="updateServiceId"/>
                     <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" :isClosed="isClosed" @click="updateStatusId"/>
                     <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" :isClosed="isClosed" @click="updateSeverityId"/>
-                    <AssignedDropdown :triggerValue="ticket.assignedName" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
+                    <AssignedDropdown :triggerValue="ticket.assignedName" :assignedImage="ticket.assignedImage" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
                     <AttachmentList :ticketId="1"/>
                 </div>
                 <div class="line"/>
@@ -32,7 +32,7 @@
                     <button class="button is-black is-normal" @click="createComment">Comentar</button>
                 </div>
             </div>
-{{ticket}}
+
             <History :comments="comments"/>
         </div>
     </div>
@@ -247,7 +247,7 @@ export default {
                         this.comment = '';
                         this.getComments();
                     } else {
-                        throw 'Aconteceu algum erro, contate o adminstrador.'; // eslint-disable-line
+                        throw 'Aconteceu algum erro, contate o adminstrador.';
                     }
                 }).catch((err) => {
                     this.$notify({

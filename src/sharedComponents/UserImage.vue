@@ -17,9 +17,19 @@ export default {
             imageId: uuidv4()
         };
     },
-    mounted() {
-        const image = require(`server/files/user-image/${this.imagePath}`); // eslint-disable-line
-        document.querySelector(`#user-image-${this.imageId}`).src = image;
+    watch: {
+        imagePath() {
+            this.setImageSrc();
+        }
     },
+    mounted() {
+        this.setImageSrc();
+    },
+    methods: {
+        setImageSrc() {
+            const image = require(`server/files/user-image/${this.imagePath}`);
+            document.querySelector(`#user-image-${this.imageId}`).src = image;
+        }
+    }
 };
 </script>

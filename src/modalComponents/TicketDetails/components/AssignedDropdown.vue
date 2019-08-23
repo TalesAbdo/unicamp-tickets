@@ -5,13 +5,13 @@
         <div class="dropdown-trigger">
             <button v-if="isSupport && !isClosed" type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
                 <figure v-if="triggerValue" class="image is-24x24">
-                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
+                    <UserImage :imagePath="assignedImage"/>
                 </figure>
                 <span>{{triggerValue || 'Escolha um responsável'}}</span>
             </button>
             <div v-else class="pure-text">
                 <figure v-if="triggerValue" class="image is-24x24">
-                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
+                    <UserImage :imagePath="assignedImage"/>
                 </figure>
                 <span>{{triggerValue || 'Sem responsável'}}</span>
             </div>
@@ -20,7 +20,7 @@
             <div class="dropdown-content">
             <a  v-for="(member) in members" :key="member.id" class="dropdown-item is-flex" @click="memberClicked(member.id)">
                 <figure class="image is-24x24">
-                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
+                    <UserImage :imagePath="member.image"/>
                 </figure>
                 {{member.name}}
             </a>
@@ -32,13 +32,19 @@
 
 <script>
 import { mapState } from 'vuex';
+import UserImage from 'shared/UserImage.vue';
+
 
 export default {
     name: 'assignedDropdown',
+    components: {
+        UserImage
+    },
     props: {
         members: { type: Array, required: true },
         triggerValue: { type: String, required: false, default: '' },
-        isClosed: { type: Boolean, required: false, default: false }
+        assignedImage: { type: String, required: false },
+        isClosed: { type: Boolean, required: false, default: false },
     },
     computed: {
         ...mapState({
@@ -113,6 +119,8 @@ export default {
 
         figure {
             margin-right: .5rem;
+            display: flex;
+            align-items: center;
         }
     }
 }

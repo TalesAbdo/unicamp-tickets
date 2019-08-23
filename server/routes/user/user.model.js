@@ -1,8 +1,8 @@
+const fs = require('fs');
 const Sequelize = require('sequelize');
 const db = require('../../models/index.js');
-const fs = require('fs');
 
-const { Op } = Sequelize.Op;
+const Op = Sequelize.Op; // eslint-disable-line
 
 async function insertUser(params) {
     try {
@@ -55,12 +55,13 @@ async function getUserImage(email) {
         let path = 'server/files/user-image/default-image.jpg';
         fs.access(`../files/user-image/${email}`, fs.F_OK, (err) => {
             if (err) {
-              console.error('Image doesnt exist. Will use default');
-              return true;
+                console.error('Image doesnt exist. Will use default');
+                return path;
             }
             path = `server/files/user-image/${email}.jpg`;
-          });
-          return path;
+            return path;
+        });
+        return path;
     } catch (error) {
         return error;
     }
@@ -87,7 +88,7 @@ async function searchUsers(typedText) {
                     { email: { [Op.substring]: typedText } }
                 ]
             },
-            attributes: ['id', 'name', 'email']
+            attributes: ['id', 'name', 'email', 'image']
         }).then(result => result).catch(err => err);
     } catch (error) {
         return error;

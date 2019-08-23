@@ -1,11 +1,8 @@
 <template>
     <div class="member-card">
         <div class="member-image">
-            <div v-if="member.isAdmin" class="admin-tag">
-                <span>Admin</span>
-            </div>
             <figure class="image is-64x64">
-                <img class="is-rounded" src="https://pm1.narvii.com/6626/77bcaf576f221820644c375a2720f21470fba161_128.jpg">
+                <UserImage :imagePath="member.image"/>
             </figure>
         </div>
 
@@ -22,9 +19,13 @@
 <script>
 import axios from 'src/axios/axios.js';
 import { mapState } from 'vuex';
+import UserImage from 'shared/UserImage.vue';
 
 export default {
     name: 'memberCard',
+    components: {
+        UserImage
+    },
     props: {
         member: { type: Object, required: true }
     },
