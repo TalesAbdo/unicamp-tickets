@@ -9,8 +9,13 @@
                 name="form-file-input"
                 @change="onChange">
 
-            <img :src="image"/>
-        </label>
+            <figure v-if="imagePath" class="image">
+                <img id="user-image-creation" src="../../../../server/files/user-image/default-image.jpg">
+            </figure>
+            <span v-else>
+                <i class="fas fa-upload"/>
+            </span>
+         </label>
     </div>
 </template>
 
@@ -20,6 +25,7 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
+            imagePath: null,
         };
     },
     computed: {
@@ -33,11 +39,12 @@ export default {
                 this.$refs.formFiles.files,
                 item => item
             );
+
             // reseting input type, so the same files can be added again
             this.$refs.formFiles.type = 'text';
             this.$refs.formFiles.type = 'file';
 
-            this.$emit('change', files);
+            this.$emit('change', files[0]);
         }
     }
 };
@@ -56,19 +63,18 @@ export default {
     .file-label {
         height: 100%;
         width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .file-cta {
+        .file-input {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
             border: none;
-
-            .label {
-                white-space: normal;
-                text-align: center;
-            }
+            cursor: pointer;
         }
     }
 }

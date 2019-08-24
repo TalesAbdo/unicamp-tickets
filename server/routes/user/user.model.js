@@ -41,7 +41,7 @@ async function updateUser(params) {
 
 async function insertUserImage(params) {
     try {
-        await fs.writeFileSync(`@server/files/user-image/${params.email}.jpg`, params.image, 'binary', () => {
+        await fs.writeFileSync(`server/files/user-image/temporary-${params.imagePath}.jpg`, params.image, 'binary', () => {
             console.log('The file was saved!');
         });
 

@@ -11,10 +11,9 @@
                     @input="setNewPassword" :maxLength="20"/>
             <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
-            <div v-if="modalType === 'modificar'" class="user-image margin-1rem">
+            <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
                 <FileInput @change="addImage"/>
-                <span class="image-warning">Insira um email para habilitar a inserção de imagem</span>
             </div>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
@@ -28,6 +27,8 @@ import { mapActions, mapState } from 'vuex';
 import Input from 'shared/Input.vue';
 import axios from 'src/axios/axios.js';
 import FileInput from './components/FileInput.vue';
+
+const uuidv4 = require('uuid/v4');
 
 export default {
     name: 'userControl',
@@ -180,6 +181,7 @@ export default {
             }
         },
         addImage(image) {
+            console.log(image.type.split('/')[0]);
             if (image && image.size >= '10485760') {
                 this.$notify({
                     group: 'foo',
@@ -187,7 +189,7 @@ export default {
                     text: 'O arquivo ultrapassa 10mb.',
                     type: 'warn'
                 });
-            } else if (image && image.type.split('/')[0] === 'image') {
+            } else if (image && !image.type.split('/')[0] === 'image') {
                 this.$notify({
                     group: 'foo',
                     title: 'Cuidado!',
@@ -195,8 +197,8 @@ export default {
                     type: 'warn'
                 });
             } else {
-                // this.imageFile =
-                axios.put('user/image', { email: this.user.email, image })
+                this.user.image = uuidv4();
+                axios.post('user/image', { imagePath: this.user.image, image })
                     .then((response) => {
                         if (response) {
                             this.user.image = true;
