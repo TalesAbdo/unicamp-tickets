@@ -13,12 +13,13 @@
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
-                <FileInput @change="addImage"/>
+                <FileInput @imageChoosed="setImage"/>
             </div>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
         </form>
         <button class="modal-close is-large" aria-label="close"></button>
+        {{user}}
     </div>
 </template>
 
@@ -27,8 +28,6 @@ import { mapActions, mapState } from 'vuex';
 import Input from 'shared/Input.vue';
 import axios from 'src/axios/axios.js';
 import FileInput from './components/FileInput.vue';
-
-const uuidv4 = require('uuid/v4');
 
 export default {
     name: 'userControl',
@@ -51,7 +50,6 @@ export default {
                 isSupport: false,
                 image: null
             },
-            imageFile: null
         };
     },
     computed: {
@@ -101,8 +99,8 @@ export default {
                 this.updateUser();
             }
         },
-        createUser() {
-            axios.post('user/new', { ...this.user })
+        async createUser() {
+            await axios.post('user/new', this.user)
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -121,6 +119,7 @@ export default {
                         this.user.email = null;
                         this.user.name = null;
                         this.user.password = null;
+                        this.user.image = null;
                         this.hide();
                     } else {
                         throw 'Email já em uso';
@@ -180,40 +179,6 @@ export default {
                 });
             }
         },
-        addImage(image) {
-            console.log(image.type.split('/')[0]);
-            if (image && image.size >= '10485760') {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Cuidado!',
-                    text: 'O arquivo ultrapassa 10mb.',
-                    type: 'warn'
-                });
-            } else if (image && !image.type.split('/')[0] === 'image') {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Cuidado!',
-                    text: 'Insira uma imagem.',
-                    type: 'warn'
-                });
-            } else {
-                this.user.image = uuidv4();
-                axios.post('user/image', { imagePath: this.user.image, image })
-                    .then((response) => {
-                        if (response) {
-                            this.user.image = true;
-                        } else if (response) {
-                            this.$notify({
-                                group: 'foo',
-                                title: 'Erro!',
-                                text: 'Erro ao inserir imagem.',
-                                type: 'error'
-                            });
-                            this.user.image = false;
-                        }
-                    });
-            }
-        }
     }
 };
 </script>

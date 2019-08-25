@@ -5,10 +5,9 @@ export default {
         return {
             id: 16,
             name: 'talesss',
-            email: 'ttt@o.com',
+            email: 'talesabdo@outlook.com',
             password: 'senha',
-            isSupport: true,
-            image: 'talesabdo@outlook.com.jpg'
+            isSupport: true
         };
     },
     getters: {
@@ -29,7 +28,6 @@ export default {
             state.email = user.email;
             state.password = user.password;
             state.isSupport = user.isSupport;
-            state.image = user.image;
         },
     },
     actions: {

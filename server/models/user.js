@@ -56,10 +56,6 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        image: {
-            type: DataTypes.STRING(60),
-            allowNull: true
-        },
         isSupport: {
             type: DataTypes.BOOLEAN,
             allowNull: false,

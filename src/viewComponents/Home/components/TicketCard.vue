@@ -22,7 +22,7 @@
 
         <div v-if="ticket.assignedName" class="card-footer-item">
             <figure class="icon image is-24x24">
-                <UserImage :imagePath="ticket.assignedImage"/>
+                <UserImage :imagePath="ticket.assignedEmail"/>
             </figure>
             <span>{{ticket.assignedName}}</span>
         </div>

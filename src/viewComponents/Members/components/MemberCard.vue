@@ -2,7 +2,7 @@
     <div class="member-card">
         <div class="member-image">
             <figure class="image is-64x64">
-                <UserImage :imagePath="member.image"/>
+                <UserImage :imagePath="member.email"/>
             </figure>
         </div>
 

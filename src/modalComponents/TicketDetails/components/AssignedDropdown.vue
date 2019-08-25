@@ -5,13 +5,13 @@
         <div class="dropdown-trigger">
             <button v-if="isSupport && !isClosed" type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
                 <figure v-if="triggerValue" class="image is-24x24">
-                    <UserImage :imagePath="assignedImage"/>
+                    <UserImage :imagePath="assignedEmail"/>
                 </figure>
                 <span>{{triggerValue || 'Escolha um responsável'}}</span>
             </button>
             <div v-else class="pure-text">
                 <figure v-if="triggerValue" class="image is-24x24">
-                    <UserImage :imagePath="assignedImage"/>
+                    <UserImage :imagePath="assignedEmail"/>
                 </figure>
                 <span>{{triggerValue || 'Sem responsável'}}</span>
             </div>
@@ -20,7 +20,7 @@
             <div class="dropdown-content">
             <a  v-for="(member) in members" :key="member.id" class="dropdown-item is-flex" @click="memberClicked(member.id)">
                 <figure class="image is-24x24">
-                    <UserImage :imagePath="member.image"/>
+                    <UserImage :imagePath="member.email"/>
                 </figure>
                 {{member.name}}
             </a>
@@ -43,7 +43,7 @@ export default {
     props: {
         members: { type: Array, required: true },
         triggerValue: { type: String, required: false, default: '' },
-        assignedImage: { type: String, required: false },
+        assignedEmail: { type: String, required: false },
         isClosed: { type: Boolean, required: false, default: false },
     },
     computed: {

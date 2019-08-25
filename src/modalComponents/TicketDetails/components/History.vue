@@ -4,7 +4,7 @@
         <div v-for="(comment, index) in comments" :key="index" class="comment">
             <div class="history-header">
                 <figure class="image is-48x48">
-                    <UserImage :imagePath="comment.userImage"/>
+                    <UserImage :imagePath="comment.userEmail"/>
                 </figure>
                 <span><b>{{writtenUserName(comment.userName)}}</b> <i>{{writtenDate(comment.createdAt)}}</i></span>
             </div>

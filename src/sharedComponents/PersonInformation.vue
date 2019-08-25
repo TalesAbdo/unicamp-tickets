@@ -1,7 +1,7 @@
 <template>
    <div class="person-information">
         <figure class="icon image is-48x48">
-            <UserImage :imagePath="image"/>
+            <UserImage :imagePath="email"/>
         </figure>
         <div class="text-info">
             <span class="text has-text-weight-bold">{{firstLine}}</span>
@@ -21,7 +21,7 @@ export default {
     props: {
         firstLine: { type: String, required: true },
         secondLine: { type: String, required: true },
-        image: { type: String, required: true },
+        email: { type: String, required: true },
     },
     methods: {
         onClick() {

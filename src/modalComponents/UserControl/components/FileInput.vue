@@ -9,13 +9,14 @@
                 name="form-file-input"
                 @change="onChange">
 
-            <figure v-if="imagePath" class="image">
-                <img id="user-image-creation" src="../../../../server/files/user-image/default-image.jpg">
+            <figure v-if="textImage" class="image">
+                <img id="user-image-creation" :src="textImage">
             </figure>
             <span v-else>
                 <i class="fas fa-upload"/>
             </span>
          </label>
+         {{textImage}}
     </div>
 </template>
 
@@ -25,7 +26,7 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
-            imagePath: null,
+            textImage: null,
         };
     },
     computed: {
@@ -34,17 +35,36 @@ export default {
         }),
     },
     methods: {
-        onChange() {
-            const files = Array.prototype.map.call(
-                this.$refs.formFiles.files,
-                item => item
-            );
-
-            // reseting input type, so the same files can be added again
-            this.$refs.formFiles.type = 'text';
-            this.$refs.formFiles.type = 'file';
-
-            this.$emit('change', files[0]);
+        onChange(event) {
+            const file = event.target.files[0];
+            if (this.verifyImage(file)) {
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.textImage = fileReader.result;
+                    this.$emit('imageChoosed', fileReader.result);
+                });
+                fileReader.readAsDataURL(file);
+            }
+        },
+        verifyImage(image) {
+            if (image && image.size >= '10485760') {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'O arquivo ultrapassa 10mb.',
+                    type: 'warn'
+                });
+                return false;
+            } if (image && (image.type.split('/')[0] !== 'image')) {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Insira uma imagem.',
+                    type: 'warn'
+                });
+                return false;
+            }
+            return true;
         }
     }
 };

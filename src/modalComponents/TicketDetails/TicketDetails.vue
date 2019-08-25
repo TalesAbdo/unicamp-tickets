@@ -6,7 +6,7 @@
                 <span class="has-text-weight-bold is-size-5">{{ticket.title}}</span>
                 <div class="sub-header">
                     <TicketNumber class="ticket-number" :id="ticket.id"/>
-                    <PersonInformation v-if="ticket.ownerImage" :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :image="image"/>
+                    <PersonInformation v-if="ticket.ownerImage" :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :email="ticket.ownerEmail"/>
                 </div>
             </div>
             <div class="ticket-content">
@@ -92,8 +92,7 @@ export default {
     },
     computed: {
         ...mapState({
-            id: state => state.user.id,
-            image: state => state.user.image
+            id: state => state.user.id
         }),
         isClosed() {
             if (this.ticket.statusId === 4) {

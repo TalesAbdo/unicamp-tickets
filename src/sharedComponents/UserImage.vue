@@ -10,7 +10,7 @@ const uuidv4 = require('uuid/v4');
 export default {
     name: 'userImage',
     props: {
-        imagePath: { type: String, required: true, default: 'default-image.jpg' }
+        imagePath: { type: String, required: true, default: 'default-image' }
     },
     data() {
         return {
@@ -27,8 +27,10 @@ export default {
     },
     methods: {
         setImageSrc() {
-            const image = require(`server/files/user-image/${this.imagePath}`);
-            document.querySelector(`#user-image-${this.imageId}`).src = image;
+            if (this.imagePath) {
+                const image = require(`server/files/user-image/${this.imagePath}.jpg`);
+                document.querySelector(`#user-image-${this.imageId}`).src = image;
+            }
         }
     }
 };
