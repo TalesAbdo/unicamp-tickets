@@ -1,12 +1,10 @@
 const cors = require('cors');
 const express = require('express');
-
-const app = express();
 const bodyParser = require('body-parser');
 const db = require('./models');
 const router = require('./routes/index.js');
 
-const PORT = process.env.PORT || 3000;
+const app = express();
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.json());
@@ -23,6 +21,7 @@ app.use(cors({
 
 app.use('/api', router);
 
+const PORT = 3000;
 
 db.sequelize.sync().then(() => {
     app.listen(PORT, () => {

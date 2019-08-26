@@ -5,23 +5,14 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const db = {};
 
-// obtaining env info
-// const env = 'development';
-// const config = require(`${__dirname}/../config/config.json`)[env];
-// let sequelize;
-// if (config.use_env_constiable) {
-//     sequelize = new Sequelize(process.env[config.use_env_constiable]);
-// } else {
-//     sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
 const sequelize = new Sequelize({
-    "username": "root",
-    "password": "",
-    "database": "unicamptickets",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": "false"});
+    username: 'root',
+    password: '',
+    database: 'unicamptickets',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+    operatorsAliases: 'false'
+});
 
 fs
     .readdirSync(__dirname)
