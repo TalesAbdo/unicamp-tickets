@@ -105,7 +105,7 @@ export default {
                 });
         },
         createTicket() {
-            axios.post('api/ticket/new', { ...this.ticket, ownerId: this.id })
+            axios.post('ticket/new', { ...this.ticket, ownerId: this.id })
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -128,7 +128,7 @@ export default {
                         this.ticket.serviceName = null;
                         this.hide();
                     } else {
-                    throw 'Aconteceu algum erro, contate o adminstrador.'; // eslint-disable-line
+                        throw 'Aconteceu algum erro, contate o adminstrador.';
                     }
                 }).catch((err) => {
                     this.$notify({

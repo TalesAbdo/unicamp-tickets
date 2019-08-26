@@ -17,7 +17,7 @@
                 <div class="chosen-users">
                     <div v-for="user in chosenUsers" :key="user.id" class="user" @click="removeUser(user.id)">
                         <figure class="image is-32x32">
-                            <img class="is-rounded" src="https://pm1.narvii.com/6626/77bcaf576f221820644c375a2720f21470fba161_128.jpg">
+                            <UserImage :imagePath="user.email"/>
                         </figure>
                             <span class="name text has-text-weight-bold">{{firstName(user.name)}}</span>
                             <span class="remove text has-text-weight-bold has-text-primary">Remove</span>

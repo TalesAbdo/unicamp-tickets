@@ -1,8 +1,8 @@
+const fs = require('fs');
 const Sequelize = require('sequelize');
 const db = require('../../models/index.js');
-const fs = require('fs');
 
-const { Op } = Sequelize.Op;
+const Op = Sequelize.Op; // eslint-disable-line
 
 async function insertUser(params) {
     try {
@@ -13,10 +13,22 @@ async function insertUser(params) {
             defaults: {
                 name: params.name,
                 password: params.password,
-                image: '@server/files/user-image/default-image.jpg', // All users start with default image
                 isSupport: false // All users start as common
             }
         }).then(result => result).catch(err => err);
+    } catch (error) {
+        return error;
+    }
+}
+
+async function insertUserImage(params) {
+    try {
+        const base64Data = params.image.replace(/^data:image\/.*;base64,/, '');
+        await fs.writeFileSync(`server/files/user-image/${params.email}.jpg`, base64Data, 'base64', () => {
+            console.log('The file was saved!');
+        });
+
+        return true;
     } catch (error) {
         return error;
     }
@@ -26,8 +38,7 @@ async function updateUser(params) {
     try {
         return db.User.update({
             name: params.name,
-            password: params.password,
-            image: params.image
+            password: params.password
         }, {
             where: {
                 id: params.id
@@ -38,29 +49,18 @@ async function updateUser(params) {
     }
 }
 
-async function insertUserImage(params) {
-    try {
-        await fs.writeFileSync(`@server/files/user-image/${params.email}.jpg`, params.image, 'binary', () => {
-            console.log('The file was saved!');
-        });
-
-        return true;
-    } catch (error) {
-        return error;
-    }
-}
-
 async function getUserImage(email) {
     try {
         let path = 'server/files/user-image/default-image.jpg';
         fs.access(`../files/user-image/${email}`, fs.F_OK, (err) => {
             if (err) {
-              console.error('Image doesnt exist. Will use default');
-              return true;
+                console.error('Image doesnt exist. Will use default');
+                return path;
             }
             path = `server/files/user-image/${email}.jpg`;
-          });
-          return path;
+            return path;
+        });
+        return path;
     } catch (error) {
         return error;
     }

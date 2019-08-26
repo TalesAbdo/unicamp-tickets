@@ -9,8 +9,13 @@
                 name="form-file-input"
                 @change="onChange">
 
-            <img :src="image"/>
-        </label>
+            <figure v-if="textImage" class="image">
+                <img id="user-image-creation" :src="textImage">
+            </figure>
+            <span v-else>
+                <i class="fas fa-upload"/>
+            </span>
+         </label>
     </div>
 </template>
 
@@ -20,6 +25,7 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
+            textImage: null,
         };
     },
     computed: {
@@ -28,16 +34,36 @@ export default {
         }),
     },
     methods: {
-        onChange() {
-            const files = Array.prototype.map.call(
-                this.$refs.formFiles.files,
-                item => item
-            );
-            // reseting input type, so the same files can be added again
-            this.$refs.formFiles.type = 'text';
-            this.$refs.formFiles.type = 'file';
-
-            this.$emit('change', files);
+        onChange(event) {
+            const file = event.target.files[0];
+            if (this.verifyImage(file)) {
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.textImage = fileReader.result;
+                    this.$emit('imageChoosed', fileReader.result);
+                });
+                fileReader.readAsDataURL(file);
+            }
+        },
+        verifyImage(image) {
+            if (image && image.size >= '10485760') {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'O arquivo ultrapassa 10mb.',
+                    type: 'warn'
+                });
+                return false;
+            } if (image && (image.type.split('/')[0] !== 'image')) {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Insira uma imagem.',
+                    type: 'warn'
+                });
+                return false;
+            }
+            return true;
         }
     }
 };
@@ -56,19 +82,18 @@ export default {
     .file-label {
         height: 100%;
         width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .file-cta {
+        .file-input {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
             border: none;
-
-            .label {
-                white-space: normal;
-                text-align: center;
-            }
+            cursor: pointer;
         }
     }
 }

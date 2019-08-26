@@ -1,11 +1,12 @@
 const cors = require('cors');
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var db = require('./models');
-var router = require('./routes/index.js');
+const express = require('express');
 
-var PORT = process.env.PORT || 3000;
+const app = express();
+const bodyParser = require('body-parser');
+const db = require('./models');
+const router = require('./routes/index.js');
+
+const PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.json());
@@ -23,8 +24,8 @@ app.use(cors({
 app.use('/api', router);
 
 
-db.sequelize.sync().then(function () {
-    app.listen(PORT, function () {
+db.sequelize.sync().then(() => {
+    app.listen(PORT, () => {
         console.log(`Listening on PORT ${PORT}`);
     });
 });

@@ -11,10 +11,9 @@
                     @input="setNewPassword" :maxLength="20"/>
             <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
-            <div v-if="modalType === 'modificar'" class="user-image margin-1rem">
+            <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
-                <FileInput @change="addImage"/>
-                <span class="image-warning">Insira um email para habilitar a inserção de imagem</span>
+                <FileInput @imageChoosed="setImage"/>
             </div>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
@@ -50,7 +49,6 @@ export default {
                 isSupport: false,
                 image: null
             },
-            imageFile: null
         };
     },
     computed: {
@@ -100,8 +98,8 @@ export default {
                 this.updateUser();
             }
         },
-        createUser() {
-            axios.post('user/new', { ...this.user })
+        async createUser() {
+            await axios.post('user/new', this.user)
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -120,9 +118,10 @@ export default {
                         this.user.email = null;
                         this.user.name = null;
                         this.user.password = null;
+                        this.user.image = null;
                         this.hide();
                     } else {
-                        throw 'Email já em uso'; // eslint-disable-line
+                        throw 'Email já em uso';
                     }
                 }).catch((err) => {
                     this.$notify({
@@ -159,17 +158,6 @@ export default {
                             this.hide();
                         }
                     });
-                await axios.put('user/image', { email: this.email, image: this.imageFile })
-                    .then((response) => {
-                        if (response.data.errors) {
-                            this.$notify({
-                                group: 'foo',
-                                title: 'Cuidado!',
-                                text: response.data.errors[0].message,
-                                type: 'warn'
-                            });
-                        }
-                    });
             } else {
                 this.$notify({
                     group: 'foo',
@@ -179,39 +167,6 @@ export default {
                 });
             }
         },
-        addImage(image) {
-            if (image && image.size >= '10485760') {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Cuidado!',
-                    text: 'O arquivo ultrapassa 10mb.',
-                    type: 'warn'
-                });
-            } else if (image && image.type.split('/')[0] === 'image') {
-                this.$notify({
-                    group: 'foo',
-                    title: 'Cuidado!',
-                    text: 'Insira uma imagem.',
-                    type: 'warn'
-                });
-            } else {
-                // this.imageFile =
-                axios.put('user/image', { email: this.user.email, image })
-                    .then((response) => {
-                        if (response) {
-                            this.user.image = true;
-                        } else if (response) {
-                            this.$notify({
-                                group: 'foo',
-                                title: 'Erro!',
-                                text: 'Erro ao inserir imagem.',
-                                type: 'error'
-                            });
-                            this.user.image = false;
-                        }
-                    });
-            }
-        }
     }
 };
 </script>

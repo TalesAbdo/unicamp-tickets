@@ -33,7 +33,7 @@
             <div class="navbar-end">
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link is-arrowless">
-                        <UserImage :imagePath="image"/>
+                        <UserImage :imagePath="email"/>
                         {{firstName}}
                     </a>
 
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import axios from 'src/axios/axios.js';
 import { mapActions, mapState } from 'vuex';
 import UserControl from 'modal/UserControl/UserControl.vue';
 import UserImage from './UserImage.vue';
@@ -90,14 +89,11 @@ export default {
         ...mapState({
             name: state => state.user.name,
             email: state => state.user.email,
-            isSupport: state => state.user.isSupport,
-            image: state => state.user.image
+            isSupport: state => state.user.isSupport
         }),
         firstName() {
             return this.name.split(' ')[0];
         },
-    },
-    mounted () {
     },
     methods: {
         ...mapActions({
@@ -115,8 +111,7 @@ export default {
                 name: null,
                 email: null,
                 password: null,
-                isSupport: false,
-                image: null,
+                isSupport: false
             });
             window.location.href = '/#/';
         },
