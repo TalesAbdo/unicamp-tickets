@@ -18,6 +18,9 @@ async function updateUser(req, res) {
             req.body.password = req.body.newPassword;
         }
         const result = await user.updateUser(req.body);
+        if (req.body.image) {
+            await user.insertUserImage({ image: req.body.image, email: req.body.email });
+        }
         res.json(result);
     } catch (err) {
         res.json(err);

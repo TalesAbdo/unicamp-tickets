@@ -13,6 +13,7 @@
         </div>
         <div class="right-container">
             <OrdenationTitle class="right-header" :isUp="isUp" @onItemClick="changeOrder"/>
+            {{tickets}}
             <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" @modalControl="modalControl" @onClick="setTicketDetailId"/>
             <Button v-if="showMoreTicketsButton" icon="fa-plus" value="Ver mais 50 tickets" @click="increaseTotalTicketRequired()"/>
         </div>

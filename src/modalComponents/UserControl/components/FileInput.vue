@@ -16,7 +16,6 @@
                 <i class="fas fa-upload"/>
             </span>
          </label>
-         {{textImage}}
     </div>
 </template>
 

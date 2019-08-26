@@ -38,8 +38,7 @@ async function updateUser(params) {
     try {
         return db.User.update({
             name: params.name,
-            password: params.password,
-            image: params.image
+            password: params.password
         }, {
             where: {
                 id: params.id
@@ -88,7 +87,7 @@ async function searchUsers(typedText) {
                     { email: { [Op.substring]: typedText } }
                 ]
             },
-            attributes: ['id', 'name', 'email', 'image']
+            attributes: ['id', 'name', 'email']
         }).then(result => result).catch(err => err);
     } catch (error) {
         return error;

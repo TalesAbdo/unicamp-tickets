@@ -19,7 +19,6 @@
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
         </form>
         <button class="modal-close is-large" aria-label="close"></button>
-        {{user}}
     </div>
 </template>
 
@@ -157,17 +156,6 @@ export default {
                             this.user.newPassword = null;
                             this.user.image = null;
                             this.hide();
-                        }
-                    });
-                await axios.put('user/image', { email: this.email, image: this.imageFile })
-                    .then((response) => {
-                        if (response.data.errors) {
-                            this.$notify({
-                                group: 'foo',
-                                title: 'Cuidado!',
-                                text: response.data.errors[0].message,
-                                type: 'warn'
-                            });
                         }
                     });
             } else {
