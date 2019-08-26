@@ -28,7 +28,7 @@ module.exports = function (sequelize, DataTypes) {
                 },
                 len: {
                     args: [3, 50],
-                    msg: 'Por favor, insira um email com no máximo 50 caracteres.'
+                    msg: 'Por favor, insira um email com no mínimo 3 e no máximo 50 caracteres.'
                 },
                 notNull: {
                     msg: 'Insira um email.'
@@ -57,7 +57,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         image: {
-            type: DataTypes.STRING(300),
+            type: DataTypes.STRING(100),
             allowNull: true
         },
         isSupport: {

@@ -5,11 +5,8 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: 'unicamptickets'
-      # So you don't have to use root, but you can if you like
       MYSQL_USER: 'user'
-      # You can use whatever password you like
       MYSQL_PASSWORD: 'password'
-      # Password for root access
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
       # <Port exposed> : < MySQL Port running inside container>
@@ -23,12 +20,10 @@ services:
       - 3000:3000
     command: bash -c "cd /my-app && npm i && npm i -g nodemon && nodemon app.js"  
   frontend:
-  # gerar build e dps colocar para rodar 
+    # gerar build e dps colocar para rodar 
     image: nginx:1.17
     volumes:
       - ../unicamp-tickets/dist:/usr/share/nginx/html
     ports:
       - 8080:80
-    #command: bash -c "nginx -g deamon"
-      
-  #     # docker build -t vuejs-cookbook/dockerize-vuejs-app .
+    #command: bash -c "nginx -g deamon"s
