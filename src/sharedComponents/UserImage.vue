@@ -1,6 +1,6 @@
 <template>
     <figure class="image">
-        <img :id="`user-image-${imageId}`" class="is-rounded" src="../../server/files/user-image/default-image.jpg">
+        <img :id="`user-image-${imageId}`" class="is-rounded" :src="getImageUrl">
     </figure>
 </template>
 
@@ -17,13 +17,21 @@ export default {
             imageId: uuidv4()
         };
     },
+    computed: {
+        getImageUrl() {
+            if (this.imagePath) {
+                return require(`server/files/user-image/${this.imagePath}.jpg`);
+            }
+            return '../../server/files/user-image/default-image.jpg';
+        }
+    },
     watch: {
         imagePath() {
-            this.setImageSrc();
+            // this.setImageSrc();
         }
     },
     mounted() {
-        this.setImageSrc();
+        // this.setImageSrc();
     },
     methods: {
         setImageSrc() {
