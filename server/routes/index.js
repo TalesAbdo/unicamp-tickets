@@ -11,7 +11,6 @@ const attachment = require('./attachment/attachment.controller');
 // User
 router.post('/user/new', user.insertUser);
 router.post('/user/image', user.insertUserImage);
-router.get('/user/:email/image', user.getUserImage);
 router.put('/user/update', user.updateUser);
 router.delete('/user/delete/:id', user.deleteUser);
 router.post('/user/search', user.searchUsers);

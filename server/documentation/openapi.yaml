@@ -19,10 +19,11 @@ paths:
         - $ref: '#/components/parameters/userNameParam'
         - $ref: '#/components/parameters/emailParam'
         - $ref: '#/components/parameters/passwordParam'
-        - $ref: '#/components/parameters/imageParam'
       responses:
         200:
           description: Return OK message
+        500:
+          description: Something failed on server side
 
   /user/update:
     put:

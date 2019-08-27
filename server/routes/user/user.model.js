@@ -49,23 +49,6 @@ async function updateUser(params) {
     }
 }
 
-async function getUserImage(email) {
-    try {
-        let path = 'server/files/user-image/default-image.jpg';
-        fs.access(`../files/user-image/${email}`, fs.F_OK, (err) => {
-            if (err) {
-                console.error('Image doesnt exist. Will use default');
-                return path;
-            }
-            path = `server/files/user-image/${email}.jpg`;
-            return path;
-        });
-        return path;
-    } catch (error) {
-        return error;
-    }
-}
-
 async function deleteUser(userId) {
     try {
         return db.User.destroy({
@@ -150,7 +133,6 @@ module.exports = {
     insertUser,
     updateUser,
     insertUserImage,
-    getUserImage,
     deleteUser,
     searchUsers,
     authenticateUser,

@@ -36,15 +36,6 @@ async function insertUserImage(req, res) {
     }
 }
 
-async function getUserImage(req, res) {
-    try {
-        const result = await user.getUserImage(req.params.email);
-        res.json(result);
-    } catch (err) {
-        res.json(err);
-    }
-}
-
 async function deleteUser(req, res) {
     try {
         const result = await user.deleteUser(req.params.id);
@@ -104,7 +95,6 @@ module.exports = {
     insertUser,
     updateUser,
     insertUserImage,
-    getUserImage,
     deleteUser,
     searchUsers,
     authenticateUser,
