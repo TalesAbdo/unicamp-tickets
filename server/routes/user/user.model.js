@@ -24,7 +24,7 @@ async function insertUser(params) {
 async function insertUserImage(params) {
     try {
         const base64Data = params.image.replace(/^data:image\/.*;base64,/, '');
-        await fs.writeFileSync(`server/files/user-image/${params.email}.jpg`, base64Data, 'base64', () => {
+        await fs.writeFileSync(`dist/img/${params.email}.jpg`, base64Data, 'base64', () => {
             console.log('The file was saved!');
         });
 

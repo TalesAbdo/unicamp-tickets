@@ -9,12 +9,13 @@
             <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password" :preValue="user.newPassword"
                     @input="setNewPassword" :maxLength="20"/>
-            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
                 <FileInput @imageChoosed="setImage"/>
             </div>
+
+            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
         </form>

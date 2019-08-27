@@ -1,9 +1,9 @@
 <template>
     <div class="login-container">
-        <form class="form-container" autocomplete="off">
+        <form class="form-container">
             <img class="image" src="@/assets/Login_Logo.svg">
-            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email" :maxLength="50"/>
-            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
+            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email" :maxLength="50" value="Submit"/>
+            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20" value="Submit"/>
 
             <button type="button" class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
 

@@ -20,9 +20,9 @@ export default {
     computed: {
         getImageUrl() {
             if (this.imagePath) {
-                return require(`server/files/user-image/${this.imagePath}.jpg`);
+                return `img/${this.imagePath}.jpg`;
             }
-            return '../../server/files/user-image/default-image.jpg';
+            return 'img/default-image.jpg';
         }
     },
     watch: {
