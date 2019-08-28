@@ -1,6 +1,6 @@
 <template>
     <figure class="image">
-        <img :id="`user-image-${imageId}`" class="is-rounded" :src="getImageUrl">
+        <img :id="`user-image-${imageId}`" class="is-rounded" src="../../server/files/user-image/default-image.jpg" @error='setBaseSource()'>
     </figure>
 </template>
 
@@ -10,36 +10,36 @@ const uuidv4 = require('uuid/v4');
 export default {
     name: 'userImage',
     props: {
-        imagePath: { type: String, required: true, default: 'default-image' }
+        imagePath: { type: String, required: true }
     },
     data() {
         return {
             imageId: uuidv4()
         };
     },
-    computed: {
-        getImageUrl() {
-            if (this.imagePath) {
-                return `img/${this.imagePath}.jpg`;
-            }
-            return 'img/default-image.jpg';
-        }
-    },
     watch: {
-        imagePath() {
-            // this.setImageSrc();
+        imageUpdated() {
+            this.setImageSource();
         }
     },
     mounted() {
-        // this.setImageSrc();
+        this.setImageSource();
     },
     methods: {
-        setImageSrc() {
+        setImageSource() {
+            let image;
             if (this.imagePath) {
-                const image = require(`server/files/user-image/${this.imagePath}.jpg`);
-                document.querySelector(`#user-image-${this.imageId}`).src = image;
+                image = `img/${this.imagePath}.jpg`;
+            } else {
+                image = require('server/files/user-image/default-image.jpg');
             }
-        }
+            document.querySelector(`#user-image-${this.imageId}`).src = image;
+            this.$emit('imagesourceUpdated');
+        },
+        setBaseSource() {
+            const image = require('server/files/user-image/default-image.jpg');
+            document.querySelector(`#user-image-${this.imageId}`).src = image;
+        },
     }
 };
 </script>

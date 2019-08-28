@@ -175,8 +175,8 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.modal.user-control{
-    .modal-background{
+.modal.user-control {
+    .modal-background {
         background-color: rgba(76, 76, 76, 0.5);
     }
 
