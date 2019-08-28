@@ -151,6 +151,14 @@ export default {
                                 text: 'Conta atualizada.',
                                 type: 'success'
                             });
+                            if (this.user.image) {
+                                this.$notify({
+                                    group: 'foo',
+                                    title: 'Atenção!',
+                                    text: 'A foto só será atualizada na próxima sessão.',
+                                    type: 'warn'
+                                });
+                            }
                             this.setUserData(JSON.parse(response.config.data));
                             this.user.name = null;
                             this.user.password = null;
