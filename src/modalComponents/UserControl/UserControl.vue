@@ -4,17 +4,18 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
-            <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
+            <Input v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
             <Input class="margin-1rem" inputTitle="Nome (obrigatório)" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name" :maxLength="80"/>
             <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password" :preValue="user.newPassword"
                     @input="setNewPassword" :maxLength="20"/>
-            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
-                <img class="image" src="@/assets/Logo.svg">
+                <FileInput @imageChoosed="setImage"/>
             </div>
+
+            <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
             <button type="button" class="button is-black is-normal" @click="userAction">{{buttonText}}</button>
         </form>
@@ -26,11 +27,12 @@
 import { mapActions, mapState } from 'vuex';
 import Input from 'shared/Input.vue';
 import axios from 'src/axios/axios.js';
+import FileInput from './components/FileInput.vue';
 
 export default {
     name: 'userControl',
     components: {
-        Input
+        Input, FileInput
     },
     props: {
         show: { type: Boolean, default: false },
@@ -47,7 +49,7 @@ export default {
                 newPassword: null,
                 isSupport: false,
                 image: null
-            }
+            },
         };
     },
     computed: {
@@ -87,6 +89,9 @@ export default {
         setNewPassword(value) {
             this.user.newPassword = value;
         },
+        setImage(value) {
+            this.user.image = value;
+        },
         userAction() {
             if (this.modalType === 'criar') {
                 this.createUser();
@@ -94,8 +99,8 @@ export default {
                 this.updateUser();
             }
         },
-        createUser() {
-            axios.post('user/new', { ...this.user })
+        async createUser() {
+            await axios.post('user/new', this.user)
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -114,9 +119,10 @@ export default {
                         this.user.email = null;
                         this.user.name = null;
                         this.user.password = null;
+                        this.user.image = null;
                         this.hide();
                     } else {
-                        throw 'Email já em uso'; // eslint-disable-line
+                        throw 'Email já em uso';
                     }
                 }).catch((err) => {
                     this.$notify({
@@ -127,9 +133,9 @@ export default {
                     });
                 });
         },
-        updateUser() {
+        async updateUser() {
             if (this.user.password === this.password) {
-                axios.put('user/update', { ...this.user })
+                await axios.put('user/update', { ...this.user })
                     .then((response) => {
                         if (response.data.errors) {
                             this.$notify({
@@ -145,10 +151,19 @@ export default {
                                 text: 'Conta atualizada.',
                                 type: 'success'
                             });
+                            if (this.user.image) {
+                                this.$notify({
+                                    group: 'foo',
+                                    title: 'Atenção!',
+                                    text: 'A foto só será atualizada na próxima sessão.',
+                                    type: 'warn'
+                                });
+                            }
                             this.setUserData(JSON.parse(response.config.data));
                             this.user.name = null;
                             this.user.password = null;
                             this.user.newPassword = null;
+                            this.user.image = null;
                             this.hide();
                         }
                     });
@@ -160,7 +175,7 @@ export default {
                     type: 'warn'
                 });
             }
-        }
+        },
     }
 };
 </script>
@@ -168,8 +183,8 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-.modal.user-control{
-    .modal-background{
+.modal.user-control {
+    .modal-background {
         background-color: rgba(76, 76, 76, 0.5);
     }
 
@@ -206,13 +221,9 @@ export default {
                 cursor: default;
             }
 
-            .image {
-                margin-top: 8px;
-                margin-left: 8px;
-                height: 120px;
-                width: 120px;
-                border: 1.1px $primary solid;
-                border-radius: 4px;
+            .image-warning {
+                color: red;
+                font-size: 12px;
             }
         }
 

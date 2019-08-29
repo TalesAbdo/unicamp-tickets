@@ -33,9 +33,7 @@
             <div class="navbar-end">
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link is-arrowless">
-                        <figure class="image">
-                            <img class="is-rounded" src="https://pm1.narvii.com/6883/bc1d3a9b73c656fe7773392421f2205d90e8eb09r1-198-255v2_128.jpg">
-                        </figure>
+                        <UserImage :imagePath="email"/>
                         {{firstName}}
                     </a>
 
@@ -75,11 +73,12 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import UserControl from 'modal/UserControl/UserControl.vue';
+import UserImage from './UserImage.vue';
 
 export default {
     name: 'navbar',
     components: {
-        UserControl
+        UserControl, UserImage
     },
     data() {
         return {
@@ -94,7 +93,7 @@ export default {
         }),
         firstName() {
             return this.name.split(' ')[0];
-        }
+        },
     },
     methods: {
         ...mapActions({
@@ -108,9 +107,9 @@ export default {
         },
         logout() {
             this.setUserData({
+                id: null,
                 name: null,
                 email: null,
-                image: null,
                 password: null,
                 isSupport: false
             });
@@ -145,7 +144,7 @@ export default {
 
     .image {
         margin-right: 0.35rem;
-        width: 32px;
+        width: 30px;
     }
 
     .navbar-link {

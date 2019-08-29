@@ -4,7 +4,7 @@
         <div v-for="(comment, index) in comments" :key="index" class="comment">
             <div class="history-header">
                 <figure class="image is-48x48">
-                    <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
+                    <UserImage :imagePath="comment.userEmail"/>
                 </figure>
                 <span><b>{{writtenUserName(comment.userName)}}</b> <i>{{writtenDate(comment.createdAt)}}</i></span>
             </div>
@@ -17,18 +17,15 @@
 </template>
 
 <script>
+import UserImage from 'shared/UserImage.vue';
 
 export default {
     name: 'ticketHistory',
+    components: {
+        UserImage
+    },
     props: {
         comments: { type: Array, required: true }
-    },
-    data() {
-        return {
-        };
-    },
-    computed: {
-
     },
     methods: {
         writtenUserName(name) {

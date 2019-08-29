@@ -1,7 +1,8 @@
+const fs = require('fs');
 const Sequelize = require('sequelize');
 const db = require('../../models/index.js');
 
-const { Op } = Sequelize.Op;
+const Op = Sequelize.Op; // eslint-disable-line
 
 async function insertUser(params) {
     try {
@@ -12,10 +13,22 @@ async function insertUser(params) {
             defaults: {
                 name: params.name,
                 password: params.password,
-                image: params.image,
                 isSupport: false // All users start as common
             }
         }).then(result => result).catch(err => err);
+    } catch (error) {
+        return error;
+    }
+}
+
+async function insertUserImage(params) {
+    try {
+        const base64Data = params.image.replace(/^data:image\/.*;base64,/, '');
+        await fs.writeFileSync(`dist/img/${params.email}.jpg`, base64Data, 'base64', () => {
+            console.log('The file was saved!');
+        });
+
+        return true;
     } catch (error) {
         return error;
     }
@@ -25,8 +38,7 @@ async function updateUser(params) {
     try {
         return db.User.update({
             name: params.name,
-            password: params.password,
-            image: params.image
+            password: params.password
         }, {
             where: {
                 id: params.id
@@ -120,10 +132,11 @@ async function getSupportUsers() {
 module.exports = {
     insertUser,
     updateUser,
+    insertUserImage,
     deleteUser,
     searchUsers,
     authenticateUser,
     insertSupportUser,
     deleteSupportUser,
-    getSupportUsers
+    getSupportUsers,
 };

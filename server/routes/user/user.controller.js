@@ -3,6 +3,9 @@ const user = require('./user.model');
 async function insertUser(req, res) {
     try {
         const result = await user.insertUser(req.body);
+        if (req.body.image) {
+            await user.insertUserImage({ image: req.body.image, email: req.body.email });
+        }
         res.json(result);
     } catch (err) {
         res.json(err);
@@ -12,9 +15,21 @@ async function insertUser(req, res) {
 async function updateUser(req, res) {
     try {
         if (req.body.newPassword) {
-            req.body.password = req.body.newPassword; // eslint-disable-line
+            req.body.password = req.body.newPassword;
         }
         const result = await user.updateUser(req.body);
+        if (req.body.image) {
+            await user.insertUserImage({ image: req.body.image, email: req.body.email });
+        }
+        res.json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
+async function insertUserImage(req, res) {
+    try {
+        const result = await user.insertUserImage(req.body);
         res.json(result);
     } catch (err) {
         res.json(err);
@@ -33,6 +48,7 @@ async function deleteUser(req, res) {
 async function searchUsers(req, res) {
     try {
         const result = await user.searchUsers(req.body.typedText);
+        console.log('result', result);
         res.json(result);
     } catch (err) {
         res.json(err);
@@ -78,10 +94,11 @@ async function getSupportUsers(req, res) {
 module.exports = {
     insertUser,
     updateUser,
+    insertUserImage,
     deleteUser,
     searchUsers,
     authenticateUser,
     insertSupportUser,
     deleteSupportUser,
-    getSupportUsers
+    getSupportUsers,
 };

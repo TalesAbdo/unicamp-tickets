@@ -1,17 +1,67 @@
 <template>
-    <button class="button">
-        <input class="file-input" type="file" name="resume">
-        <i class="fas fa-upload has-text-primary" />
-    </button>
+    <label class="file-label">
+         <input
+            ref="formFiles"
+            class="file-input"
+            type="file"
+            accept="image/*"
+            name="form-file-input"
+            @change="onChange">
+
+        <span class="file-cta">
+            <span class="archive-file-icon">
+                <i class="fas fa-upload has-text-primary" />
+            </span>
+        </span>
+    </label>
 </template>
 
 <script>
 export default {
     name: 'inputText',
     methods: {
-        onClick() {
-            this.$emit('click');
-        },
+        onChange() {
+            const files = Array.prototype.map.call(
+                this.$refs.formFiles.files,
+                item => item
+            );
+            // reseting input type, so the same files can be added again
+            this.$refs.formFiles.type = 'text';
+            this.$refs.formFiles.type = 'file';
+
+            this.$emit('change', files);
+        }
     }
 };
 </script>
+
+<style lang="scss">
+@import '~src/css/main.scss';
+
+#file-input-container {
+    margin-top: 8px;
+    height: 120px;
+    width: 120px;
+    border: 1.1px $primary solid;
+    border-radius: 4px;
+
+    .file-label {
+        height: 100%;
+        width: 100%;
+
+        .file-cta {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            border: none;
+
+            .label {
+                white-space: normal;
+                text-align: center;
+            }
+        }
+    }
+}
+</style>

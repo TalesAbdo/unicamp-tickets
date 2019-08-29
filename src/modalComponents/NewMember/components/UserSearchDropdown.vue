@@ -29,7 +29,7 @@
         <!-- User search results -->
         <div v-show="result.length && !isSearching && typedText" class="results">
             <a v-for="(item, index) in result" :key="index" class="result-item" @click="userSelected(item)">
-                <PersonInformation :firstLine="item.name" :secondLine="item.email" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
+                <PersonInformation :firstLine="item.name" :secondLine="item.email" :email="item.email"/>
             </a>
         </div>
     </div>

@@ -1,7 +1,7 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
     const Attachment = sequelize.define('Attachment', {
         path: {
-            type: DataTypes.STRING(300),
+            type: DataTypes.STRING(60),
             allowNull: false
         },
         name: {

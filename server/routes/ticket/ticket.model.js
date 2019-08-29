@@ -75,7 +75,7 @@ async function updateTicketStatus(params) {
 async function getTicket(ticketId) {
     try {
         return db.sequelize.query(
-            `select t.*, au.name as assignedName, ou.name as ownerName, ou.email as ownerEmail, s.name as serviceName from ticket t
+            `select t.*, au.name as assignedName, au.email as assignedEmail, ou.name as ownerName, ou.email as ownerEmail, s.name as serviceName from ticket t
             left join user au on au.id = t.assignedId
             inner join user ou on ou.id = t.ownerId
             inner join service s on s.id = t.serviceId
@@ -94,7 +94,7 @@ async function getTicketsByUser(params) {
             ownerQuery = `and ownerId = ${params.ownerId}`;
         }
         return db.sequelize.query(
-            `select t.id, t.title, t.severityId, t.statusId, t.createdAt, au.name as assignedName from ticket t
+            `select t.id, t.title, t.severityId, t.statusId, t.createdAt, au.name as assignedName, au.email as assignedEmail from ticket t
             left join user au on au.id = t.assignedId
             where statusId in (${params.statusList.join(',')})
             and severityId in (${params.severityList.join(',')})

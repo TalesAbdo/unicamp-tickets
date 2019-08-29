@@ -20,11 +20,16 @@
             <span>{{severityName}}</span>
         </div>
 
-        <div class="card-footer-item">
+        <div v-if="ticket.assignedName" class="card-footer-item">
             <figure class="icon image is-24x24">
-                <img class="is-rounded" src="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg">
+                <UserImage :imagePath="ticket.assignedEmail"/>
             </figure>
             <span>{{ticket.assignedName}}</span>
+        </div>
+        <div v-else class="card-footer-item">
+            <span>
+                Sem Responsável
+            </span>
         </div>
         <span class="card-footer-item">{{creationDate}}</span>
     </footer>
@@ -34,11 +39,12 @@
 <script>
 import moment from 'moment';
 import TicketNumber from 'shared/TicketNumber.vue';
+import UserImage from 'shared/UserImage.vue';
 
 export default {
     name: 'ticketCard',
     components: {
-        TicketNumber
+        TicketNumber, UserImage
     },
     props: {
         ticket: { type: Object, required: true },

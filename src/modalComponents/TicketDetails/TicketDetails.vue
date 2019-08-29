@@ -6,7 +6,7 @@
                 <span class="has-text-weight-bold is-size-5">{{ticket.title}}</span>
                 <div class="sub-header">
                     <TicketNumber class="ticket-number" :id="ticket.id"/>
-                    <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" imageSrc="https://s.ebiografia.com/assets/img/authors/ta/le/tales-de-mileto-l.jpg"/>
+                    <PersonInformation v-if="ticket.ownerImage" :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :email="ticket.ownerEmail"/>
                 </div>
             </div>
             <div class="ticket-content">
@@ -14,8 +14,8 @@
                     <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" :isClosed="isClosed" @click="updateServiceId"/>
                     <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" :isClosed="isClosed" @click="updateStatusId"/>
                     <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" :isClosed="isClosed" @click="updateSeverityId"/>
-                    <AssignedDropdown :triggerValue="ticket.assignedName" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
-                    <AttachmentList />
+                    <AssignedDropdown :triggerValue="ticket.assignedName" :assignedImage="ticket.assignedImage" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
+                    <AttachmentList :ticketId="1"/>
                 </div>
                 <div class="line"/>
                 <div class="right-content">
@@ -66,6 +66,7 @@ export default {
                 id: 0,
                 ownerName: '',
                 ownerEmail: '',
+                ownerImage: null,
                 title: '',
                 description: '',
                 serviceName: 'Escolha um serviço',
@@ -245,7 +246,7 @@ export default {
                         this.comment = '';
                         this.getComments();
                     } else {
-                        throw 'Aconteceu algum erro, contate o adminstrador.'; // eslint-disable-line
+                        throw 'Aconteceu algum erro, contate o adminstrador.';
                     }
                 }).catch((err) => {
                     this.$notify({

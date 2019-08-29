@@ -103,7 +103,7 @@ export default {
                     this.createService(params);
                 }
             } catch (e) {
-                console.log(e); // eslint-disable-line
+                console.log(e);
             }
         },
         async createService(params) {
@@ -127,7 +127,7 @@ export default {
                         this.service.description = null;
                         this.hide();
                     } else {
-                        throw 'Aconteceu algum na hora de criar o serviço, contate o adminstrador.'; // eslint-disable-line
+                        throw 'Aconteceu algum na hora de criar o serviço, contate o adminstrador.';
                     }
                 }).catch((err) => {
                     this.$notify({
@@ -159,7 +159,7 @@ export default {
                         this.service.description = null;
                         this.hide();
                     } else {
-                        throw 'Aconteceu algum na hora de atualizar o serviço, contate o adminstrador.'; // eslint-disable-line
+                        throw 'Aconteceu algum na hora de atualizar o serviço, contate o adminstrador.';
                     }
                 }).catch((err) => {
                     this.$notify({

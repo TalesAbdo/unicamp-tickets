@@ -1,4 +1,4 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
     const Ticket = sequelize.define('Ticket', {
         title: {
             type: DataTypes.STRING(100),

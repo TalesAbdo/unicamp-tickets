@@ -270,7 +270,7 @@ export default {
                 saveAs(new Blob([buf], { type: 'application/octet-stream' }),
                     `Relatorio-${today.getDate()}-${today.getMonth() + 1 < 10 ? '0'.concat(today.getMonth()) : today.getMonth()}-${today.getFullYear()}.xlsx`);
             } catch (error) {
-                console.log('Could not generate report', error); // eslint-disable-line
+                console.log('Could not generate report', error);
             }
         }
     }
