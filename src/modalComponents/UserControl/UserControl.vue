@@ -4,7 +4,7 @@
         <div class="modal-background" @click="hide"></div>
         <form class="modal-content" autocomplete="off">
             <h1 class="header-text">Insira suas informações para {{modalType}} sua conta!</h1>
-            <Input  v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
+            <Input v-if="modalType !== 'modificar'" class="margin-1rem" inputTitle="Email (obrigatório)" inputPlaceHolder="seu email" @input="setEmail" :preValue="user.email" :maxLength="50"/>
             <Input class="margin-1rem" inputTitle="Nome (obrigatório)" inputPlaceHolder="seu nome" @input="setName" :preValue="user.name" :maxLength="80"/>
             <Input v-if="modalType === 'modificar'" class="margin-1rem" inputTitle="Nova Senha (opcional)"
                     inputPlaceHolder="sua senha caso queira alterá-la" type="password" :preValue="user.newPassword"

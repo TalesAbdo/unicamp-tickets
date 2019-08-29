@@ -2,10 +2,10 @@
     <div class="login-container">
         <form class="form-container">
             <img class="image" src="@/assets/Login_Logo.svg">
-            <Input class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email" :maxLength="50" value="Submit"/>
-            <Input class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20" value="Submit"/>
+            <Input id="emailInput" class="margin-1rem" inputTitle="Email" inputPlaceHolder="seu email"  @input="setEmail" :preValue="user.email" :maxLength="50"/>
+            <Input id="passwordInput" class="margin-1rem" inputTitle="Senha" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
 
-            <button type="button" class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
+            <button id="loginButton" type="button" class="button is-black is-normal margin-1rem" @click="loginIntoApplication">Conectar</button>
 
             <button type="button" @click="modalControl" class="link-button">Não tem uma conta? Clique Aqui</button>
             <!-- <button type="button" class="link-button">Recuperar senha</button> -->
@@ -33,6 +33,22 @@ export default {
                 password: null,
             }
         };
+    },
+    mounted() {
+        const emailInput = document.getElementById('emailInput');
+        emailInput.addEventListener('keyup', (event) => {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById('loginButton').click();
+            }
+        });
+        const passwordInput = document.getElementById('passwordInput');
+        passwordInput.addEventListener('keyup', (event) => {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById('loginButton').click();
+            }
+        });
     },
     methods: {
         ...mapActions({
