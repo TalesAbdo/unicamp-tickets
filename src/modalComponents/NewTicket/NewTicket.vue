@@ -21,7 +21,7 @@
                 <div class="attachment-container">
                     <div class="attachment-content">
                         <span class="attachment-title">Anexos</span>
-                        <FileButton />
+                        <FileButton @fileInserted="setFiles"/>
                     </div>
                     <div class="attachment-list">
                         <span><i class="fas fa-trash" /> Arquivo1.ssv</span>
@@ -61,6 +61,7 @@ export default {
                 serviceId: null,
                 severityId: null,
                 serviceName: null,
+                files: []
             },
             services: []
         };
@@ -89,6 +90,9 @@ export default {
         },
         setSeverity(value) {
             this.ticket.severityId = value;
+        },
+        setFiles(value) {
+            this.files.push(value);
         },
         getServices() {
             axios.get('service/all/active')

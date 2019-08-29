@@ -1,35 +1,54 @@
 <template>
-    <label class="file-label">
-         <input
-            ref="formFiles"
-            class="file-input"
-            type="file"
-            accept="image/*"
-            name="form-file-input"
-            @change="onChange">
+    <div id="file-button-container">
+        <label class="file-label">
+            <input
+                ref="formFiles"
+                class="file-input"
+                type="file"
+                accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, video/*, audio/*"
+                name="form-file-input"
+                @change="onChange">
 
-        <span class="file-cta">
-            <span class="archive-file-icon">
-                <i class="fas fa-upload has-text-primary" />
+            <span>
+                <i class="fas fa-upload"/>
             </span>
-        </span>
-    </label>
+         </label>
+    </div>
 </template>
 
 <script>
-export default {
-    name: 'inputText',
-    methods: {
-        onChange() {
-            const files = Array.prototype.map.call(
-                this.$refs.formFiles.files,
-                item => item
-            );
-            // reseting input type, so the same files can be added again
-            this.$refs.formFiles.type = 'text';
-            this.$refs.formFiles.type = 'file';
 
-            this.$emit('change', files);
+export default {
+    methods: {
+        onChange(event) {
+            const file = event.target.files[0];
+            if (this.verifyFile(file)) {
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.$emit('fileInserted', fileReader.result);
+                });
+                fileReader.readAsDataURL(file);
+            }
+        },
+        verifyFile(file) {
+            if (file && file.size >= '10485760') {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'O arquivo ultrapassa 10mb.',
+                    type: 'warn'
+                });
+                return false;
+            } if (file && (file.type.split('/')[0] !== 'image')) {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Insira uma imagem, vídeo, áudio ou arquivo do Office (Word, Excel e PowerPoint).',
+                    type: 'warn'
+                });
+                return false;
+            }
+            return true;
         }
     }
 };
@@ -38,29 +57,32 @@ export default {
 <style lang="scss">
 @import '~src/css/main.scss';
 
-#file-input-container {
+#file-button-container {
     margin-top: 8px;
-    height: 120px;
-    width: 120px;
+    height: 30px;
+    width: 30px;
     border: 1.1px $primary solid;
     border-radius: 4px;
 
     .file-label {
         height: 100%;
         width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .file-cta {
+        .file-input {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
             border: none;
+            cursor: pointer;
+        }
 
-            .label {
-                white-space: normal;
-                text-align: center;
-            }
+        span {
+            color: $black;
         }
     }
 }

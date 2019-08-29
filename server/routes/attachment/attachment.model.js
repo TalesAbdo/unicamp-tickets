@@ -1,11 +1,31 @@
 const db = require('../../models/index.js');
 
-async function insertAttachment(params) {
+function insertAttachments(files) {
     try {
-        return db.Attachment.create({
-            path: params.path,
-            name: params.name
-        }).then(result => result).catch(err => err);
+        files.map(async (file) => {
+            await fs.writeFileSync(`dist/img/${file.pathName}.${file.extension}`, file., 'base64', () => {
+                console.log('The file was saved!');
+            });
+            return db.Attachment.create({
+                path: file.pathName,
+                name: file.realName,
+                extension: file.extension
+            }).then(result => result).catch(err => err);
+        });
+    } catch (error) {
+        return error;
+    }
+}
+
+
+async function insertUserImage(params) {
+    try {
+        const base64Data = params.image.replace(/^data:image\/.*;base64,/, '');
+        await fs.writeFileSync(`dist/img/${params.email}.jpg`, base64Data, 'base64', () => {
+            console.log('The file was saved!');
+        });
+
+        return true;
     } catch (error) {
         return error;
     }
@@ -24,6 +44,6 @@ async function getAttachments(ticketId) {
 }
 
 module.exports = {
-    insertAttachment,
+    insertAttachments,
     getAttachments
 };
