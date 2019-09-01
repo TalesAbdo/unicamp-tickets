@@ -19,15 +19,29 @@
 <script>
 
 export default {
+    props: {
+        filesQuantity: { type: Number, required: false, default: 0 }
+    },
+    watch: {
+        filesQuantity() {
+            if (this.filesQuantity >= 3) {
+                document.getElementById('file-button-container').disabled = true;
+            } else {
+                document.getElementById('file-button-container').disabled = false;
+            }
+        }
+    },
     methods: {
         onChange(event) {
-            const file = event.target.files[0];
-            if (this.verifyFile(file)) {
-                const fileReader = new FileReader();
-                fileReader.addEventListener('load', () => {
-                    this.$emit('fileInserted', fileReader.result);
-                });
-                fileReader.readAsDataURL(file);
+            if (event.target.files[0]) {
+                const file = event.target.files[0];
+                if (this.verifyFile(file)) {
+                    const fileReader = new FileReader();
+                    fileReader.addEventListener('load', () => {
+                        this.$emit('fileInserted', file, fileReader.result);
+                    });
+                    fileReader.readAsDataURL(file);
+                }
             }
         },
         verifyFile(file) {
@@ -58,9 +72,8 @@ export default {
 @import '~src/css/main.scss';
 
 #file-button-container {
-    margin-top: 8px;
-    height: 30px;
-    width: 30px;
+    height: 35px;
+    width: 35px;
     border: 1.1px $primary solid;
     border-radius: 4px;
 
@@ -78,7 +91,6 @@ export default {
             align-items: center;
             height: 100%;
             border: none;
-            cursor: pointer;
         }
 
         span {

@@ -5,22 +5,22 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const db = {};
 
-// const sequelize = new Sequelize({
-//     username: 'root',
-//     password: '',
-//     database: 'unicamptickets',
-//     host: '127.0.0.1',
-//     dialect: 'mysql',
-//     operatorsAliases: 'false'
-// });
-
 const sequelize = new Sequelize({
-    database: 'unicamptickets',
     username: 'root',
-    password: 'password',
-    host: 'db',
+    password: '',
+    database: 'unicamptickets',
+    host: '127.0.0.1',
     dialect: 'mysql',
+    operatorsAliases: 'false'
 });
+
+// const sequelize = new Sequelize({
+//     database: 'unicamptickets',
+//     username: 'root',
+//     password: 'password',
+//     host: 'db',
+//     dialect: 'mysql',
+// });
 
 fs
     .readdirSync(__dirname)

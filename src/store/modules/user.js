@@ -3,11 +3,11 @@ export default {
 
     state() {
         return {
-            id: null,
-            name: null,
-            email: null,
-            password: null,
-            isSupport: true
+            id: 2,
+            name: 'tales',
+            email: 't@o.com ',
+            password: '12345',
+            isSupport: false
         };
     },
     getters: {
