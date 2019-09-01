@@ -1,9 +1,10 @@
 <template>
-    <div id="file-button-container">
+    <div id="file-button-container" :class="{ 'max-quantity':maxQuantity }">
         <label class="file-label">
             <input
                 ref="formFiles"
                 class="file-input"
+                id="file-input-attachment"
                 type="file"
                 accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, video/*, audio/*"
                 name="form-file-input"
@@ -22,12 +23,19 @@ export default {
     props: {
         filesQuantity: { type: Number, required: false, default: 0 }
     },
+    data() {
+        return {
+            maxQuantity: false
+        };
+    },
     watch: {
         filesQuantity() {
             if (this.filesQuantity >= 3) {
-                document.getElementById('file-button-container').disabled = true;
+                this.maxQuantity = true;
+                document.getElementById('file-input-attachment').disabled = true;
             } else {
-                document.getElementById('file-button-container').disabled = false;
+                this.maxQuantity = false;
+                document.getElementById('file-input-attachment').disabled = false;
             }
         }
     },
@@ -97,5 +105,9 @@ export default {
             color: $black;
         }
     }
+}
+
+.max-quantity {
+    opacity: 0.5;
 }
 </style>
