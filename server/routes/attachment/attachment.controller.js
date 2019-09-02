@@ -11,7 +11,7 @@ async function insertAttachment(req, res) {
 
 async function getAttachments(req, res) {
     try {
-        const result = await attachment.getAttachments(req.params.ticketId);
+        const result = await attachment.getAttachments(req.params.id);
         res.json(result);
     } catch (err) {
         res.json(err);

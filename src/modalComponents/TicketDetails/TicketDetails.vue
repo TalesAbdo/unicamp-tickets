@@ -6,7 +6,7 @@
                 <span class="has-text-weight-bold is-size-5">{{ticket.title}}</span>
                 <div class="sub-header">
                     <TicketNumber class="ticket-number" :id="ticket.id"/>
-                    <PersonInformation v-if="ticket.ownerImage" :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :email="ticket.ownerEmail"/>
+                    <PersonInformation :firstLine="ticket.ownerName" :secondLine="ticket.ownerEmail" :email="ticket.ownerEmail"/>
                 </div>
             </div>
             <div class="ticket-content">
@@ -15,7 +15,7 @@
                     <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" :isClosed="isClosed" @click="updateStatusId"/>
                     <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" :isClosed="isClosed" @click="updateSeverityId"/>
                     <AssignedDropdown :triggerValue="ticket.assignedName" :assignedImage="ticket.assignedImage" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
-                    <AttachmentList :ticketId="1"/>
+                    <AttachmentList :ticketId="ticket.id"/>
                 </div>
                 <div class="line"/>
                 <div class="right-content">
@@ -113,7 +113,7 @@ export default {
                             group: 'foo',
                             title: 'Erro!',
                             text: 'Não foi possível obter informações do ticket.',
-                            type: 'Error'
+                            type: 'error'
                         });
                     });
             }
@@ -129,7 +129,7 @@ export default {
                             group: 'foo',
                             title: 'Erro!',
                             text: 'Não foi possível obter a listagem de serviços.',
-                            type: 'Error'
+                            type: 'error'
                         });
                     });
             }
@@ -145,7 +145,7 @@ export default {
                             group: 'foo',
                             title: 'Erro!',
                             text: 'Não foi possível obter a listagem de membros.',
-                            type: 'Error'
+                            type: 'error'
                         });
                     });
             }

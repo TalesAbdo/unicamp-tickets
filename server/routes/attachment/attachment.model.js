@@ -4,9 +4,8 @@ const db = require('../../models/index.js');
 function insertAttachments(files, ticketId) {
     try {
         files.map(async (file) => {
-            const base64Data = file.fileContent.replace(/^data:.*;base64,/, '');
-            console.log(base64Data);
-            await fs.writeFileSync(`dist/img/${file.pathName}`, base64Data, 'base64', () => {
+            // const base64Data = file.fileContent.replace(/^data:.*;base64,/, '');
+            await fs.writeFileSync(`dist/img/${file.pathName}`, file.fileContent, () => {
                 console.log('The file was saved!');
             });
             await db.Attachment.create({
@@ -23,11 +22,11 @@ function insertAttachments(files, ticketId) {
 
 async function getAttachments(ticketId) {
     try {
-        return db.Attachment.find({
-            where: {
-                ticketId
-            }
-        }).then(result => result).catch(err => err);
+        return db.sequelize.query(
+            `select * from attachment
+            where ticketId = ${ticketId}`,
+            { type: db.sequelize.QueryTypes.SELECT }
+        ).then(result => result).catch(err => err);
     } catch (error) {
         return error;
     }

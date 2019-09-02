@@ -98,7 +98,7 @@ export default {
         setAttachment(file, fileContent) {
             const fileInfo = {
                 realName: file.name,
-                pathName: `${uuidv4()}.${file.type.replace(/^.*\//, '')}`,
+                pathName: `${uuidv4()}.txt`,
                 fileContent
             };
             this.ticket.files.push(fileInfo);

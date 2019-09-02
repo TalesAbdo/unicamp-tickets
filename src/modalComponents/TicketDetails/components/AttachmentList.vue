@@ -6,26 +6,48 @@
                 <span>{{item.name}}</span>
             </a>
         </div>
-        <FileButton/>
     </div>
 </template>
 
 <script>
-import FileButton from 'shared/FileButton.vue';
+import axios from 'src/axios/axios.js';
 
 export default {
     name: 'attachmentList',
-    components: {
-        FileButton
-    },
     props: {
         ticketId: { type: Number, required: true }
     },
     data() {
         return {
-            attachmentList: [{ id: 1, name: 'Comprovante.jpg' }, { id: 2, name: 'Foto_Doc.jpg' }, { id: 3, name: 'Fatura.pdf' }]
+            attachmentList: []
         };
     },
+    watch: {
+        ticketId() {
+            this.getAttachments();
+        }
+    },
+    mounted() {
+        this.getAttachments();
+    },
+    methods: {
+        getAttachments() {
+            if (this.ticketId) {
+                axios.get(`attachment/ticket/${this.ticketId}`)
+                    .then((response) => {
+                        this.attachmentList = response.data;
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível obter os anexos do ticket.',
+                            type: 'error'
+                        });
+                    });
+            }
+        }
+    }
 };
 </script>
 
