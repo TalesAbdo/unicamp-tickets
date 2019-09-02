@@ -50,6 +50,10 @@ export default {
                     });
                     fileReader.readAsDataURL(file);
                 }
+
+                // resets input so the same file can be inserted again
+                this.$refs.formFiles.type = 'text';
+                this.$refs.formFiles.type = 'file';
             }
         },
         verifyFile(file) {

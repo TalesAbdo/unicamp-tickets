@@ -1,14 +1,5 @@
 const attachment = require('./attachment.model.js');
 
-async function insertAttachment(req, res) {
-    try {
-        const result = await attachment.insertAttachment(req.body);
-        res.json(result);
-    } catch (err) {
-        res.json(err);
-    }
-}
-
 async function getAttachments(req, res) {
     try {
         const result = await attachment.getAttachments(req.params.id);
@@ -18,7 +9,16 @@ async function getAttachments(req, res) {
     }
 }
 
+async function getAttachment(req, res) {
+    try {
+        const result = await attachment.getAttachment(req.params.path);
+        res.json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
 module.exports = {
-    insertAttachment,
-    getAttachments
+    getAttachments,
+    getAttachment
 };

@@ -5,7 +5,7 @@ function insertAttachments(files, ticketId) {
     try {
         files.map(async (file) => {
             // const base64Data = file.fileContent.replace(/^data:.*;base64,/, '');
-            await fs.writeFileSync(`dist/img/${file.pathName}`, file.fileContent, () => {
+            await fs.writeFileSync(`server/files/attachments/${file.pathName}`, file.fileContent, () => {
                 console.log('The file was saved!');
             });
             await db.Attachment.create({
@@ -32,7 +32,16 @@ async function getAttachments(ticketId) {
     }
 }
 
+async function getAttachment(path) {
+    try {
+        return fs.readFileSync(`server/files/attachments/${path}`, 'utf8');
+    } catch (error) {
+        return error;
+    }
+}
+
 module.exports = {
     insertAttachments,
-    getAttachments
+    getAttachments,
+    getAttachment
 };
