@@ -3,10 +3,10 @@ export default {
 
     state() {
         return {
-            id: 2,
-            name: 'tales',
-            email: 't@o.com ',
-            password: '12345',
+            id: null,
+            name: '',
+            email: '',
+            password: '',
             isSupport: false
         };
     },
