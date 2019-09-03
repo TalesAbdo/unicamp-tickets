@@ -7,7 +7,6 @@ const router = require('./server/routes/index.js');
 const app = express();
 
 // Sets up the Express app to handle data parsing
-
 app.use(bodyParser.json({ limit: '50mb', type: 'application/json' }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
@@ -26,6 +25,12 @@ app.use('/api', router);
 const PORT = 3000;
 
 db.sequelize.sync().then(() => {
+    db.sequelize.query(`INSERT INTO user (email, name, password, isSupport)
+    VALUES ('et@o.c', 'teste', 'senha', true)`)
+        .then(() => {
+            console.log('User inserted');
+        });
+
     app.listen(PORT, () => {
         console.log(`Listening on PORT ${PORT}`);
     });

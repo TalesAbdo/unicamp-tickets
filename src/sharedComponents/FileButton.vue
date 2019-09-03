@@ -65,11 +65,27 @@ export default {
                     type: 'warn'
                 });
                 return false;
-            } if (file && (file.type.split('/')[0] !== 'image')) {
+            }
+            if (file && !((file.type.split('/')[0] === 'image')
+                || (file.type.split('/')[0] === 'video')
+                || (file.type.split('/')[0] === 'audio')
+                || (file.type === 'application/pdf')
+                || (file.type === 'application/msword')
+                || (file.type === 'application/vnd.ms-excel')
+                || (file.type === 'application/vnd.ms-powerpoint'))) {
                 this.$notify({
                     group: 'foo',
                     title: 'Cuidado!',
-                    text: 'Insira uma imagem, vídeo, áudio ou arquivo do Office (Word, Excel e PowerPoint).',
+                    text: 'Insira uma imagem, vídeo, áudio, PDF ou arquivo do Office (Word, Excel e PowerPoint).',
+                    type: 'warn'
+                });
+                return false;
+            }
+            if (file && (file.name.length > 60)) {
+                this.$notify({
+                    group: 'foo',
+                    title: 'Cuidado!',
+                    text: 'Nome muito grande para o arquivo.',
                     type: 'warn'
                 });
                 return false;
