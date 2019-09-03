@@ -27,12 +27,14 @@ export default {
     },
     methods: {
         setImageSource() {
+            console.log('imagepATH', this.imagePath);
             let image;
             if (this.imagePath) {
                 image = `img/${this.imagePath}.jpg`;
             } else {
                 image = require('server/files/user-image/default-image.jpg');
             }
+            console.log('IMAGE', image);
             document.querySelector(`#user-image-${this.imageId}`).src = image;
             this.$emit('imagesourceUpdated');
         },

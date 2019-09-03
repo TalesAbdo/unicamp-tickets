@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         name: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING(50),
             allowNull: false,
             validate: {
                 len: {
-                    args: [0, 100],
+                    args: [0, 50],
                     msg: 'Nome do arquivo deve ter no máximo 100 caracteres.'
                 },
                 notNull: {

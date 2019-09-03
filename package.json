@@ -95,7 +95,7 @@
     }
   },
   "browserslist": [
-    "> 0.5%",
+    "> 0.25%",
     "not ie <= 8"
   ],
   "gitHooks": {
