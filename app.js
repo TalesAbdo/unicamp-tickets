@@ -29,7 +29,7 @@ db.sequelize.sync().then(() => {
     VALUES ('et@o.c', 'teste', 'senha', true)`)
         .then(() => {
             console.log('User inserted');
-        });
+        }).catch(() => console.log('User already inserted'));
 
     app.listen(PORT, () => {
         console.log(`Listening on PORT ${PORT}`);
