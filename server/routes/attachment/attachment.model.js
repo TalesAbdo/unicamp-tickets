@@ -4,6 +4,7 @@ const db = require('../../models/index.js');
 function insertAttachments(files, ticketId) {
     try {
         files.map(async (file) => {
+            console.log('HEREEEEEEEEEEEEEEEEEE');
             await fs.writeFileSync(`server/files/attachments/${file.pathName}`, file.fileContent, () => {
                 console.log('The file was saved!');
             });

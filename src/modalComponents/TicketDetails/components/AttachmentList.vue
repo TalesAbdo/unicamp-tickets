@@ -88,6 +88,7 @@ export default {
 
         .attachment-item {
             color: $info;
+            cursor: pointer;
             margin-bottom: -.1rem;
 
             &:hover {
