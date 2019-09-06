@@ -107,7 +107,7 @@ export default {
             }
         },
         async createService(params) {
-            await axios.post('api/service/new', params)
+            await axios.post('service/new', params)
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -139,7 +139,7 @@ export default {
                 });
         },
         async updateService(params) {
-            await axios.put(`api/service/update/${this.oldService.id}`, params)
+            await axios.put(`service/update/${this.oldService.id}`, params)
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -172,7 +172,7 @@ export default {
         },
         async deleteService() {
             try {
-                await axios.put(`api/service/archive/${this.oldService.id}`, { isActive: !this.oldService.isActive })
+                await axios.put(`service/archive/${this.oldService.id}`, { isActive: !this.oldService.isActive })
                     .then(() => {
                         this.$notify(this.successMessage);
                         this.service.name = null;

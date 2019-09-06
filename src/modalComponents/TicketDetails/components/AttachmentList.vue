@@ -2,30 +2,75 @@
     <div class="attachment-content">
         <div class="attachment-list">
             <span class="has-text-weight-bold">Anexos</span>
-            <a v-for="(item, index) in attachmentList" :key="index" >
-                <span>{{item.name}}</span>
-            </a>
+            <span v-for="(item, index) in attachmentList" :key="index" @click="getAttachment(item)">
+                <span class="attachment-item">{{item.name}}</span>
+            </span>
         </div>
-        <FileButton/>
     </div>
 </template>
 
 <script>
-import FileButton from 'shared/FileButton.vue';
+import axios from 'src/axios/axios.js';
 
 export default {
     name: 'attachmentList',
-    components: {
-        FileButton
-    },
     props: {
         ticketId: { type: Number, required: true }
     },
     data() {
         return {
-            attachmentList: [{ id: 1, name: 'Comprovante.jpg' }, { id: 2, name: 'Foto_Doc.jpg' }, { id: 3, name: 'Fatura.pdf' }]
+            attachmentList: []
         };
     },
+    watch: {
+        ticketId() {
+            this.getAttachments();
+        }
+    },
+    mounted() {
+        this.getAttachments();
+    },
+    methods: {
+        getAttachments() {
+            if (this.ticketId) {
+                axios.get(`attachment/ticket/${this.ticketId}`)
+                    .then((response) => {
+                        this.attachmentList = response.data;
+                    })
+                    .catch(() => {
+                        this.$notify({
+                            group: 'foo',
+                            title: 'Erro!',
+                            text: 'Não foi possível obter os anexos do ticket.',
+                            type: 'error'
+                        });
+                    });
+            }
+        },
+        getAttachment(item) {
+            axios.get(`attachment/${item.path}`)
+                .then((response) => {
+                    console.log(response);
+                    fetch(response.data)
+                        .then(res => res.blob())
+                        .then((blob) => {
+                            const url = window.URL.createObjectURL(blob);
+                            const helper = document.createElement('a');
+                            helper.setAttribute('href', url);
+                            helper.setAttribute('download', item.name);
+                            helper.click();
+                        });
+                })
+                .catch(() => {
+                    this.$notify({
+                        group: 'foo',
+                        title: 'Erro!',
+                        text: 'Não foi possível obter o anexo.',
+                        type: 'error'
+                    });
+                });
+        }
+    }
 };
 </script>
 
@@ -41,8 +86,9 @@ export default {
         flex-direction: column;
         width: 100%;
 
-        a {
+        .attachment-item {
             color: $info;
+            cursor: pointer;
             margin-bottom: -.1rem;
 
             &:hover {

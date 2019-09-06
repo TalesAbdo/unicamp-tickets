@@ -5,7 +5,7 @@
                 ref="formFiles"
                 class="file-input"
                 type="file"
-                accept="image/*"
+                accept="image/jpg, image/jpeg, image/png"
                 name="form-file-input"
                 @change="onChange">
 
@@ -20,18 +20,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 
 export default {
     data() {
         return {
             textImage: null,
         };
-    },
-    computed: {
-        ...mapState({
-            image: state => state.user.image,
-        }),
     },
     methods: {
         onChange(event) {
@@ -50,15 +44,15 @@ export default {
                 this.$notify({
                     group: 'foo',
                     title: 'Cuidado!',
-                    text: 'O arquivo ultrapassa 10mb.',
+                    text: 'A imagem ultrapassa 10mb.',
                     type: 'warn'
                 });
                 return false;
-            } if (image && (image.type.split('/')[0] !== 'image')) {
+            } if (image && ((image.type !== 'image/jpeg') && (image.type !== 'image/jpg') && (image.type !== 'image/png'))) {
                 this.$notify({
                     group: 'foo',
                     title: 'Cuidado!',
-                    text: 'Insira uma imagem.',
+                    text: 'Insira uma imagem com extensão JPEG, JPG ou PNG.',
                     type: 'warn'
                 });
                 return false;
@@ -94,6 +88,10 @@ export default {
             height: 100%;
             border: none;
             cursor: pointer;
+        }
+
+        span {
+            color: $black;
         }
     }
 }

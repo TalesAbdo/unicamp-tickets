@@ -32,7 +32,9 @@ export default {
             return ` ${name} comentou `;
         },
         writtenDate(date) {
-            return `às ${date.slice(11, 16)} de ${date.slice(8, 10)}/${date.slice(5, 7)}/${date.slice(0, 4)}`;
+            let newDate = date.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+            newDate = new Date(newDate);
+            return `às ${newDate.toLocaleString().slice(11, 16)} de ${newDate.toLocaleString().slice(0, 10)}`;
         },
     }
 };

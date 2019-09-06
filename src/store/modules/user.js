@@ -4,10 +4,10 @@ export default {
     state() {
         return {
             id: null,
-            name: null,
-            email: null,
-            password: null,
-            isSupport: true
+            name: '',
+            email: '',
+            password: '',
+            isSupport: false
         };
     },
     getters: {

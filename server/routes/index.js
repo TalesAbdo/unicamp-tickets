@@ -48,7 +48,7 @@ router.post('/ticket/byclosingtime', ticket.getTicketsByClosingTime);
 router.post('/ticket/relatory', ticket.getTicketsRelatory);
 
 // Attachments
-router.post('/attachment/new', attachment.insertAttachment);
 router.get('/attachment/ticket/:id', attachment.getAttachments);
+router.get('/attachment/:path', attachment.getAttachment);
 
 module.exports = router;

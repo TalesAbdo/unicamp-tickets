@@ -1,17 +1,17 @@
 const attachment = require('./attachment.model.js');
 
-async function insertAttachment(req, res) {
+async function getAttachments(req, res) {
     try {
-        const result = await attachment.insertAttachment(req.body);
+        const result = await attachment.getAttachments(req.params.id);
         res.json(result);
     } catch (err) {
         res.json(err);
     }
 }
 
-async function getAttachments(req, res) {
+async function getAttachment(req, res) {
     try {
-        const result = await attachment.getAttachments(req.params.ticketId);
+        const result = await attachment.getAttachment(req.params.path);
         res.json(result);
     } catch (err) {
         res.json(err);
@@ -19,6 +19,6 @@ async function getAttachments(req, res) {
 }
 
 module.exports = {
-    insertAttachment,
-    getAttachments
+    getAttachments,
+    getAttachment
 };

@@ -21,11 +21,13 @@
                 <div class="attachment-container">
                     <div class="attachment-content">
                         <span class="attachment-title">Anexos</span>
-                        <FileButton />
+                        <FileButton @fileInserted="setAttachment" :filesQuantity="ticket.files.length"/>
                     </div>
                     <div class="attachment-list">
-                        <span><i class="fas fa-trash" /> Arquivo1.ssv</span>
-                        <span><i class="fas fa-trash" /> Arquivo1.ssv</span>
+                        <div class="attachment-item" v-for="(item, index) in ticket.files" :key="index">
+                            <div class="delete-button" @click="removeAttachment(index)"><i class="fas fa-trash"/></div>
+                            <span class="attachment-name">{{item.realName}}</span>
+                        </div>
                     </div>
                 </div>
                 <button type="button" class="button is-black is-normal" @click="createTicket">Abrir Ticket</button>
@@ -44,6 +46,8 @@ import Textarea from 'shared/Textarea.vue';
 import FileButton from 'shared/FileButton.vue';
 import Service from './components/ServiceDropdown.vue';
 
+const uuidv4 = require('uuid/v4');
+
 export default {
     name: 'newTicket',
     components: {
@@ -61,6 +65,7 @@ export default {
                 serviceId: null,
                 severityId: null,
                 serviceName: null,
+                files: []
             },
             services: []
         };
@@ -89,6 +94,17 @@ export default {
         },
         setSeverity(value) {
             this.ticket.severityId = value;
+        },
+        setAttachment(file, fileContent) {
+            const fileInfo = {
+                realName: file.name,
+                pathName: `${uuidv4()}.txt`,
+                fileContent
+            };
+            this.ticket.files.push(fileInfo);
+        },
+        removeAttachment(index) {
+            this.ticket.files.splice(index, 1);
         },
         getServices() {
             axios.get('service/all/active')
@@ -126,6 +142,7 @@ export default {
                         this.ticket.serviceId = null;
                         this.ticket.severityId = null;
                         this.ticket.serviceName = null;
+                        this.ticket.files = [];
                         this.hide();
                     } else {
                         throw 'Aconteceu algum erro, contate o adminstrador.';
@@ -228,6 +245,22 @@ export default {
                     margin-left: 1rem;
                     display: flex;
                     flex-direction: column;
+
+                    .attachment-item {
+                        display: flex;
+
+                        .delete-button {
+                            cursor: pointer;
+                            margin-right: 0.5rem;
+                        }
+
+                        .attachment-name {
+                            max-width: 490px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
                 }
             }
 

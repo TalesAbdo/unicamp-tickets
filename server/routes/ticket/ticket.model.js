@@ -112,7 +112,7 @@ async function getTicketsByUser(params) {
 async function getYearsWithTickets() {
     try {
         return db.sequelize.query(
-            'SELECT YEAR(createdAt) YEAR FROM TICKET GROUP BY YEAR(createdAt);',
+            'SELECT YEAR(createdAt) YEAR FROM ticket GROUP BY YEAR(createdAt);',
             { type: db.sequelize.QueryTypes.SELECT }
         ).then(result => result).catch(err => err);
     } catch (error) {

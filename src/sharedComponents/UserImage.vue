@@ -10,7 +10,7 @@ const uuidv4 = require('uuid/v4');
 export default {
     name: 'userImage',
     props: {
-        imagePath: { type: String, required: true }
+        imagePath: { type: String, required: false }
     },
     data() {
         return {
@@ -18,7 +18,7 @@ export default {
         };
     },
     watch: {
-        imageUpdated() {
+        imagePath() {
             this.setImageSource();
         }
     },

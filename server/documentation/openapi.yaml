@@ -35,7 +35,6 @@ paths:
         - $ref: '#/components/parameters/userIdParam'
         - $ref: '#/components/parameters/userNameParam'
         - $ref: '#/components/parameters/passwordParam'
-        - $ref: '#/components/parameters/imageParam'
       responses:
         200:
           description: Return OK message
@@ -220,6 +219,7 @@ paths:
         - $ref: '#/components/parameters/ticketTitleParam'
         - $ref: '#/components/parameters/ticketDescriptionParam'
         - $ref: '#/components/parameters/severityIdParam'
+        - $ref: '#/components/parameters/files'
       responses:
         200:
           description: Return OK message
@@ -357,7 +357,7 @@ paths:
   /ticket/relatory:
     post:
       operationId: getTicketsRelatory
-      summary: Get tickets according to filters.
+      summary: Get tickets according to filters
       tags:
         - Ticket
       parameters:
@@ -368,6 +368,30 @@ paths:
       responses:
         200:
           description: Return an array with filtered tickets.
+
+  /attachment/ticket/{id}:
+    post:
+      operationId: getAttachments
+      summary: Get all files' data from a ticket
+      tags:
+        - Attachment
+      parameters:
+        - $ref: '#/components/parameters/ticketIdParam'
+      responses:
+        200:
+          description: Return OK message.
+
+  /attachment/{path}:
+    post:
+      operationId: getAttachment
+      summary: Get a file content.
+      tags:
+        - Attachment
+      parameters:
+        - $ref: '#/components/parameters/pathParam'
+      responses:
+        200:
+          description: Return the file content as base64 String.
 
 components:
   parameters:
@@ -571,3 +595,17 @@ components:
       description: Final date
       schema:
         type: string
+    pathParam:
+      name: path
+      in: query
+      required: true
+      description: Storage name from a product
+      schema:
+        type: string
+    files:
+      name: files
+      in: path
+      required: true
+      description: Array with at maximum 3 objects with file data
+      schema:
+        type: array

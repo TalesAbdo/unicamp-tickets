@@ -11,7 +11,8 @@ const db = {};
 //     database: 'unicamptickets',
 //     host: '127.0.0.1',
 //     dialect: 'mysql',
-//     operatorsAliases: 'false'
+//     operatorsAliases: 'false',
+//     timezone: '-03:00'
 // });
 
 const sequelize = new Sequelize({
@@ -20,6 +21,7 @@ const sequelize = new Sequelize({
     password: 'password',
     host: 'db',
     dialect: 'mysql',
+    timezone: '-03:00'
 });
 
 fs

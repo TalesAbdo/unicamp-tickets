@@ -1,8 +1,10 @@
 const ticket = require('./ticket.model.js');
+const attachment = require('../attachment/attachment.model.js');
 
 async function insertTicket(req, res) {
     try {
         const result = await ticket.insertTicket(req.body);
+        attachment.insertAttachments(req.body.files, result.dataValues.id);
         res.json(result);
     } catch (err) {
         res.json(err);
