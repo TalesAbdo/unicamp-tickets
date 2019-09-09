@@ -28,6 +28,10 @@ app.use('/api', router);
 const PORT = 3000;
 
 db.sequelize.sync().then(() => {
+    db.sequelize.query(`INSERT INTO user (email, name, password, isSupport)
+    VALUES ('adminuser@email.com', 'Admin', 'senha', true)`)
+        .then(() => console.log('User inserted')).catch(() => console.log('User already inserted'));
+
     app.listen(PORT, () => {
         console.log(`Listening on PORT ${PORT}`);
     });
