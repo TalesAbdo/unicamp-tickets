@@ -32,7 +32,7 @@ db.sequelize.sync().then(() => {
     VALUES ('adminuser@email.com', 'Admin', 'senha', true)`)
         .then(() => console.log('User inserted')).catch(() => console.log('User already inserted'));
 
-    app.listen(PORT, () => {
+    app.listen(process.env.PORT || PORT, () => {
         console.log(`Listening on PORT ${PORT}`);
     });
 });
