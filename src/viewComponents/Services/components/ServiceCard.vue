@@ -53,10 +53,6 @@ export default {
         .service-description {
             color: $dark-gray;
         }
-
-        span {
-            word-break: break-all;
-        }
     }
 
     .right-container {

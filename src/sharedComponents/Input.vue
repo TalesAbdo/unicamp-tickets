@@ -49,7 +49,6 @@ export default {
         border: none;
         width: 100%;
         color: $black;
-        font-style: italic;
         background-color: transparent;
         font-size: 0.95rem;
 

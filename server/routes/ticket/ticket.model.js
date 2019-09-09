@@ -22,7 +22,7 @@ async function updateTicketAssigned(params) {
             assignedId: params.assignedId
         }, {
             where: {
-                id: params.ticketid
+                id: params.ticketId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {
@@ -36,7 +36,7 @@ async function updateTicketService(params) {
             serviceId: params.serviceId
         }, {
             where: {
-                id: params.ticketid
+                id: params.ticketId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {
@@ -50,7 +50,7 @@ async function updateTicketSeverity(params) {
             severityId: params.severityId
         }, {
             where: {
-                id: params.ticketid
+                id: params.ticketId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {
@@ -64,7 +64,7 @@ async function updateTicketStatus(params) {
             statusId: params.statusId
         }, {
             where: {
-                id: params.ticketid
+                id: params.ticketId
             }
         }).then(result => result).catch(err => err);
     } catch (error) {

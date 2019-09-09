@@ -321,10 +321,6 @@ export default {
                 width: 65%;
                 display: flex;
                 flex-direction: column;
-
-                .description {
-                    word-break: break-all;
-                }
             }
         }
 

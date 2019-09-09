@@ -222,6 +222,10 @@ export default {
             justify-content: flex-end;
             align-items: flex-end;
 
+            .is-black {
+                margin-top: 2rem;
+            }
+
             .is-danger {
                 margin-top: .5rem;
             }

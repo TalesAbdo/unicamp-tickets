@@ -19,7 +19,7 @@ const sequelize = new Sequelize({
     database: 'unicamptickets',
     username: 'root',
     password: 'password',
-    host: 'db',
+    host: 'dbUT',
     dialect: 'mysql',
     timezone: '-03:00'
 });
