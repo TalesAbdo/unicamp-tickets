@@ -15,14 +15,24 @@ const db = {};
 //     timezone: '-03:00'
 // });
 
+// const sequelize = new Sequelize({
+//     database: 'unicamptickets',
+//     username: 'root',
+//     password: 'password',
+//     host: 'dbUT',
+//     dialect: 'mysql',
+//     timezone: '-03:00'
+// });
+
 const sequelize = new Sequelize({
-    database: 'unicamptickets',
-    username: 'root',
-    password: 'password',
-    host: 'dbUT',
+    database: 'heroku_284b7c1266bc699',
+    username: 'baf49de6b3b5fe',
+    password: 'a60183e0',
+    host: 'us-cdbr-iron-east-02.cleardb.net',
     dialect: 'mysql',
     timezone: '-03:00'
 });
+
 
 fs
     .readdirSync(__dirname)
