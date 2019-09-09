@@ -1,4 +1,4 @@
-const cors = require('cors');
+// const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./models');
@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({
 // Static directory
 app.use(express.static('dist'));
 
-app.use(cors({
-    origin: 'http://localhost:8080'
-}));
+// app.use(cors({
+//     origin: 'http://localhost:8080'
+// }));
 
 app.use('/api', router);
 
