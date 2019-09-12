@@ -33,12 +33,13 @@
 <script>
 import axios from 'src/axios/axios.js';
 import Title from 'shared/Title.vue';
+import UserImage from 'shared/UserImage.vue';
 import UserSearchDropdown from './components/UserSearchDropdown.vue';
 
 export default {
     name: 'newMember',
     components: {
-        Title, UserSearchDropdown
+        Title, UserSearchDropdown, UserImage
     },
     props: {
         show: { type: Boolean, default: false }

@@ -90,13 +90,13 @@ async function authenticateUser(params) {
     }
 }
 
-async function insertSupportUser(userId) {
+async function insertSupportUser(id) {
     try {
         return db.User.update({
             isSupport: true
         }, {
             where: {
-                userId
+                id
             }
         }).then(result => result).catch(err => err);
     } catch (error) {

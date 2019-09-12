@@ -4,8 +4,7 @@ const db = require('../../models/index.js');
 function insertAttachments(files, ticketId) {
     try {
         files.map(async (file) => {
-            console.log('HEREEEEEEEEEEEEEEEEEE');
-            await fs.writeFileSync(`server/files/attachments/${file.pathName}`, file.fileContent, () => {
+            await fs.writeFileSync(`dist/img/${file.pathName}`, file.fileContent, () => {
                 console.log('The file was saved!');
             });
             await db.Attachment.create({
@@ -34,7 +33,7 @@ async function getAttachments(ticketId) {
 
 async function getAttachment(path) {
     try {
-        return fs.readFileSync(`server/files/attachments/${path}`, 'utf8');
+        return fs.readFileSync(`dist/img/${path}`, 'utf8');
     } catch (error) {
         return error;
     }
