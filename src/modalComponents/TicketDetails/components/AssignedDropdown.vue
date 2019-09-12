@@ -4,13 +4,13 @@
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button v-if="isSupport && !isClosed" type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
-                <figure v-if="triggerValue" class="image is-24x24">
+                <figure v-if="triggerValue" class="image is-32x32">
                     <UserImage :imagePath="assignedEmail"/>
                 </figure>
                 <span>{{triggerValue || 'Escolha um responsável'}}</span>
             </button>
             <div v-else class="pure-text">
-                <figure v-if="triggerValue" class="image is-24x24">
+                <figure v-if="triggerValue" class="image is-32x32">
                     <UserImage :imagePath="assignedEmail"/>
                 </figure>
                 <span>{{triggerValue || 'Sem responsável'}}</span>
@@ -19,7 +19,7 @@
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
             <a  v-for="(member) in members" :key="member.id" class="dropdown-item is-flex" @click="memberClicked(member.id)">
-                <figure class="image is-24x24">
+                <figure class="image is-32x32">
                     <UserImage :imagePath="member.email"/>
                 </figure>
                 {{member.name}}

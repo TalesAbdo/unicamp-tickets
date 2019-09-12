@@ -59,7 +59,7 @@ export default {
         .history-header {
             margin: .75rem 0 0 1.5rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
 
             .image {
                 margin-right: .5rem;
