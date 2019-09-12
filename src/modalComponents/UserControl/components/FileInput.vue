@@ -22,10 +22,18 @@
 <script>
 
 export default {
+    props: {
+        confirmed: { type: Boolean, required: false, default: false }
+    },
     data() {
         return {
             textImage: null,
         };
+    },
+    watch: {
+        confirmed() {
+            this.textImage = null;
+        }
     },
     methods: {
         onChange(event) {
