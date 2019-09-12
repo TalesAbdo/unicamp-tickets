@@ -10,7 +10,7 @@
             <Textarea v-else class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="service.description" :maxLength="200"/>
             <div class="footer-buttons">
                 <button type="button" class="button is-black" @click="createUpdateService">{{buttonText}}</button>
-                <button v-if="oldService.id" type="button" class="button is-danger is-inverted"  @click="deleteService">{{archiveText}}</button>
+                <button v-if="oldService.id" type="button" class="button is-danger is-inverted"  @click="archiveService">{{archiveText}}</button>
             </div>
         </form>
         <button class="modal-close is-large" aria-label="close"/>
@@ -79,6 +79,11 @@ export default {
             }
         };
     },
+    watch: {
+        oldService(value) {
+            this.service = value;
+        },
+    },
     methods: {
         hide() {
             this.$emit('hide');
@@ -139,7 +144,7 @@ export default {
                 });
         },
         async updateService(params) {
-            await axios.put(`service/update/${this.oldService.id}`, params)
+            await axios.put('service/update', { ...params, id: this.oldService.id })
                 .then((response) => {
                     if (response.data.errors) {
                         this.$notify({
@@ -170,9 +175,9 @@ export default {
                     });
                 });
         },
-        async deleteService() {
+        async archiveService() {
             try {
-                await axios.put(`service/archive/${this.oldService.id}`, { isActive: !this.oldService.isActive })
+                await axios.put('service/archive', { id: this.oldService.id, isActive: !this.oldService.isActive })
                     .then(() => {
                         this.$notify(this.successMessage);
                         this.service.name = null;

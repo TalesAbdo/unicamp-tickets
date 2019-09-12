@@ -15,7 +15,7 @@ async function insertComment(params) {
 async function getCommentsByTicket(ticketId) {
     try {
         return db.sequelize.query(
-            `SELECT c.id, c.commentText, c.createdAt, u.name as userName from comment c
+            `SELECT c.id, c.commentText, c.createdAt, u.name as userName, u.email as userEmail from comment c
              inner join user u on u.id = c.userId
              where c.ticketId = ${ticketId}
              order by id desc`,
