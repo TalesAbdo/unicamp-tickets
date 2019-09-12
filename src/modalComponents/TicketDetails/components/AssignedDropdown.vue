@@ -1,6 +1,6 @@
 <template>
 <div class="assigned-dropdown-container">
-    <span class="dropdown-title">Responsável</span>
+    <span class="dropdown-title">Respo nsável</span>
     <div :class="{'is-active': active}" class="dropdown">
         <div class="dropdown-trigger">
             <button v-if="isSupport && !isClosed" type="button" class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="controlDropdown">
