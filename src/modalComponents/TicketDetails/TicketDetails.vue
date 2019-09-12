@@ -14,7 +14,7 @@
                     <ServiceDropdown :triggerValue="ticket.serviceName" :services="services" :isClosed="isClosed" @click="updateServiceId"/>
                     <StatusDropdown :triggerValue="ticket.statusId" :statuses="statuses" :isClosed="isClosed" @click="updateStatusId"/>
                     <SeverityDropdown :triggerValue="ticket.severityId" :severities="severities" :isClosed="isClosed" @click="updateSeverityId"/>
-                    <AssignedDropdown :triggerValue="ticket.assignedName" :assignedImage="ticket.assignedImage" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
+                    <AssignedDropdown :triggerValue="ticket.assignedName" :assignedEmail="ticket.assignedEmail" :members="members" :isClosed="isClosed" @click="updateAssignedId"/>
                     <AttachmentList :ticketId="ticket.id"/>
                 </div>
                 <div class="line"/>

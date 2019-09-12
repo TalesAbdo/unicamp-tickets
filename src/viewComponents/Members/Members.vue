@@ -9,7 +9,7 @@
 
              <MemberCard v-for="member in members" :key="member.id" :member="member" @onUpdate="getMemberList"/>
         </div>
-        <NewMember :show="showNewMember" @hide="modalControl"  @onUpdate="getMemberList"/>
+        <NewMember :show="showNewMember" @hide="modalControl"/>
     </div>
 </template>
 

@@ -12,7 +12,7 @@
 
             <div class="user-image margin-1rem">
                 <span class="title">Imagem</span>
-                <FileInput @imageChoosed="setImage"/>
+                <FileInput @imageChoosed="setImage" :confirmed="confirmed"/>
             </div>
 
             <Input class="margin-1rem" inputTitle="Senha (obrigatório)" inputPlaceHolder="sua senha" type="password" @input="setPassword" :preValue="user.password" :maxLength="20"/>
@@ -50,6 +50,7 @@ export default {
                 isSupport: false,
                 image: null
             },
+            confirmed: false
         };
     },
     computed: {
@@ -120,6 +121,7 @@ export default {
                         this.user.name = null;
                         this.user.password = null;
                         this.user.image = null;
+                        this.confirmed = !this.confirmed;
                         this.hide();
                     } else {
                         throw 'Email já em uso';
@@ -164,6 +166,7 @@ export default {
                             this.user.password = null;
                             this.user.newPassword = null;
                             this.user.image = null;
+                            this.confirmed = !this.confirmed;
                             this.hide();
                         }
                     });
