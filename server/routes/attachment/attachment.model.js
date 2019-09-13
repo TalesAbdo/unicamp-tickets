@@ -33,7 +33,7 @@ async function getAttachments(ticketId) {
 
 async function getAttachment(path) {
     try {
-        return fs.readFileSync(`img/${path}`, 'utf8');
+        return fs.readFileSync(`dist/img/${path}`, 'utf8');
     } catch (error) {
         return error;
     }
