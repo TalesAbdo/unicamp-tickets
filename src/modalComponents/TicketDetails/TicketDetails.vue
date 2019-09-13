@@ -19,7 +19,7 @@
                 </div>
                 <div class="line"/>
                 <div class="right-content">
-                    <span class="has-text-weight-bold">Descrição</span>
+                    <span class="has-text-weight-bold">Descrição </span>
                     <span class="description">{{ticket.description}}</span>
                 </div>
             </div>
