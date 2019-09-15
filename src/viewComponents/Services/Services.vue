@@ -8,7 +8,7 @@
              <Title titleValue="Serviços"/>
              <ServiceCard v-for="(item, index) in services" :key="index" :service="item" @modalControl="modalControl"/>
         </div>
-        <ServiceControl :show="showServiceControl" @hide="modalControl('close')" :oldService="oldService"/>
+        <ServiceControl :show="showServiceControl" @hide="modalControl('close')" :oldService="oldService" :isEdition="isEdition"/>
     </div>
 </template>
 
@@ -33,7 +33,8 @@ export default {
                 name: '',
                 description: '',
                 isActive: true
-            }
+            },
+            isEdition: false
         };
     },
     mounted() {
@@ -56,6 +57,7 @@ export default {
         },
         modalControl(value) {
             if (value === 'newService' || value === 'close') {
+                this.isEdition = false;
                 this.oldService = {
                     id: null,
                     name: '',
@@ -64,6 +66,7 @@ export default {
                 };
             } else {
                 this.oldService = value;
+                this.isEdition = true;
             }
             this.showServiceControl = !this.showServiceControl;
             this.getServiceList();

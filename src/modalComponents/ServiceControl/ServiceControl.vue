@@ -5,7 +5,7 @@
             <Title :titleValue="titleText" class="header-text"/>
             <Input v-if="oldService.name" class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="oldService.name" :maxLength="60"/>
             <Input v-else class="margin-rem" inputTitle="Nome" inputPlaceHolder="o nome" @input="setName" :preValue="service.name" :maxLength="60"/>
-            <Textarea v-if="oldService.description" vclass="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição"
+            <Textarea v-if="oldService.description" class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição"
                       @input="setDescription" :preValue="oldService.description" :maxLength="200"/>
             <Textarea v-else class="margin-rem" textareaTitle="Descrição" textareaPlaceHolder="a descrição" @input="setDescription" :preValue="service.description" :maxLength="200"/>
             <div class="footer-buttons">
@@ -31,16 +31,17 @@ export default {
     props: {
         show: { type: Boolean, default: false },
         oldService: { type: Object, required: true },
+        isEdition: { type: Boolean, required: true }
     },
     computed: {
         titleText() {
-            if (this.oldService.name) {
+            if (this.isEdition) {
                 return 'Editar Serviço';
             }
             return 'Novo Serviço';
         },
         buttonText() {
-            if (this.oldService.name) {
+            if (this.isEdition) {
                 return 'Confirmar Alterações';
             }
             return 'Criar Serviço';
