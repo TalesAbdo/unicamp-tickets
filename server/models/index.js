@@ -5,15 +5,15 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const db = {};
 
-// const sequelize = new Sequelize({
-//     username: 'root',
-//     password: '',
-//     database: 'unicamptickets',
-//     host: '127.0.0.1',
-//     dialect: 'mysql',
-//     operatorsAliases: 'false',
-//     timezone: '-03:00'
-// });
+const sequelize = new Sequelize({
+    username: 'root',
+    password: '',
+    database: 'unicamptickets',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+    operatorsAliases: 'false',
+    timezone: '-03:00'
+});
 
 // const sequelize = new Sequelize({
 //     database: 'unicamptickets',
@@ -24,15 +24,14 @@ const db = {};
 //     timezone: '-03:00'
 // });
 
-const sequelize = new Sequelize({
-    database: 'heroku_284b7c1266bc699',
-    username: 'baf49de6b3b5fe',
-    password: 'a60183e0',
-    host: 'us-cdbr-iron-east-02.cleardb.net',
-    dialect: 'mysql',
-    timezone: '-03:00'
-});
-
+// const sequelize = new Sequelize({
+//     database: 'heroku_284b7c1266bc699',
+//     username: 'baf49de6b3b5fe',
+//     password: 'a60183e0',
+//     host: 'us-cdbr-iron-east-02.cleardb.net',
+//     dialect: 'mysql',
+//     timezone: '-03:00'
+// });
 
 fs
     .readdirSync(__dirname)

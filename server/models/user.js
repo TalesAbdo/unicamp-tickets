@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
                 notNull: {
                     msg: 'Insira um nome.'
                 },
-                is: {
-                    args: [/^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/],
-                    msg: 'Apenas letras são permitidas no nome.'
+                not: {
+                    args: ["[\'\"\!\^\?\(\)\[\]]", 'i'], // eslint-disable-line
+                    msg: 'Insira um nome válido sem caracteres especiais.'
                 }
             }
         },
