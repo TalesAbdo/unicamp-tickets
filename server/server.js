@@ -36,14 +36,14 @@ db.sequelize.sync().then(() => {
         .then(() => console.log('Query 1 success')).catch(() => console.log('Qeury 1 error'));
 
     db.sequelize.query(`Update ticket set description = 'Oi,
-        reserva o auditório para a Vanessa da secretária.
-        Att, Diretor.', title='Reserva auditório'
-        Where id= 32`)
+reserva o auditório para a Vanessa da secretária.
+Att, Diretor.', title='Reserva auditório'
+Where id= 32`)
         .then(() => console.log('Query 2 success')).catch(() => console.log('Qeury 2 error'));
 
     db.sequelize.query(`Update ticket set description = 'Bom dia,
-    Atualize o cadastro dos novos alunos do curso de SI, já estão aprovados. Qualquer problema me contate, mas é para estar tudo OK.
-    Att, Diretor.', title='Usuários de SI 2019 2S'
+Atualize o cadastro dos novos alunos do curso de SI, já estão aprovados. Qualquer problema me contate, mas é para estar tudo OK.
+Att, Diretor.', title='Usuários de SI 2019 2S'
     Where id= 42`)
         .then(() => console.log('Query 3 success')).catch(() => console.log('Qeury 3 error'));
     app.listen(process.env.PORT || PORT, () => {
