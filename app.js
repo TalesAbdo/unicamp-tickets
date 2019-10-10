@@ -45,8 +45,6 @@ db.sequelize.sync().then(() => {
     Where id= 42`)
         .then(() => console.log('Query 3 success')).catch(() => console.log('Qeury 3 error'));
 
-    db.sequelize.query('select * from user')
-        .then(() => console.log('Queryusers success')).catch(() => console.log('Qeury users error'));
     app.listen(PORT, () => {
         console.log(`Listening on PORT ${PORT}`);
     });
